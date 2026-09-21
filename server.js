@@ -1,186 +1,133 @@
-const WORKER_URL = "https://still-disk-8324.mmaojmmmoh.workers.dev/";
+const WORKER_URL =
+  "https://still-disk-8324.mmaojmmmoh.workers.dev/";
 
 const input =
-  document.querySelector("#messageInput") ||
-  document.querySelector("#userInput") ||
-  document.querySelector("#chatInput") ||
-  document.querySelector("textarea") ||
-  document.querySelector("input[type='text']");
+  document.getElementById("messageInput");
 
-const sendButton =
-  document.querySelector("#sendButton") ||
-  document.querySelector("#sendBtn") ||
-  document.querySelector("#send") ||
-  document.querySelector("button");
+const button =
+  document.getElementById("sendButton");
 
-const messages =
-  document.querySelector("#messages") ||
-  document.querySelector("#chatMessages") ||
-  document.querySelector("#chat") ||
-  document.querySelector(".messages") ||
-  document.querySelector(".chat-messages");
+const chat =
+  document.getElementById("chat");
 
 function addMessage(text, type) {
-  if (!messages) return;
+  if (!chat) return;
 
-  const message = document.createElement("div");
+  const message =
+    document.createElement("div");
 
   message.className =
-    type === "user"
-      ? "message user-message"
-      : "message ai-message";
+    "message " + type;
 
-  message.textContent = text;
+  message.textContent =
+    text;
 
-  messages.appendChild(message);
-  messages.scrollTop = messages.scrollHeight;
-}
+  chat.appendChild(message);
 
-function isOwnerQuestion(text) {
-  const message = text.toLowerCase();
+  chat.scrollTop =
+    chat.scrollHeight;
 
-  const questions = [
-    "مين صنعك",
-    "من صنعك",
-    "مين عملك",
-    "من عملك",
-    "مين برمجك",
-    "من برمجك",
-    "مين أنشأك",
-    "من أنشأك",
-    "مين اللي صنعك",
-    "مين اللي عملك",
-    "مين اللي برمجك",
-    "مين اللي أنشأك",
-    "مين صاحبك",
-    "مين صاحب dino",
-    "مين مؤسس dino",
-    "حقوق الطبع والنشر",
-    "حقوق النشر",
-    "copyright",
-    "owner",
-    "creator",
-    "developer"
-  ];
-
-  return questions.some(function(question) {
-    return message.includes(question);
-  });
+  return message;
 }
 
 async function sendMessage() {
+
   if (!input) return;
 
-  const text = input.value.trim();
+  const message =
+    input.value.trim();
 
-  if (!text) return;
+  if (!message) return;
 
-  addMessage(text, "user");
+  addMessage(message, "user");
 
   input.value = "";
 
-  // سؤال صاحب Dino AI لا يحتاج OpenAI
-  if (isOwnerQuestion(text)) {
+  const aiMessage =
     addMessage(
-      "أنا Dino AI 🦖، والمشروع أنشأه Mohamed Reda.",
+      "Dino AI يفكر... 🦖",
       "ai"
     );
-    return;
-  }
-
-  addMessage("جاري التفكير... 🦖", "ai");
 
   try {
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+    const response =
+      await fetch(
+        WORKER_URL,
+        {
+          method: "POST",
 
-      body: JSON.stringify({
-        message: text
-      })
-    });
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-    const data = await response.json();
+          body: JSON.stringify({
+            message: message
+          })
+        }
+      );
 
-    const aiMessages = messages.querySelectorAll(".ai-message");
+    const data =
+      await response.json();
 
-    if (aiMessages.length > 0) {
-      const lastMessage = aiMessages[aiMessages.length - 1];
-
-      if (lastMessage.textContent === "جاري التفكير... 🦖") {
-        lastMessage.remove();
-      }
-    }
-
-    // إخفاء أخطاء Rate Limit عن المستخدم
-    const errorText = String(data.error || "");
+    const errorText =
+      String(data.error || "")
+        .toLowerCase();
 
     if (
       response.status === 429 ||
-      errorText.toLowerCase().includes("rate limit") ||
-      errorText.toLowerCase().includes("requests per day") ||
-      errorText.toLowerCase().includes("rpd")
+      errorText.includes("rate limit") ||
+      errorText.includes("requests per day") ||
+      errorText.includes("rpd")
     ) {
-      addMessage(
-        "أنا موجود 🦖، لكن خدمة الذكاء الاصطناعي مش متاحة مؤقتًا. جرّب بعد شوية.",
-        "ai"
-      );
+
+      aiMessage.textContent =
+        "خدمة Dino AI وصلت للحد المؤقت 🦖. جرّب بعد ما يتجدد الحد.";
+
       return;
     }
 
     if (data.reply) {
-      addMessage(data.reply, "ai");
+
+      aiMessage.textContent =
+        data.reply;
+
       return;
     }
 
-    if (data.error) {
-      addMessage(
-        "حصلت مشكلة مؤقتة في الاتصال بـ Dino AI 🦖.",
-        "ai"
-      );
-      return;
-    }
-
-    addMessage(
-      "مش قادر أجيب رد دلوقتي. جرّب تاني.",
-      "ai"
-    );
+    aiMessage.textContent =
+      "حصلت مشكلة مؤقتة في Dino AI 🦖.";
 
   } catch (error) {
 
-    const aiMessages = messages.querySelectorAll(".ai-message");
-
-    if (aiMessages.length > 0) {
-      const lastMessage = aiMessages[aiMessages.length - 1];
-
-      if (lastMessage.textContent === "جاري التفكير... 🦖") {
-        lastMessage.remove();
-      }
-    }
-
-    addMessage(
-      "مش قادر أتصل بالخدمة دلوقتي 🦖. جرّب بعد شوية.",
-      "ai"
-    );
+    aiMessage.textContent =
+      "مش قادر أتصل بـ Dino AI حاليًا 🦖.";
 
     console.error(error);
   }
 }
 
-if (sendButton) {
-  sendButton.addEventListener("click", sendMessage);
+if (button) {
+  button.addEventListener(
+    "click",
+    sendMessage
+  );
 }
 
 if (input) {
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      sendMessage();
-    }
-  });
-}
 
-console.log("Dino AI connected 🦖");
+  input.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendMessage();
+      }
+
+    }
+  );
+}
