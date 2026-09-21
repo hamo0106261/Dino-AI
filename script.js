@@ -5,8 +5,16 @@ const sendButton = document.getElementById("sendButton");
 
 const developerName = "Mohamed Reda";
 
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 function makeLinksClickable(text) {
-    return text.replace(
+    const safeText = escapeHTML(text);
+
+    return safeText.replace(
         /(https?:\/\/[^\s<]+)/g,
         '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
     );
@@ -30,6 +38,7 @@ function addMessage(text, type) {
 function getAnswer(question) {
     const q = question.toLowerCase().trim();
 
+    // المطور
     if (
         q.includes("مين صنعك") ||
         q.includes("من صنعك") ||
@@ -38,59 +47,66 @@ function getAnswer(question) {
         q.includes("مين عملك") ||
         q.includes("من عملك")
     ) {
-        return "تم تطوير Dino AI بواسطة Mohamed Reda.";
+        return `تم تطوير Dino AI بواسطة ${developerName}.`;
     }
 
+    // المالك
     if (
         q.includes("مين مالكك") ||
         q.includes("من مالكك") ||
         q.includes("مين صاحبك") ||
         q.includes("من صاحبك")
     ) {
-        return "مالك ومطور Dino AI هو Mohamed Reda.";
+        return `مالك ومطور Dino AI هو ${developerName}.`;
     }
 
+    // حقوق النشر
     if (
         q.includes("حقوق الطبع") ||
         q.includes("حقوق النشر") ||
         q.includes("copyright") ||
         q.includes("حقوقك")
     ) {
-        return "© 2026 Mohamed Reda — All Rights Reserved.";
+        return `© 2026 ${developerName} — All Rights Reserved.`;
     }
 
+    // اسم التطبيق
     if (
         q.includes("اسمك") ||
         q.includes("ما اسمك") ||
         q.includes("مين انت") ||
         q.includes("من انت")
     ) {
-        return "أنا Dino AI، مساعد ذكي للمعلومات والأسئلة.";
+        return "أنا Dino AI، مساعدك الذكي.";
     }
 
+    // سؤال عن الألعاب
     if (
         q.includes("لعبة") ||
         q.includes("العاب") ||
+        q.includes("ألعاب") ||
         q.includes("game") ||
         q.includes("gaming")
     ) {
-        return "أقدر أساعدك في معلومات الألعاب والشخصيات وطريقة اللعب والمنصات والإصدارات. اكتب اسم اللعبة التي تريد معرفة معلومات عنها.";
+        return "أقدر أساعدك في معلومات الألعاب والشخصيات وطريقة اللعب والمنصات والإصدارات. اكتب اسم اللعبة وسؤالك عنها.";
     }
 
-    return "أنا Dino AI. اسألني عن المطور أو حقوق النشر أو عن لعبة معينة.";
+    return "أنا Dino AI. حاليًا أقدر أجاوب على الأسئلة الأساسية. سنضيف الاتصال بالذكاء الاصطناعي ومعلومات الألعاب في الخطوة التالية.";
 }
 
 function sendMessage() {
     const question = userInput.value.trim();
 
-    if (!question) {
+    if (question === "") {
         return;
     }
 
     addMessage(question, "user");
-    userInput.value = "";
 
-    setTimeout(function () {
+    userInput.value = "";
+    userInput.focus();
+
+    setTimeout(() => {
         const answer = getAnswer(question);
         addMessage(answer, "ai");
     }, 300);
@@ -98,8 +114,9 @@ function sendMessage() {
 
 sendButton.addEventListener("click", sendMessage);
 
-userInput.addEventListener("keydown", function(event) {
+userInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
+        event.preventDefault();
         sendMessage();
     }
 });
