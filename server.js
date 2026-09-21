@@ -1,53 +1,167 @@
-const express = require("express");
-const cors = require("cors");
+const WORKER_URL = "https://still-disk-8324.mmaojmmmoh.workers.dev/";
 
-const app = express();
+const input =
+  document.querySelector("#messageInput") ||
+  document.querySelector("#userInput") ||
+  document.querySelector("#chatInput") ||
+  document.querySelector("textarea") ||
+  document.querySelector("input[type='text']");
 
-app.use(cors());
-app.use(express.json());
+const sendButton =
+  document.querySelector("#sendButton") ||
+  document.querySelector("#sendBtn") ||
+  document.querySelector("#send") ||
+  document.querySelector("button");
 
-app.post("/chat", async (req, res) => {
+const messages =
+  document.querySelector("#messages") ||
+  document.querySelector("#chatMessages") ||
+  document.querySelector("#chat") ||
+  document.querySelector(".messages") ||
+  document.querySelector(".chat-messages");
+
+function addMessage(text, type) {
+  if (!messages) return;
+
+  const message = document.createElement("div");
+
+  message.className =
+    type === "user"
+      ? "message user-message"
+      : "message ai-message";
+
+  message.textContent = text;
+
+  messages.appendChild(message);
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function isOwnerQuestion(text) {
+  const message = text.toLowerCase();
+
+  const questions = [
+    "مين صنعك",
+    "من صنعك",
+    "مين عملك",
+    "من عملك",
+    "مين برمجك",
+    "من برمجك",
+    "مين أنشأك",
+    "من أنشأك",
+    "مين اللي صنعك",
+    "مين اللي عملك",
+    "مين اللي برمجك",
+    "مين اللي أنشأك",
+    "مين صاحبك",
+    "مين صاحب dino",
+    "مين مؤسس dino",
+    "حقوق الطبع والنشر",
+    "حقوق النشر",
+    "copyright",
+    "owner",
+    "creator",
+    "developer"
+  ];
+
+  return questions.some(function(question) {
+    return message.includes(question);
+  });
+}
+
+async function sendMessage() {
+  if (!input) {
+    console.error("لم يتم العثور على مربع الكتابة.");
+    return;
+  }
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+
+  input.value = "";
+
+  // سؤال صاحب Dino AI لا يحتاج OpenAI
+  if (isOwnerQuestion(text)) {
+    addMessage(
+      "أنا Dino AI 🦖، والمشروع أنشأه Mohamed Reda.\n\nصاحب مشروع Dino AI هو Mohamed Reda.",
+      "ai"
+    );
+    return;
+  }
+
+  addMessage("جاري التفكير... 🦖", "ai");
+
   try {
-    const message = req.body.message;
-
-    if (!message) {
-      return res.status(400).json({ error: "اكتب رسالة أولاً" });
-    }
-
-    const response = await fetch("https://api.openai.com/v1/responses", {
+    const response = await fetch(WORKER_URL, {
       method: "POST",
+
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Content-Type": "application/json"
       },
+
       body: JSON.stringify({
-        model: "gpt-5.6-luna",
-        input: message
+        message: text
       })
     });
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data.error?.message || "حدث خطأ في الذكاء الاصطناعي"
-      });
+    // إزالة رسالة جاري التفكير
+    const aiMessages = messages.querySelectorAll(".ai-message");
+
+    if (aiMessages.length > 0) {
+      const lastMessage = aiMessages[aiMessages.length - 1];
+
+      if (lastMessage.textContent === "جاري التفكير... 🦖") {
+        lastMessage.remove();
+      }
     }
 
-    res.json({
-      reply: data.output_text || "لم أستطع تكوين رد."
-    });
+    if (data.reply) {
+      addMessage(data.reply, "ai");
+    } else if (data.error) {
+      addMessage(data.error, "ai");
+    } else {
+      addMessage("حدث خطأ ولم يصلني رد.", "ai");
+    }
 
   } catch (error) {
+
+    const aiMessages = messages.querySelectorAll(".ai-message");
+
+    if (aiMessages.length > 0) {
+      const lastMessage = aiMessages[aiMessages.length - 1];
+
+      if (lastMessage.textContent === "جاري التفكير... 🦖") {
+        lastMessage.remove();
+      }
+    }
+
+    addMessage(
+      "تعذر الاتصال بـ Dino AI. تأكد من اتصال الإنترنت.",
+      "ai"
+    );
+
     console.error(error);
-    res.status(500).json({
-      error: "حدث خطأ في السيرفر"
-    });
   }
-});
+}
 
-const PORT = process.env.PORT || 3000;
+if (sendButton) {
+  sendButton.addEventListener("click", sendMessage);
+}
 
-app.listen(PORT, () => {
-  console.log(`Dino AI server running on port ${PORT}`);
-});
+if (input) {
+  input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+
+  });
+}
+
+console.log("Dino AI connected 🦖");
