@@ -1,131 +1,53 @@
 ```javascript
-const chatBox = document.getElementById("chatBox");
-const userInput = document.getElementById("userInput");
-const sendButton = document.getElementById("sendButton");
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
 
-// معلومات المطور
-const developerName = "Mohamed Reda";
+const PORT = process.env.PORT || 3000;
 
-// تحويل الروابط إلى روابط قابلة للضغط
-function makeLinksClickable(text) {
-    const urlRegex = /(https?:\/\/[^\s<]+)/g;
+const server = http.createServer((req, res) => {
+    let filePath = req.url === "/"
+        ? path.join(__dirname, "index.html")
+        : path.join(__dirname, req.url);
 
-    return text.replace(urlRegex, function (url) {
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    // منع الوصول لملفات خارج المشروع
+    if (!filePath.startsWith(__dirname)) {
+        res.writeHead(403);
+        res.end("Forbidden");
+        return;
+    }
+
+    const ext = path.extname(filePath).toLowerCase();
+
+    const contentTypes = {
+        ".html": "text/html; charset=UTF-8",
+        ".css": "text/css; charset=UTF-8",
+        ".js": "application/javascript; charset=UTF-8",
+        ".json": "application/json; charset=UTF-8",
+        ".txt": "text/plain; charset=UTF-8",
+        ".xml": "application/xml; charset=UTF-8"
+    };
+
+    fs.readFile(filePath, (error, data) => {
+        if (error) {
+            res.writeHead(404, {
+                "Content-Type": "text/plain; charset=UTF-8"
+            });
+
+            res.end("File not found");
+            return;
+        }
+
+        res.writeHead(200, {
+            "Content-Type":
+                contentTypes[ext] || "application/octet-stream"
+        });
+
+        res.end(data);
     });
-}
+});
 
-// إضافة رسالة إلى المحادثة
-function addMessage(text, type) {
-    const message = document.createElement("div");
-    message.className = `message ${type}`;
-
-    const name = type === "ai" ? "Dino AI" : "أنت";
-
-    message.innerHTML = `
-        <strong>${name}</strong>
-        <p>${makeLinksClickable(text)}</p>
-    `;
-
-    chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// الرد على الأسئلة المعروفة
-function getLocalAnswer(question) {
-    const q = question.toLowerCase();
-
-    // المطور
-    if (
-        q.includes("مين صنعك") ||
-        q.includes("من صنعك") ||
-        q.includes("مين المطور") ||
-        q.includes("من المطور") ||
-        q.includes("مين عملك") ||
-        q.includes("من عملك")
-    ) {
-        return `تم تطوير Dino AI بواسطة ${developerName}.`;
-    }
-
-    // المالك
-    if (
-        q.includes("مين مالكك") ||
-        q.includes("من مالكك") ||
-        q.includes("مين صاحبك") ||
-        q.includes("من صاحبك")
-    ) {
-        return `مالك ومطور Dino AI هو ${developerName}.`;
-    }
-
-    // حقوق النشر
-    if (
-        q.includes("حقوق الطبع") ||
-        q.includes("حقوق النشر") ||
-        q.includes("copyright") ||
-        q.includes("حقوقك")
-    ) {
-        return `© 2026 ${developerName} — All Rights Reserved.`;
-    }
-
-    // اسم التطبيق
-    if (
-        q.includes("اسمك") ||
-        q.includes("ما اسمك") ||
-        q.includes("مين انت") ||
-        q.includes("من انت")
-    ) {
-        return "أنا Dino AI، مساعد ذكي للمعلومات والأسئلة.";
-    }
-
-    // الألعاب
-    if (
-        q.includes("لعبة") ||
-        q.includes("العاب") ||
-        q.includes("gaming") ||
-        q.includes("game")
-    ) {
-        return `أقدر أساعدك في أسئلة كثيرة عن الألعاب، مثل معلومات اللعبة، الشخصيات، طريقة اللعب، المنصات والإصدارات. اسألني عن اسم اللعبة التي تريدها.`;
-    }
-
-    return null;
-}
-
-// إرسال الرسالة
-function sendMessage() {
-    const question = userInput.value.trim();
-
-    if (question === "") {
-        return;
-    }
-
-    addMessage(question, "user");
-    userInput.value = "";
-
-    const localAnswer = getLocalAnswer(question);
-
-    if (localAnswer) {
-        setTimeout(() => {
-            addMessage(localAnswer, "ai");
-        }, 300);
-
-        return;
-    }
-
-    setTimeout(() => {
-        addMessage(
-            "أقدر أساعدك، لكن خدمة الذكاء الاصطناعي غير متصلة حاليًا. جرّب سؤالي عن اسم المطور أو حقوق النشر أو لعبة معينة.",
-            "ai"
-        );
-    }, 300);
-}
-
-// زر الإرسال
-sendButton.addEventListener("click", sendMessage);
-
-// زر Enter
-userInput.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
+server.listen(PORT, () => {
+    console.log(`Dino AI is running on port ${PORT}`);
 });
 ```
