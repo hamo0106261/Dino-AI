@@ -1,10 +1,23 @@
-```html
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino AI 🦖</title>
+
+<title>Dino AI - مساعد الذكاء الاصطناعي</title>
+
+<meta name="description" content="Dino AI هو مساعد ذكاء اصطناعي ذكي وسريع يساعدك في الأسئلة والألعاب والمواضيع المختلفة.">
+
+<meta name="keywords" content="Dino AI, دينو AI, ذكاء اصطناعي, AI, مساعد ذكي, ألعاب">
+
+<meta name="author" content="Mohamed Reda">
+
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Dino AI - مساعد الذكاء الاصطناعي">
+<meta property="og:description" content="تحدث مع Dino AI، مساعدك الذكي.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hamo0106261.github.io/Dino-AI/">
 
 <style>
 * {
@@ -213,6 +226,7 @@ button:hover {
 }
 
 @media (max-width: 600px) {
+
   .message {
     max-width: 90%;
   }
@@ -247,21 +261,23 @@ button:hover {
     <button
       class="history-button"
       id="historyButton"
-      type="button"
-    >
+      type="button">
       🗂️ الشاتات
     </button>
 
-    <div class="logo">🦖 Dino AI</div>
+    <div class="logo">
+      🦖 Dino AI
+    </div>
 
-    <div class="subtitle">مساعدك الذكي</div>
+    <div class="subtitle">
+      مساعدك الذكي
+    </div>
 
   </div>
 
   <div
     class="history-panel"
-    id="historyPanel"
-  >
+    id="historyPanel">
 
     <div class="history-title">
       🗂️ المحادثات القديمة
@@ -270,8 +286,7 @@ button:hover {
     <button
       class="new-chat"
       id="newChatButton"
-      type="button"
-    >
+      type="button">
       ➕ محادثة جديدة
     </button>
 
@@ -283,11 +298,17 @@ button:hover {
 
     <div class="welcome">
 
-      <div class="dino">🦖</div>
+      <div class="dino">
+        🦖
+      </div>
 
-      <h2>أهلاً بك في Dino AI</h2>
+      <h2>
+        أهلاً بك في Dino AI
+      </h2>
 
-      <p>اكتب رسالتك ودعنا نتحدث!</p>
+      <p>
+        اكتب رسالتك ودعنا نتحدث!
+      </p>
 
     </div>
 
@@ -298,13 +319,11 @@ button:hover {
     <input
       id="messageInput"
       type="text"
-      placeholder="اكتب رسالتك هنا..."
-    >
+      placeholder="اكتب رسالتك هنا...">
 
     <button
       id="sendButton"
-      type="button"
-    >
+      type="button">
       إرسال
     </button>
 
@@ -318,9 +337,14 @@ button:hover {
 
 <script>
 
-const input = document.getElementById("messageInput");
-const button = document.getElementById("sendButton");
-const chat = document.getElementById("chat");
+const input =
+  document.getElementById("messageInput");
+
+const button =
+  document.getElementById("sendButton");
+
+const chat =
+  document.getElementById("chat");
 
 const historyButton =
   document.getElementById("historyButton");
@@ -334,17 +358,20 @@ const historyList =
 const newChatButton =
   document.getElementById("newChatButton");
 
-let currentChatId = Date.now().toString();
+
+let currentChatId =
+  Date.now().toString();
 
 let currentMessages = [];
 
 
 function makeLinksClickable(text) {
 
-  const escapedText = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  const escapedText =
+    text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
   return escapedText
 
@@ -378,7 +405,8 @@ function makeLinksClickable(text) {
         ) {
 
           ending =
-            cleanUrl.slice(-1) + ending;
+            cleanUrl.slice(-1) +
+            ending;
 
           cleanUrl =
             cleanUrl.slice(0, -1);
@@ -428,16 +456,26 @@ function saveCurrentChat() {
       : "محادثة جديدة";
 
   const chatData = {
+
     id: currentChatId,
+
     title: title,
+
     messages: currentMessages,
-    date: new Date().toLocaleString("ar-EG")
+
+    date:
+      new Date().toLocaleString("ar-EG")
   };
 
   if (existingIndex >= 0) {
-    chats[existingIndex] = chatData;
+
+    chats[existingIndex] =
+      chatData;
+
   } else {
+
     chats.unshift(chatData);
+
   }
 
   localStorage.setItem(
@@ -471,17 +509,21 @@ function loadHistory() {
     const item =
       document.createElement("div");
 
-    item.className = "history-item";
+    item.className =
+      "history-item";
+
 
     const text =
       document.createElement("div");
 
-    text.className = "history-text";
+    text.className =
+      "history-text";
 
     text.textContent =
       "💬 " + chatItem.title;
 
     item.appendChild(text);
+
 
     const date =
       document.createElement("small");
@@ -489,9 +531,11 @@ function loadHistory() {
     date.textContent =
       chatItem.date;
 
-    date.style.color = "#8ea095";
+    date.style.color =
+      "#8ea095";
 
     item.appendChild(date);
+
 
     const deleteButton =
       document.createElement("button");
@@ -499,9 +543,12 @@ function loadHistory() {
     deleteButton.className =
       "delete-history";
 
-    deleteButton.type = "button";
+    deleteButton.type =
+      "button";
 
-    deleteButton.textContent = "🗑️ حذف";
+    deleteButton.textContent =
+      "🗑️ حذف";
+
 
     deleteButton.addEventListener(
       "click",
@@ -525,7 +572,9 @@ function loadHistory() {
       }
     );
 
+
     item.appendChild(deleteButton);
+
 
     item.addEventListener(
       "click",
@@ -536,6 +585,7 @@ function loadHistory() {
       }
     );
 
+
     historyList.appendChild(item);
 
   });
@@ -544,12 +594,14 @@ function loadHistory() {
 
 function openChat(chatItem) {
 
-  currentChatId = chatItem.id;
+  currentChatId =
+    chatItem.id;
 
   currentMessages =
     chatItem.messages || [];
 
   chat.innerHTML = "";
+
 
   currentMessages.forEach(
     function(message) {
@@ -564,6 +616,7 @@ function openChat(chatItem) {
             ? "user"
             : "ai"
         );
+
 
       if (message.role === "user") {
 
@@ -586,10 +639,13 @@ function openChat(chatItem) {
     }
   );
 
+
   chat.scrollTop =
     chat.scrollHeight;
 
-  historyPanel.classList.remove("show");
+  historyPanel.classList.remove(
+    "show"
+  );
 }
 
 
@@ -606,11 +662,17 @@ function startNewChat() {
 
     <div class="welcome">
 
-      <div class="dino">🦖</div>
+      <div class="dino">
+        🦖
+      </div>
 
-      <h2>أهلاً بك في Dino AI</h2>
+      <h2>
+        أهلاً بك في Dino AI
+      </h2>
 
-      <p>اكتب رسالتك ودعنا نتحدث!</p>
+      <p>
+        اكتب رسالتك ودعنا نتحدث!
+      </p>
 
     </div>
 
@@ -618,7 +680,9 @@ function startNewChat() {
 
   input.value = "";
 
-  historyPanel.classList.remove("show");
+  historyPanel.classList.remove(
+    "show"
+  );
 }
 
 
@@ -631,12 +695,14 @@ async function sendMessage() {
     return;
   }
 
+
   const welcome =
     document.querySelector(".welcome");
 
   if (welcome) {
     welcome.remove();
   }
+
 
   const userMessage =
     document.createElement("div");
@@ -647,14 +713,19 @@ async function sendMessage() {
   userMessage.textContent =
     message;
 
-  chat.appendChild(userMessage);
+  chat.appendChild(
+    userMessage
+  );
+
 
   currentMessages.push({
     role: "user",
     text: message
   });
 
+
   input.value = "";
+
 
   const aiMessage =
     document.createElement("div");
@@ -665,10 +736,13 @@ async function sendMessage() {
   aiMessage.textContent =
     "Dino AI يفكر... 🦖";
 
-  chat.appendChild(aiMessage);
+  chat.appendChild(
+    aiMessage
+  );
 
   chat.scrollTop =
     chat.scrollHeight;
+
 
   try {
 
@@ -683,14 +757,17 @@ async function sendMessage() {
               "application/json"
           },
 
-          body: JSON.stringify({
-            message: message
-          })
+          body:
+            JSON.stringify({
+              message: message
+            })
         }
       );
 
+
     const data =
       await response.json();
+
 
     if (data.reply) {
 
@@ -699,10 +776,12 @@ async function sendMessage() {
           data.reply
         );
 
+
       currentMessages.push({
         role: "assistant",
         text: data.reply
       });
+
 
       saveCurrentChat();
 
@@ -721,6 +800,7 @@ async function sendMessage() {
 
   }
 
+
   chat.scrollTop =
     chat.scrollHeight;
 }
@@ -730,7 +810,9 @@ historyButton.addEventListener(
   "click",
   function() {
 
-    historyPanel.classList.toggle("show");
+    historyPanel.classList.toggle(
+      "show"
+    );
 
     loadHistory();
 
@@ -768,4 +850,3 @@ loadHistory();
 
 </body>
 </html>
-```
