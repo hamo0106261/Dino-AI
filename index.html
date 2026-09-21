@@ -38,11 +38,10 @@
     }
 
     .header {
-      padding: 20px;
+      padding: 22px;
       text-align: center;
       background: #0c1510;
       border-bottom: 1px solid #29402f;
-      position: relative;
     }
 
     .logo {
@@ -251,7 +250,7 @@
     </button>
 
     <div class="logo">
-      🦖 Dino AI
+      Dino AI
     </div>
 
     <div class="subtitle">
@@ -646,7 +645,7 @@ async function sendMessage() {
     "message ai";
 
   aiMessage.textContent =
-    "Dino AI يفكر... 🦖";
+    "Dino AI يفكر...";
 
   chat.appendChild(
     aiMessage
@@ -681,10 +680,6 @@ async function sendMessage() {
       String(data.error || "")
         .toLowerCase();
 
-    /*
-      لا نعرض رسالة OpenAI الطويلة للمستخدم.
-    */
-
     if (
       response.status === 429 ||
       errorText.includes("rate limit") ||
@@ -693,7 +688,7 @@ async function sendMessage() {
     ) {
 
       aiMessage.textContent =
-        "أنا موجود 🦖، لكن خدمة الذكاء الاصطناعي مش متاحة مؤقتًا. جرّب بعد شوية.";
+        "خدمة Dino AI غير متاحة مؤقتًا. جرّب بعد شوية.";
 
       return;
     }
@@ -715,14 +710,14 @@ async function sendMessage() {
     } else {
 
       aiMessage.textContent =
-        "حصلت مشكلة مؤقتة في Dino AI 🦖. جرّب تاني.";
+        "حصلت مشكلة مؤقتة في Dino AI.";
 
     }
 
   } catch (error) {
 
     aiMessage.textContent =
-      "مش قادر أتصل بالخدمة دلوقتي 🦖. جرّب بعد شوية.";
+      "مش قادر أتصل بـ Dino AI حاليًا.";
 
     console.error(error);
 
@@ -764,8 +759,11 @@ input.addEventListener(
   function(event) {
 
     if (event.key === "Enter") {
+
       event.preventDefault();
+
       sendMessage();
+
     }
 
   }
