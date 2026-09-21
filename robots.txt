@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hamo0106261.github.io/Dino-AI/sitemap.xml
