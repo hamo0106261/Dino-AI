@@ -68,6 +68,7 @@
       border-radius: 18px;
       line-height: 1.6;
       white-space: pre-wrap;
+      word-wrap: break-word;
     }
 
     .user {
@@ -187,9 +188,11 @@
   </div>
 
   <script>
+
     const input = document.getElementById("messageInput");
     const button = document.getElementById("sendButton");
     const chat = document.getElementById("chat");
+
 
     function makeLinksClickable(text) {
 
@@ -198,65 +201,99 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-      return escapedText.replace(
-        /(https?:\/\/[^\s<]+)/g,
-        function(url) {
 
-          let cleanUrl = url;
+      return escapedText
+        .replace(
+          /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+          function(match, name, url) {
 
-          let ending = "";
+            return (
+              '<a href="' +
+              url +
+              '" target="_blank" rel="noopener noreferrer">' +
+              name +
+              "</a>"
+            );
 
-          while (
-            cleanUrl.endsWith(".") ||
-            cleanUrl.endsWith(",") ||
-            cleanUrl.endsWith(")") ||
-            cleanUrl.endsWith("]")
-          ) {
-            ending = cleanUrl.slice(-1) + ending;
-            cleanUrl = cleanUrl.slice(0, -1);
           }
+        )
+        .replace(
+          /(https?:\/\/[^\s<]+)/g,
+          function(url) {
 
-          return (
-            '<a href="' +
-            cleanUrl +
-            '" target="_blank" rel="noopener noreferrer">' +
-            cleanUrl +
-            "</a>" +
-            ending
-          );
-        }
-      );
+            let cleanUrl = url;
+            let ending = "";
+
+
+            while (
+              cleanUrl.endsWith(".") ||
+              cleanUrl.endsWith(",") ||
+              cleanUrl.endsWith(")") ||
+              cleanUrl.endsWith("]")
+            ) {
+
+              ending = cleanUrl.slice(-1) + ending;
+              cleanUrl = cleanUrl.slice(0, -1);
+
+            }
+
+
+            return (
+              '<a href="' +
+              cleanUrl +
+              '" target="_blank" rel="noopener noreferrer">' +
+              cleanUrl +
+              "</a>" +
+              ending
+            );
+
+          }
+        );
+
     }
+
 
     async function sendMessage() {
 
       const message = input.value.trim();
 
+
       if (!message) {
         return;
       }
 
+
       const welcome = document.querySelector(".welcome");
+
 
       if (welcome) {
         welcome.remove();
       }
 
+
       const userMessage = document.createElement("div");
+
       userMessage.className = "message user";
+
       userMessage.textContent = message;
 
       chat.appendChild(userMessage);
 
+
       input.value = "";
 
+
       const aiMessage = document.createElement("div");
+
       aiMessage.className = "message ai";
+
       aiMessage.textContent = "Dino AI يفكر... 🦖";
 
       chat.appendChild(aiMessage);
 
+
       chat.scrollTop = chat.scrollHeight;
+
 
       try {
 
@@ -264,16 +301,20 @@
           "https://still-disk-8324.mmaojmmmoh.workers.dev/",
           {
             method: "POST",
+
             headers: {
               "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
               message: message
             })
           }
         );
 
+
         const data = await response.json();
+
 
         if (data.reply) {
 
@@ -287,6 +328,7 @@
 
         }
 
+
       } catch (error) {
 
         aiMessage.textContent =
@@ -294,18 +336,28 @@
 
       }
 
+
       chat.scrollTop = chat.scrollHeight;
+
     }
 
-    button.addEventListener("click", sendMessage);
 
-    input.addEventListener("keydown", function(event) {
+    button.addEventListener(
+      "click",
+      sendMessage
+    );
 
-      if (event.key === "Enter") {
-        sendMessage();
+
+    input.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+
       }
-
-    });
+    );
 
   </script>
 
