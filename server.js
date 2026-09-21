@@ -33,7 +33,6 @@ function addMessage(text, type) {
   message.textContent = text;
 
   messages.appendChild(message);
-
   messages.scrollTop = messages.scrollHeight;
 }
 
@@ -70,10 +69,7 @@ function isOwnerQuestion(text) {
 }
 
 async function sendMessage() {
-  if (!input) {
-    console.error("لم يتم العثور على مربع الكتابة.");
-    return;
-  }
+  if (!input) return;
 
   const text = input.value.trim();
 
@@ -86,7 +82,7 @@ async function sendMessage() {
   // سؤال صاحب Dino AI لا يحتاج OpenAI
   if (isOwnerQuestion(text)) {
     addMessage(
-      "أنا Dino AI 🦖، والمشروع أنشأه Mohamed Reda.\n\nصاحب مشروع Dino AI هو Mohamed Reda.",
+      "أنا Dino AI 🦖، والمشروع أنشأه Mohamed Reda.",
       "ai"
     );
     return;
@@ -109,7 +105,6 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    // إزالة رسالة جاري التفكير
     const aiMessages = messages.querySelectorAll(".ai-message");
 
     if (aiMessages.length > 0) {
@@ -120,13 +115,39 @@ async function sendMessage() {
       }
     }
 
+    // إخفاء أخطاء Rate Limit عن المستخدم
+    const errorText = String(data.error || "");
+
+    if (
+      response.status === 429 ||
+      errorText.toLowerCase().includes("rate limit") ||
+      errorText.toLowerCase().includes("requests per day") ||
+      errorText.toLowerCase().includes("rpd")
+    ) {
+      addMessage(
+        "أنا موجود 🦖، لكن خدمة الذكاء الاصطناعي مش متاحة مؤقتًا. جرّب بعد شوية.",
+        "ai"
+      );
+      return;
+    }
+
     if (data.reply) {
       addMessage(data.reply, "ai");
-    } else if (data.error) {
-      addMessage(data.error, "ai");
-    } else {
-      addMessage("حدث خطأ ولم يصلني رد.", "ai");
+      return;
     }
+
+    if (data.error) {
+      addMessage(
+        "حصلت مشكلة مؤقتة في الاتصال بـ Dino AI 🦖.",
+        "ai"
+      );
+      return;
+    }
+
+    addMessage(
+      "مش قادر أجيب رد دلوقتي. جرّب تاني.",
+      "ai"
+    );
 
   } catch (error) {
 
@@ -141,7 +162,7 @@ async function sendMessage() {
     }
 
     addMessage(
-      "تعذر الاتصال بـ Dino AI. تأكد من اتصال الإنترنت.",
+      "مش قادر أتصل بالخدمة دلوقتي 🦖. جرّب بعد شوية.",
       "ai"
     );
 
@@ -155,12 +176,10 @@ if (sendButton) {
 
 if (input) {
   input.addEventListener("keydown", function(event) {
-
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       sendMessage();
     }
-
   });
 }
 
