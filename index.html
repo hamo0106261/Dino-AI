@@ -247,7 +247,7 @@
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك أو أرسل صورة.
+                اكتب سؤالك أو أرسل صورة أو ملف صوتي.
 
             </div>
 
@@ -275,6 +275,24 @@
                     accept="image/*"
                     hidden>
 
+
+                <!-- زر الصوت -->
+                <button
+                    id="audioButton"
+                    class="attach-button"
+                    type="button"
+                    aria-label="إضافة صوت">
+                    🎤
+                </button>
+
+                <!-- اختيار الصوت -->
+                <input
+                    id="audioInput"
+                    type="file"
+                    accept="audio/*"
+                    hidden>
+
+
                 <!-- مربع السؤال -->
                 <input
                     id="userInput"
@@ -282,6 +300,7 @@
                     placeholder="اسأل Dino AI..."
                     autocomplete="off"
                     spellcheck="false">
+
 
                 <!-- إرسال -->
                 <button
@@ -297,6 +316,13 @@
             <!-- معاينة الصورة -->
             <div
                 id="imagePreview"
+                class="attachment-preview">
+            </div>
+
+
+            <!-- معاينة الصوت -->
+            <div
+                id="audioPreview"
                 class="attachment-preview">
             </div>
 
@@ -402,6 +428,15 @@ const imageInput =
 
 const imagePreview =
     document.getElementById("imagePreview");
+
+const audioButton =
+    document.getElementById("audioButton");
+
+const audioInput =
+    document.getElementById("audioInput");
+
+const audioPreview =
+    document.getElementById("audioPreview");
 
 const darkModeButton =
     document.getElementById("darkModeButton");
@@ -921,7 +956,7 @@ newChatButton.addEventListener(
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك أو أرسل صورة.
+                اكتب سؤالك أو أرسل صورة أو ملف صوتي.
 
             </div>
 
@@ -933,6 +968,18 @@ newChatButton.addEventListener(
         );
 
         userInput.value = "";
+
+        selectedImage = null;
+
+        selectedAudio = null;
+
+        imageInput.value = "";
+
+        audioInput.value = "";
+
+        imagePreview.innerHTML = "";
+
+        audioPreview.innerHTML = "";
 
         userInput.focus();
 
@@ -1110,6 +1157,7 @@ imageInput.addEventListener(
                         position:relative;
                         display:inline-block;
                         margin-top:8px;
+                        margin-left:8px;
                         ">
 
                         <img
@@ -1174,6 +1222,137 @@ imageInput.addEventListener(
 
 
 /* =========================
+   الصوت
+   ========================= */
+
+let selectedAudio = null;
+
+
+audioButton.addEventListener(
+    "click",
+    function () {
+
+        audioInput.click();
+
+    }
+);
+
+
+audioInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            audioInput.files[0];
+
+        if (!file) return;
+
+
+        selectedAudio = file;
+
+
+        const audioURL =
+            URL.createObjectURL(file);
+
+
+        audioPreview.innerHTML = `
+
+            <div
+                id="audioAttachment"
+                style="
+                position:relative;
+                display:flex;
+                align-items:center;
+                gap:10px;
+                width:100%;
+                margin-top:8px;
+                padding:10px;
+                background:#f1f1f1;
+                border:1px solid #ddd;
+                border-radius:12px;
+                ">
+
+                <span
+                    style="
+                    font-size:24px;
+                    ">
+                    🎵
+                </span>
+
+                <div
+                    style="
+                    flex:1;
+                    min-width:0;
+                    ">
+
+                    <div
+                        style="
+                        font-size:13px;
+                        margin-bottom:6px;
+                        overflow:hidden;
+                        text-overflow:ellipsis;
+                        white-space:nowrap;
+                        ">
+                        ${file.name}
+                    </div>
+
+                    <audio
+                        controls
+                        src="${audioURL}"
+                        style="
+                        width:100%;
+                        max-width:350px;
+                        height:38px;
+                        ">
+                    </audio>
+
+                </div>
+
+                <button
+                    id="removeAudio"
+                    type="button"
+                    style="
+                    width:30px;
+                    height:30px;
+                    border:none;
+                    border-radius:50%;
+                    background:#202123;
+                    color:white;
+                    cursor:pointer;
+                    font-size:18px;
+                    ">
+                    ×
+                </button>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "removeAudio"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    selectedAudio = null;
+
+                    audioInput.value = "";
+
+                    audioPreview.innerHTML = "";
+
+                    URL.revokeObjectURL(audioURL);
+
+                }
+            );
+
+    }
+);
+
+
+/* =========================
    إرسال الرسالة
    ========================= */
 
@@ -1185,7 +1364,8 @@ async function sendMessage() {
 
     if (
         !message &&
-        !selectedImage
+        !selectedImage &&
+        !selectedAudio
     ) {
 
         return;
@@ -1211,6 +1391,20 @@ async function sendMessage() {
     }
 
 
+    if (selectedAudio) {
+
+        messageToSend +=
+            (
+                messageToSend
+                ? "\n\n"
+                : ""
+            ) +
+            "🎵 ملف صوتي مرفق: " +
+            selectedAudio.name;
+
+    }
+
+
     const userMessage =
         document.createElement("div");
 
@@ -1229,9 +1423,15 @@ async function sendMessage() {
 
     selectedImage = null;
 
+    selectedAudio = null;
+
     imageInput.value = "";
 
+    audioInput.value = "";
+
     imagePreview.innerHTML = "";
+
+    audioPreview.innerHTML = "";
 
 
     const botMessage =
@@ -1336,6 +1536,7 @@ function displayBotReply(
 
     const urlRegex =
         /(https?:\/\/[^\s<>"']+)/g;
+
 
     const parts =
         text.split(urlRegex);
