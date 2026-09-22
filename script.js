@@ -1,4 +1,6 @@
 ```javascript
+alert("SCRIPT WORKS");
+
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const chatBox = document.getElementById("chatBox");
@@ -10,7 +12,9 @@ function displayBotReply(element, text) {
     const parts = text.split(urlRegex);
 
     parts.forEach((part) => {
+
         if (/^https?:\/\//i.test(part)) {
+
             const link = document.createElement("a");
 
             link.href = part;
@@ -22,11 +26,15 @@ function displayBotReply(element, text) {
             link.style.marginTop = "8px";
 
             element.appendChild(link);
+
         } else {
+
             element.appendChild(
                 document.createTextNode(part)
             );
+
         }
+
     });
 }
 
@@ -39,7 +47,9 @@ async function sendMessage() {
     }
 
     const userMessage = document.createElement("div");
+
     userMessage.className = "message user";
+
     userMessage.textContent = message;
 
     chatBox.appendChild(userMessage);
@@ -47,7 +57,9 @@ async function sendMessage() {
     userInput.value = "";
 
     const botMessage = document.createElement("div");
+
     botMessage.className = "message bot";
+
     botMessage.textContent = "🤖 جاري التفكير...";
 
     chatBox.appendChild(botMessage);
@@ -57,6 +69,7 @@ async function sendMessage() {
     try {
 
         const response = await fetch(API_URL, {
+
             method: "POST",
 
             headers: {
@@ -66,6 +79,7 @@ async function sendMessage() {
             body: JSON.stringify({
                 message: message
             })
+
         });
 
         const data = await response.json();
@@ -99,18 +113,24 @@ async function sendMessage() {
     userInput.focus();
 }
 
-sendButton.addEventListener("click", sendMessage);
+sendButton.addEventListener("click", function () {
+    sendMessage();
+});
 
 userInput.addEventListener("keydown", function (event) {
 
     if (event.key === "Enter") {
+
         event.preventDefault();
+
         sendMessage();
     }
 
 });
 
 window.addEventListener("load", function () {
+
     userInput.focus();
+
 });
 ```
