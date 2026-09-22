@@ -8,6 +8,229 @@
     <title>Dino AI</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================
+           أزرار الصور والمايك
+           ========================= */
+
+        .attach-button {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border: none;
+            border-radius: 14px;
+            background: #f1f3f5;
+            color: #202124;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s ease;
+            padding: 0;
+        }
+
+        .attach-button:hover {
+            transform: translateY(-2px);
+            background: #e4e7eb;
+        }
+
+        .attach-button svg {
+            width: 21px;
+            height: 21px;
+            stroke: currentColor;
+        }
+
+        /* زر المايك أثناء التسجيل */
+        .attach-button.recording {
+            background: #ef4444;
+            color: white;
+            animation: recordingPulse 1.2s infinite;
+        }
+
+        .attach-button.recording:hover {
+            background: #dc2626;
+        }
+
+        @keyframes recordingPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        /* =========================
+           Dark Mode
+           ========================= */
+
+        body.dark-mode {
+            background: #080b10 !important;
+            color: #f5f7fa !important;
+        }
+
+        body.dark-mode .app,
+        body.dark-mode .main-area {
+            background: #080b10 !important;
+            color: #f5f7fa !important;
+        }
+
+        body.dark-mode .top-bar {
+            background: #0d1219 !important;
+            border-color: #202936 !important;
+        }
+
+        body.dark-mode .logo {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .chat-box {
+            background: #080b10 !important;
+        }
+
+        body.dark-mode .welcome h1,
+        body.dark-mode .welcome p {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .message.bot {
+            background: #151c25 !important;
+            color: #f5f7fa !important;
+            border-color: #26313e !important;
+        }
+
+        body.dark-mode .message.user {
+            background: #2563eb !important;
+            color: white !important;
+        }
+
+        body.dark-mode .input-wrapper {
+            background: #080b10 !important;
+        }
+
+        body.dark-mode .input-area {
+            background: #111820 !important;
+            border-color: #293440 !important;
+        }
+
+        body.dark-mode #userInput {
+            background: transparent !important;
+            color: white !important;
+        }
+
+        body.dark-mode #userInput::placeholder {
+            color: #8b96a3 !important;
+        }
+
+        body.dark-mode .attach-button {
+            background: #1b2430 !important;
+            color: #e8edf3 !important;
+        }
+
+        body.dark-mode .attach-button:hover {
+            background: #263241 !important;
+        }
+
+        body.dark-mode .attach-button.recording {
+            background: #ef4444 !important;
+            color: white !important;
+        }
+
+        body.dark-mode #sendButton {
+            background: #2563eb !important;
+            color: white !important;
+        }
+
+        body.dark-mode .input-note {
+            color: #7e8997 !important;
+        }
+
+        body.dark-mode footer {
+            color: #697482 !important;
+        }
+
+        body.dark-mode .sidebar {
+            background: #0d1219 !important;
+            color: white !important;
+            border-color: #202936 !important;
+        }
+
+        body.dark-mode .sidebar-button,
+        body.dark-mode .sidebar-item {
+            background: transparent !important;
+            color: #e8edf3 !important;
+        }
+
+        body.dark-mode .sidebar-button:hover,
+        body.dark-mode .sidebar-item:hover {
+            background: #1b2430 !important;
+        }
+
+        body.dark-mode .sidebar-logo,
+        body.dark-mode .sidebar-info {
+            color: white !important;
+        }
+
+        body.dark-mode .memory-panel {
+            background: #0d1219 !important;
+            color: white !important;
+        }
+
+        body.dark-mode .memory-header {
+            border-color: #26313e !important;
+        }
+
+        body.dark-mode .memory-header h2 {
+            color: white !important;
+        }
+
+        body.dark-mode .memory-content {
+            color: #e8edf3 !important;
+        }
+
+        body.dark-mode .memory-add input {
+            background: #151c25 !important;
+            color: white !important;
+            border-color: #293440 !important;
+        }
+
+        body.dark-mode .memory-item {
+            background: #151c25 !important;
+            color: white !important;
+            border-color: #26313e !important;
+        }
+
+        body.dark-mode .empty-memory {
+            color: #8b96a3 !important;
+        }
+
+        body.dark-mode .menu-button,
+        body.dark-mode .close-sidebar,
+        body.dark-mode .memory-header button {
+            color: white !important;
+        }
+
+        body.dark-mode a {
+            color: #60a5fa !important;
+        }
+
+        /* معاينة المرفقات */
+        .attachment-preview {
+            color: inherit;
+        }
+
+        body.dark-mode .attachment-preview > div {
+            background: #151c25 !important;
+            border-color: #293440 !important;
+            color: #e8edf3 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -76,9 +299,7 @@
 
 
     <!-- نافذة الذاكرة -->
-    <div
-        id="memoryPanel"
-        class="memory-panel">
+    <div id="memoryPanel" class="memory-panel">
 
         <div class="memory-header">
 
@@ -126,9 +347,7 @@
 
 
     <!-- نافذة المحادثات -->
-    <div
-        id="chatsPanel"
-        class="memory-panel">
+    <div id="chatsPanel" class="memory-panel">
 
         <div class="memory-header">
 
@@ -151,9 +370,7 @@
 
 
     <!-- نافذة الإعدادات -->
-    <div
-        id="settingsPanel"
-        class="memory-panel">
+    <div id="settingsPanel" class="memory-panel">
 
         <div class="memory-header">
 
@@ -272,8 +489,21 @@
                     id="attachButton"
                     class="attach-button"
                     type="button"
-                    aria-label="إضافة صورة">
-                    📎
+                    aria-label="إضافة صورة"
+                    title="إضافة صورة">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+
+                        <path d="M21.44 11.05l-8.49 8.49a5.5 5.5 0 01-7.78-7.78l9.2-9.2a3.5 3.5 0 014.95 4.95l-9.2 9.2a1.5 1.5 0 01-2.12-2.12l8.49-8.49"/>
+
+                    </svg>
+
                 </button>
 
                 <!-- اختيار الصور -->
@@ -289,8 +519,44 @@
                     id="audioButton"
                     class="attach-button"
                     type="button"
-                    aria-label="التحدث مع Dino AI">
-                    🎤
+                    aria-label="التحدث مع Dino AI"
+                    title="التحدث مع Dino AI">
+
+                    <svg
+                        id="microphoneIcon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+
+                        <rect
+                            x="9"
+                            y="2"
+                            width="6"
+                            height="12"
+                            rx="3">
+                        </rect>
+
+                        <path d="M5 10a7 7 0 0014 0"></path>
+
+                        <line
+                            x1="12"
+                            y1="19"
+                            x2="12"
+                            y2="22">
+                        </line>
+
+                        <line
+                            x1="8"
+                            y1="22"
+                            x2="16"
+                            y2="22">
+                        </line>
+
+                    </svg>
+
                 </button>
 
 
@@ -1017,6 +1283,21 @@ closeSettings.addEventListener(
    الوضع الداكن
    ========================= */
 
+function updateDarkModeButton() {
+
+    const dark =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+    darkModeButton.textContent =
+        dark
+        ? "إيقاف"
+        : "تشغيل";
+
+}
+
+
 darkModeButton.addEventListener(
     "click",
     function () {
@@ -1040,10 +1321,7 @@ darkModeButton.addEventListener(
         );
 
 
-        darkModeButton.textContent =
-            dark
-            ? "إيقاف"
-            : "تشغيل";
+        updateDarkModeButton();
 
     }
 );
@@ -1059,10 +1337,10 @@ if (
         "dark-mode"
     );
 
-    darkModeButton.textContent =
-        "إيقاف";
-
 }
+
+
+updateDarkModeButton();
 
 
 /* =========================
@@ -1236,11 +1514,6 @@ audioButton.addEventListener(
     "click",
     async function () {
 
-        /*
-         * إذا كان التسجيل شغالًا
-         * نوقفه
-         */
-
         if (isRecording) {
 
             mediaRecorder.stop();
@@ -1251,10 +1524,6 @@ audioButton.addEventListener(
 
 
         try {
-
-            /*
-             * طلب إذن الميكروفون
-             */
 
             microphoneStream =
                 await navigator.mediaDevices.getUserMedia({
@@ -1267,10 +1536,6 @@ audioButton.addEventListener(
 
             let options = {};
 
-
-            /*
-             * اختيار أفضل صيغة يدعمها المتصفح
-             */
 
             if (
                 MediaRecorder.isTypeSupported(
@@ -1294,14 +1559,44 @@ audioButton.addEventListener(
             isRecording = true;
 
 
-            audioButton.textContent =
-                "⏹️";
+            audioButton.classList.add(
+                "recording"
+            );
 
 
             audioButton.setAttribute(
                 "aria-label",
                 "إيقاف التسجيل"
             );
+
+
+            audioButton.setAttribute(
+                "title",
+                "إيقاف التسجيل"
+            );
+
+
+            audioButton.innerHTML = `
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <rect
+                        x="7"
+                        y="7"
+                        width="10"
+                        height="10"
+                        rx="2">
+                    </rect>
+
+                </svg>
+
+            `;
 
 
             audioPreview.innerHTML = `
@@ -1329,10 +1624,6 @@ audioButton.addEventListener(
             `;
 
 
-            /*
-             * استقبال أجزاء الصوت
-             */
-
             mediaRecorder.addEventListener(
                 "dataavailable",
                 function (event) {
@@ -1348,10 +1639,6 @@ audioButton.addEventListener(
                 }
             );
 
-
-            /*
-             * بعد إيقاف التسجيل
-             */
 
             mediaRecorder.addEventListener(
                 "stop",
@@ -1407,8 +1694,9 @@ audioButton.addEventListener(
                     isRecording = false;
 
 
-                    audioButton.textContent =
-                        "🎤";
+                    audioButton.classList.remove(
+                        "recording"
+                    );
 
 
                     audioButton.setAttribute(
@@ -1417,9 +1705,50 @@ audioButton.addEventListener(
                     );
 
 
-                    /*
-                     * إغلاق الميكروفون
-                     */
+                    audioButton.setAttribute(
+                        "title",
+                        "التحدث مع Dino AI"
+                    );
+
+
+                    audioButton.innerHTML = `
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="9"
+                                y="2"
+                                width="6"
+                                height="12"
+                                rx="3">
+                            </rect>
+
+                            <path d="M5 10a7 7 0 0014 0"></path>
+
+                            <line
+                                x1="12"
+                                y1="19"
+                                x2="12"
+                                y2="22">
+                            </line>
+
+                            <line
+                                x1="8"
+                                y1="22"
+                                x2="16"
+                                y2="22">
+                            </line>
+
+                        </svg>
+
+                    `;
+
 
                     if (microphoneStream) {
 
@@ -1438,19 +1767,11 @@ audioButton.addEventListener(
                     }
 
 
-                    /*
-                     * إرسال الصوت تلقائيًا
-                     */
-
                     sendMessage();
 
                 }
             );
 
-
-            /*
-             * بدء التسجيل
-             */
 
             mediaRecorder.start();
 
@@ -1463,8 +1784,48 @@ audioButton.addEventListener(
             isRecording = false;
 
 
-            audioButton.textContent =
-                "🎤";
+            audioButton.classList.remove(
+                "recording"
+            );
+
+
+            audioButton.innerHTML = `
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <rect
+                        x="9"
+                        y="2"
+                        width="6"
+                        height="12"
+                        rx="3">
+                    </rect>
+
+                    <path d="M5 10a7 7 0 0014 0"></path>
+
+                    <line
+                        x1="12"
+                        y1="19"
+                        x2="12"
+                        y2="22">
+                    </line>
+
+                    <line
+                        x1="8"
+                        y1="22"
+                        x2="16"
+                        y2="22">
+                    </line>
+
+                </svg>
+
+            `;
 
 
             audioPreview.innerHTML = `
@@ -1505,10 +1866,6 @@ async function sendMessage() {
         userInput.value.trim();
 
 
-    /*
-     * حفظ الصوت قبل مسحه
-     */
-
     const audioToSend =
         selectedAudio;
 
@@ -1528,10 +1885,6 @@ async function sendMessage() {
         message;
 
 
-    /*
-     * الصورة
-     */
-
     if (selectedImage) {
 
         messageToSend +=
@@ -1546,10 +1899,6 @@ async function sendMessage() {
     }
 
 
-    /*
-     * الصوت
-     */
-
     if (audioToSend) {
 
         messageToSend +=
@@ -1562,10 +1911,6 @@ async function sendMessage() {
 
     }
 
-
-    /*
-     * رسالة المستخدم
-     */
 
     const userMessage =
         document.createElement("div");
@@ -1585,17 +1930,9 @@ async function sendMessage() {
     );
 
 
-    /*
-     * حفظ نسخة من الصورة
-     */
-
     const imageToSend =
         selectedImage;
 
-
-    /*
-     * تنظيف الواجهة
-     */
 
     userInput.value = "";
 
@@ -1609,10 +1946,6 @@ async function sendMessage() {
 
     audioPreview.innerHTML = "";
 
-
-    /*
-     * رسالة Dino AI
-     */
 
     const botMessage =
         document.createElement("div");
@@ -1639,11 +1972,6 @@ async function sendMessage() {
 
         let response;
 
-
-        /*
-         * إذا يوجد تسجيل صوتي
-         * نرسل FormData
-         */
 
         if (audioToSend) {
 
@@ -1674,10 +2002,6 @@ async function sendMessage() {
                 );
 
         } else {
-
-            /*
-             * الرسائل العادية
-             */
 
             response =
                 await fetch(
