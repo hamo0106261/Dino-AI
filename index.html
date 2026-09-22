@@ -563,51 +563,212 @@
             color: #6b7280;
         }
 
+        /* تحسينات الموبايل فقط */
         @media (max-width: 600px) {
+
             .header {
-                height: 58px;
-                min-height: 58px;
-                padding: 0 10px;
+                height: 60px;
+                min-height: 60px;
+                padding: 0 8px;
             }
 
             .header-title {
                 font-size: 19px;
             }
 
+            .header-buttons {
+                gap: 2px;
+            }
+
+            .icon-button {
+                width: 46px;
+                height: 46px;
+            }
+
+            .icon-button svg {
+                width: 23px;
+                height: 23px;
+            }
+
             .chat-box {
-                padding: 20px 14px;
+                width: 100%;
+                max-width: none;
+                padding: 18px 10px 12px;
             }
 
             .welcome {
-                padding: 20px 10px;
+                width: 100%;
+                max-width: none;
+                padding: 20px 8px;
             }
 
             .welcome h1 {
-                font-size: 26px;
+                font-size: 27px;
+            }
+
+            .welcome p {
+                font-size: 16px;
+                line-height: 1.8;
             }
 
             .message {
-                max-width: 90%;
+                max-width: 94%;
+                font-size: 16px;
+                line-height: 1.8;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+
+            .message.user {
+                max-width: 88%;
+                padding: 11px 14px;
+            }
+
+            .message.bot {
+                max-width: 94%;
+                padding: 9px 0;
+            }
+
+            .message.bot a {
+                max-width: 100%;
+                overflow-wrap: anywhere;
             }
 
             .input-area {
-                padding: 8px 8px 8px;
+                width: 100%;
+                padding: 8px 7px 7px;
             }
 
             .input-box {
-                min-height: 52px;
+                width: 100%;
+                max-width: none;
+                min-height: 58px;
+                padding: 6px;
+                gap: 3px;
+                border-radius: 29px;
+            }
+
+            .small-button {
+                width: 44px;
+                height: 44px;
+                flex-shrink: 0;
+            }
+
+            .small-button svg {
+                width: 23px;
+                height: 23px;
             }
 
             .user-input {
-                font-size: 15px;
+                min-width: 0;
+                width: 100%;
+                padding: 10px 5px;
+                font-size: 16px;
+            }
+
+            .send-button {
+                width: 44px;
+                height: 44px;
+                flex-shrink: 0;
+                font-size: 19px;
             }
 
             .sidebar {
-                width: 285px;
+                width: min(320px, 88vw);
+                padding: 18px 14px;
+            }
+
+            .sidebar-header {
+                font-size: 20px;
+                margin-bottom: 22px;
+            }
+
+            .sidebar-item {
+                min-height: 50px;
+                padding: 14px 16px;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            .panel {
+                padding: 10px;
+            }
+
+            .panel-content {
+                width: 100%;
+                max-width: none;
+                max-height: 88vh;
+                padding: 18px;
+                border-radius: 16px;
+            }
+
+            .panel-header {
+                font-size: 19px;
+            }
+
+            textarea {
+                min-height: 140px;
+                font-size: 16px;
+            }
+
+            .voice-call-panel {
+                padding: 20px;
+            }
+
+            .voice-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 34px;
+            }
+
+            .voice-title {
+                font-size: 26px;
+            }
+
+            .voice-status {
+                max-width: 90%;
+                font-size: 16px;
+                line-height: 1.7;
+            }
+
+            .voice-controls {
+                gap: 22px;
+                margin-top: 35px;
+            }
+
+            .voice-control {
+                width: 66px;
+                height: 66px;
+                font-size: 22px;
+            }
+
+            .voice-transcript {
+                left: 12px;
+                right: 12px;
+                bottom: 18px;
+                max-width: 94%;
+                font-size: 15px;
+                line-height: 1.8;
+                overflow-wrap: anywhere;
+            }
+
+            .preview,
+            .audio-preview {
+                width: 100%;
+                max-width: none;
+                margin: 0 auto 8px;
+            }
+
+            .preview img {
+                max-width: 150px;
+                max-height: 130px;
             }
 
             .copyright {
-                padding-bottom: 5px;
+                padding: 5px 8px 7px;
+                font-size: 10px;
+                line-height: 1.5;
+                white-space: normal;
             }
         }
     </style>
@@ -713,6 +874,7 @@
                 title="تسجيل صوت">
 
                 <svg viewBox="0 0 24 24">
+
                     <rect
                         x="8"
                         y="3"
@@ -731,6 +893,7 @@
                         stroke-width="2"
                         stroke-linecap="round">
                     </path>
+
                 </svg>
 
             </button>
@@ -757,7 +920,7 @@
 
     <!-- حقوق النشر -->
     <footer class="copyright">
-        © 2026 Dino AI — جميع الحقوق محفوظة لـ Mohamed Reda
+        © 2026 Dino AI — جميع الحقوق محفوظة لـ Mohamed Rade
     </footer>
 
 </div>
@@ -971,7 +1134,6 @@
     </div>
 
 </div>
-
 
 <script>
 
@@ -1230,10 +1392,12 @@
             audio.volume = 1;
 
             audio.play().catch(error => {
+
                 console.log(
                     "تعذر تشغيل الصوت تلقائياً:",
                     error
                 );
+
             });
 
             currentVoiceAudio = audio;
@@ -1290,16 +1454,20 @@
 
             if (text.includes(question)) {
 
-                return "أنا Dino AI، تم تصميمي وتطويري بواسطة Mohamed Reda.";
+                return "أنا Dino AI، تم تصميمي وتطويري بواسطة Mohamed Rade.";
+
             }
+
         }
 
         for (const question of copyrightQuestions) {
 
             if (text.includes(question)) {
 
-                return "حقوق تطبيق Dino AI ومحتواه وتصميمه محفوظة لمالكه ومطوّره Mohamed Reda، مع مراعاة حقوق وتراخيص أي تقنيات أو خدمات خارجية مستخدمة داخل التطبيق.";
+                return "حقوق تطبيق Dino AI ومحتواه وتصميمه محفوظة لمالكه ومطوّره Mohamed Rade، مع مراعاة حقوق وتراخيص أي تقنيات أو خدمات خارجية مستخدمة داخل التطبيق.";
+
             }
+
         }
 
         return null;
@@ -1524,7 +1692,9 @@
                             audioChunks.push(
                                 event.data
                             );
+
                         }
+
                     };
 
                 mediaRecorder.onstop =
@@ -1564,6 +1734,7 @@
                                     track =>
                                         track.stop()
                                 );
+
                         }
 
                         audioButton.classList.remove(
@@ -1584,7 +1755,9 @@
                 alert(
                     "اسمح للمتصفح باستخدام الميكروفون."
                 );
+
             }
+
         };
 
 
@@ -1596,6 +1769,7 @@
         function() {
 
             imageInput.click();
+
         };
 
 
@@ -1630,6 +1804,7 @@
         function() {
 
             sendMessage();
+
         };
 
 
@@ -1644,7 +1819,9 @@
                 event.preventDefault();
 
                 sendMessage();
+
             }
+
         }
     );
 
@@ -1659,6 +1836,7 @@
             sidebar.classList.add(
                 "open"
             );
+
         };
 
 
@@ -1668,6 +1846,7 @@
             sidebar.classList.remove(
                 "open"
             );
+
         };
 
 
@@ -1698,6 +1877,7 @@
             sidebar.classList.remove(
                 "open"
             );
+
         };
 
 
@@ -1712,6 +1892,7 @@
                 "dinoMemory"
             ) || "[]"
         );
+
     }
 
 
@@ -1760,13 +1941,16 @@
                         );
 
                         renderMemory();
+
                     };
 
                 memoryList.appendChild(
                     div
                 );
+
             }
         );
+
     }
 
 
@@ -1782,6 +1966,7 @@
             sidebar.classList.remove(
                 "open"
             );
+
         };
 
 
@@ -1791,6 +1976,7 @@
             memoryPanel.classList.remove(
                 "active"
             );
+
         };
 
 
@@ -1817,6 +2003,7 @@
             memoryInput.value = "";
 
             renderMemory();
+
         };
 
 
@@ -1867,6 +2054,7 @@
                 chats.slice(0, 20)
             )
         );
+
     }
 
 
@@ -1923,19 +2111,23 @@
                                 displayBotReply(
                                     message
                                 );
+
                             }
                         );
 
                         chatsPanel.classList.remove(
                             "active"
                         );
+
                     };
 
                 chatsList.appendChild(
                     div
                 );
+
             }
         );
+
     }
 
 
@@ -1951,6 +2143,7 @@
             sidebar.classList.remove(
                 "open"
             );
+
         };
 
 
@@ -1960,6 +2153,7 @@
             chatsPanel.classList.remove(
                 "active"
             );
+
         };
 
 
@@ -1977,6 +2171,7 @@
             sidebar.classList.remove(
                 "open"
             );
+
         };
 
 
@@ -1986,6 +2181,7 @@
             settingsPanel.classList.remove(
                 "active"
             );
+
         };
 
 
@@ -2002,6 +2198,7 @@
                     "dark-mode"
                 )
             );
+
         };
 
 
@@ -2013,6 +2210,7 @@
             );
 
             renderMemory();
+
         };
 
 
@@ -2024,6 +2222,7 @@
             );
 
             renderChats();
+
         };
 
 
@@ -2040,12 +2239,12 @@
         document.body.classList.add(
             "dark-mode"
         );
+
     }
 
 
     /* ==================================================
        VOICE CALL
-       مكالمة صوتية حقيقية:
        المستخدم يتكلم
        ↓
        Whisper
@@ -2097,7 +2296,9 @@
                 alert(
                     "اسمح للمتصفح باستخدام الميكروفون."
                 );
+
             }
+
         };
 
 
@@ -2154,7 +2355,9 @@
                     voiceChunks.push(
                         event.data
                     );
+
                 }
+
             };
 
 
@@ -2203,10 +2406,12 @@
                     voiceProcessing = false;
 
                     if (voiceCallActive) {
+
                         setTimeout(
                             startVoiceRecording,
                             300
                         );
+
                     }
 
                     return;
@@ -2238,11 +2443,14 @@
                         startVoiceRecording,
                         1000
                     );
+
                 }
+
             };
 
 
         voiceRecorder.start();
+
     }
 
 
@@ -2272,6 +2480,7 @@
             }
 
             startVoiceRecording();
+
         };
 
 
@@ -2333,12 +2542,12 @@
             }
 
 
-            /* النص الذي فهمه النظام */
             if (data.transcript) {
 
                 voiceTranscript.innerText =
                     "أنت: " +
                     data.transcript;
+
             }
 
 
@@ -2347,18 +2556,14 @@
                 "لم يصل رد.";
 
 
-            /* عرض الرد في الشات */
             displayBotReply(reply);
 
 
-            /* عرض الرد داخل المكالمة */
             voiceTranscript.innerText =
                 reply;
 
 
-            /* =========================
-               Dino يتكلم
-            ========================= */
+            /* Dino يتكلم */
 
             if (data.audio) {
 
@@ -2396,7 +2601,9 @@
                                     startVoiceRecording,
                                     350
                                 );
+
                             }
+
                         };
 
 
@@ -2422,7 +2629,9 @@
                                     startVoiceRecording,
                                     350
                                 );
+
                             }
+
                         };
 
                 } else {
@@ -2441,12 +2650,13 @@
                             startVoiceRecording,
                             350
                         );
+
                     }
+
                 }
 
             } else {
 
-                /* لو الـWorker لم يرجع صوت */
                 voiceStatus.innerText =
                     "⚠️ وصل الرد كنص فقط — خدمة الصوت غير متاحة حالياً.";
 
@@ -2464,11 +2674,13 @@
                                 "🎤 جاهز أسمعك تاني";
 
                             startVoiceRecording();
+
                         }
 
                     },
                     1200
                 );
+
             }
 
 
@@ -2490,12 +2702,15 @@
                     startVoiceRecording,
                     1500
                 );
+
             }
+
         }
 
 
         selectedAudio =
             null;
+
     }
 
 
@@ -2518,14 +2733,21 @@
             ) {
 
                 try {
+
                     currentVoiceAudio.pause();
-                    currentVoiceAudio.currentTime = 0;
+
+                    currentVoiceAudio.currentTime =
+                        0;
+
                 } catch (error) {
+
                     console.log(error);
+
                 }
 
                 currentVoiceAudio =
                     null;
+
             }
 
 
@@ -2535,10 +2757,15 @@
             ) {
 
                 try {
+
                     voiceRecorder.stop();
+
                 } catch (error) {
+
                     console.log(error);
+
                 }
+
             }
 
 
@@ -2555,6 +2782,7 @@
 
                 voiceStream =
                     null;
+
             }
 
 
@@ -2581,6 +2809,7 @@
 
             voiceTranscript.innerText =
                 "";
+
         };
 
 </script>
