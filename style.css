@@ -18,43 +18,43 @@ body {
 }
 
 /* الشريط العلوي */
+
 .top-bar {
     height: 60px;
-    border-bottom: 1px solid #eeeeee;
     display: flex;
     align-items: center;
     padding: 0 25px;
+    border-bottom: 1px solid #eeeeee;
     background: #ffffff;
 }
 
 .logo {
     font-size: 21px;
     font-weight: bold;
+    color: #202123;
 }
 
-/* منطقة المحادثة */
+/* المحادثة */
+
 .chat-box {
     width: 100%;
     max-width: 850px;
-    margin: auto;
+    margin: 0 auto;
     flex: 1;
-    padding: 40px 20px 180px;
+    padding: 30px 20px 180px;
     overflow-y: auto;
 }
 
 /* الترحيب */
+
 .welcome {
     text-align: center;
-    margin: 70px auto 45px;
-}
-
-.dino-icon {
-    font-size: 55px;
-    margin-bottom: 15px;
+    margin: 100px 0 50px;
 }
 
 .welcome h1 {
     font-size: 30px;
+    font-weight: 600;
     margin-bottom: 12px;
 }
 
@@ -64,18 +64,19 @@ body {
 }
 
 /* الرسائل */
+
 .message {
-    width: fit-content;
     max-width: 75%;
     padding: 13px 17px;
     margin-bottom: 18px;
     border-radius: 18px;
     line-height: 1.8;
     white-space: pre-wrap;
-    word-break: break-word;
+    word-wrap: break-word;
 }
 
 /* رسالة Dino AI */
+
 .message.bot {
     margin-right: 0;
     background: transparent;
@@ -83,14 +84,16 @@ body {
 }
 
 /* رسالة المستخدم */
+
 .message.user {
-    margin-left: 0;
+    margin-left: auto;
     background: #f1f1f1;
-    border: 1px solid #e5e5e5;
     color: #202123;
+    border: 1px solid #e5e5e5;
 }
 
-/* منطقة الإدخال */
+/* منطقة الكتابة */
+
 .input-wrapper {
     position: fixed;
     bottom: 25px;
@@ -99,12 +102,12 @@ body {
     width: min(850px, calc(100% - 30px));
 }
 
-/* مربع الكتابة */
+/* صندوق الكتابة */
+
 .input-area {
-    width: 100%;
     display: flex;
     align-items: center;
-    gap: 8px;
+    width: 100%;
     padding: 8px 10px 8px 15px;
     background: #ffffff;
     border: 1px solid #d9d9d9;
@@ -113,6 +116,7 @@ body {
 }
 
 /* خانة الكتابة */
+
 #userInput {
     flex: 1;
     height: 45px;
@@ -125,17 +129,18 @@ body {
 }
 
 #userInput::placeholder {
-    color: #8a8a8a;
+    color: #888888;
 }
 
 /* زر الإرسال */
+
 #sendButton {
     width: 44px;
     height: 44px;
     border: none;
     border-radius: 50%;
     background: #202123;
-    color: white;
+    color: #ffffff;
     font-size: 22px;
     cursor: pointer;
 }
@@ -149,6 +154,7 @@ body {
 }
 
 /* الروابط */
+
 .message a {
     color: #2563eb;
     text-decoration: none;
@@ -159,6 +165,7 @@ body {
 }
 
 /* الملاحظة */
+
 .input-note {
     text-align: center;
     color: #999999;
@@ -167,6 +174,7 @@ body {
 }
 
 /* الفوتر */
+
 footer {
     text-align: center;
     color: #999999;
@@ -174,7 +182,8 @@ footer {
     padding: 8px;
 }
 
-/* الموبايل */
+/* الهاتف */
+
 @media (max-width: 600px) {
 
     .top-bar {
@@ -182,12 +191,11 @@ footer {
     }
 
     .chat-box {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding: 20px 12px 180px;
     }
 
     .welcome {
-        margin-top: 45px;
+        margin-top: 60px;
     }
 
     .welcome h1 {
@@ -199,7 +207,7 @@ footer {
     }
 
     .input-wrapper {
-        bottom: 10px;
         width: calc(100% - 20px);
+        bottom: 10px;
     }
 }
