@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dino AI</title>
 
     <link rel="stylesheet" href="style.css">
@@ -13,24 +14,36 @@
 
 <div class="app">
 
+    <!-- الشريط العلوي -->
     <header class="top-bar">
-        <div class="logo">🦖 Dino AI</div>
+        <div class="logo">
+            Dino AI
+        </div>
     </header>
 
+
+    <!-- المحادثة -->
     <main id="chatBox" class="chat-box">
 
         <div class="welcome">
-            <div class="dino-icon">🦖</div>
+
             <h1>مرحباً بك في Dino AI</h1>
-            <p>اسألني عن الألعاب والشخصيات أو أي شيء تريد معرفته.</p>
+
+            <p>
+                كيف يمكنني مساعدتك اليوم؟
+            </p>
+
         </div>
 
+
         <div class="message bot">
-            أهلاً بك 👋 أنا Dino AI، كيف يمكنني مساعدتك؟
+            أهلاً بك 👋 أنا Dino AI، اكتب سؤالك وسأحاول مساعدتك.
         </div>
 
     </main>
 
+
+    <!-- منطقة الكتابة -->
     <div class="input-wrapper">
 
         <div class="input-area">
@@ -38,12 +51,18 @@
             <input
                 type="text"
                 id="userInput"
-                placeholder="اكتب رسالتك..."
+                placeholder="اسأل Dino AI..."
                 autocomplete="off"
                 spellcheck="false"
             >
 
-            <button id="sendButton" type="button">↑</button>
+            <button
+                id="sendButton"
+                type="button"
+                aria-label="إرسال"
+            >
+                ↑
+            </button>
 
         </div>
 
@@ -53,11 +72,13 @@
 
     </div>
 
+
     <footer>
         © 2026 Mohamed Reda — Dino AI
     </footer>
 
 </div>
+
 
 <script>
 
@@ -65,71 +86,147 @@ const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const chatBox = document.getElementById("chatBox");
 
-const API_URL = "https://dino-ai-api.mmaojmmmoh.workers.dev";
+const API_URL =
+    "https://dino-ai-api.mmaojmmmoh.workers.dev";
+
+
+function displayBotReply(element, text) {
+
+    const urlRegex =
+        /(https?:\/\/[^\s<>"']+)/g;
+
+    const parts =
+        text.split(urlRegex);
+
+
+    parts.forEach(function(part) {
+
+        if (/^https?:\/\//i.test(part)) {
+
+            const link =
+                document.createElement("a");
+
+            link.href = part;
+
+            link.textContent =
+                "🔗 فتح الرابط";
+
+            link.target = "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.style.display =
+                "inline-block";
+
+            link.style.marginTop =
+                "8px";
+
+            element.appendChild(link);
+
+        } else {
+
+            element.appendChild(
+                document.createTextNode(part)
+            );
+
+        }
+
+    });
+
+}
 
 
 async function sendMessage() {
 
-    const message = userInput.value.trim();
+    const message =
+        userInput.value.trim();
+
 
     if (!message) {
         return;
     }
 
-    // إظهار رسالة المستخدم
-    const userMessage = document.createElement("div");
 
-    userMessage.className = "message user";
-    userMessage.textContent = message;
+    const userMessage =
+        document.createElement("div");
 
-    chatBox.appendChild(userMessage);
+    userMessage.className =
+        "message user";
 
-    // مسح خانة الكتابة
+    userMessage.textContent =
+        message;
+
+    chatBox.appendChild(
+        userMessage
+    );
+
+
     userInput.value = "";
 
-    // رسالة مؤقتة
-    const botMessage = document.createElement("div");
 
-    botMessage.className = "message bot";
-    botMessage.textContent = "🤖 جاري التفكير...";
+    const botMessage =
+        document.createElement("div");
 
-    chatBox.appendChild(botMessage);
+    botMessage.className =
+        "message bot";
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+    botMessage.textContent =
+        "جاري التفكير...";
+
+    chatBox.appendChild(
+        botMessage
+    );
+
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 
 
     try {
 
-        const response = await fetch(API_URL, {
+        const response =
+            await fetch(API_URL, {
 
-            method: "POST",
+                method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
 
-            body: JSON.stringify({
-                message: message
-            })
+                body: JSON.stringify({
+                    message: message
+                })
 
-        });
+            });
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (!response.ok) {
 
             botMessage.textContent =
                 "❌ خطأ: " +
-                (data.error || "حدث خطأ");
+                (
+                    data.error ||
+                    "حدث خطأ غير معروف"
+                );
 
             return;
         }
 
 
-        botMessage.textContent =
-            data.reply || "لم يصل رد من Dino AI.";
+        botMessage.textContent = "";
+
+
+        displayBotReply(
+            botMessage,
+            data.reply ||
+            "لم يصل رد من Dino AI."
+        );
 
 
     } catch (error) {
@@ -142,28 +239,35 @@ async function sendMessage() {
     }
 
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
 
     userInput.focus();
+
 }
 
 
-// زر الإرسال
-sendButton.addEventListener("click", sendMessage);
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
 
 
-// زر Enter
-userInput.addEventListener("keydown", function(event) {
+userInput.addEventListener(
+    "keydown",
+    function(event) {
 
-    if (event.key === "Enter") {
+        if (event.key === "Enter") {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        sendMessage();
+            sendMessage();
+
+        }
 
     }
-
-});
+);
 
 </script>
 
