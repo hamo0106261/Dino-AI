@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dino AI</title>
 
     <style>
@@ -31,20 +32,12 @@
             cursor: pointer;
         }
 
-        /* =========================
-           التطبيق
-        ========================= */
-
         .app {
             width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
         }
-
-        /* =========================
-           الشريط العلوي
-        ========================= */
 
         .header {
             height: 60px;
@@ -89,10 +82,6 @@
             height: 21px;
         }
 
-        /* =========================
-           الشات
-        ========================= */
-
         .chat-box {
             flex: 1;
             width: 100%;
@@ -103,10 +92,6 @@
             display: flex;
             flex-direction: column;
         }
-
-        /* =========================
-           الترحيب
-        ========================= */
 
         .welcome {
             width: 100%;
@@ -129,10 +114,6 @@
             font-size: 16px;
             line-height: 1.9;
         }
-
-        /* =========================
-           الرسائل
-        ========================= */
 
         .message {
             max-width: 82%;
@@ -177,10 +158,6 @@
             text-decoration: none;
             font-weight: 600;
         }
-
-        /* =========================
-           منطقة الإدخال
-        ========================= */
 
         .input-area {
             width: 100%;
@@ -262,10 +239,6 @@
             opacity: 0.45;
         }
 
-        /* =========================
-           تسجيل الصوت
-        ========================= */
-
         .recording {
             background: #dc2626 !important;
             color: #ffffff !important;
@@ -278,15 +251,12 @@
             }
         }
 
-        /* =========================
-           معاينة المرفقات
-        ========================= */
-
         .preview,
         .audio-preview {
             width: 100%;
             max-width: 900px;
             margin: 0 auto 8px;
+            display: none;
         }
 
         .preview img {
@@ -298,10 +268,6 @@
         .audio-preview audio {
             width: 100%;
         }
-
-        /* =========================
-           القائمة الجانبية
-        ========================= */
 
         .sidebar {
             position: fixed;
@@ -343,10 +309,6 @@
         .sidebar-item:hover {
             background: #eaeaea;
         }
-
-        /* =========================
-           النوافذ
-        ========================= */
 
         .panel {
             position: fixed;
@@ -393,10 +355,6 @@
             font-family: inherit;
             font-size: 15px;
         }
-
-        /* =========================
-           وضع المكالمة
-        ========================= */
 
         .voice-call-panel {
             position: fixed;
@@ -476,9 +434,16 @@
             line-height: 1.8;
         }
 
-        /* =========================
-           الوضع الداكن
-        ========================= */
+        /* حقوق النشر */
+        .copyright {
+            width: 100%;
+            text-align: center;
+            padding: 4px 10px 8px;
+            font-size: 11px;
+            color: #9ca3af;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
 
         body.dark-mode {
             background: #0b1118;
@@ -593,9 +558,10 @@
             color: white;
         }
 
-        /* =========================
-           الهاتف
-        ========================= */
+        body.dark-mode .copyright {
+            background: #101720;
+            color: #6b7280;
+        }
 
         @media (max-width: 600px) {
             .header {
@@ -625,7 +591,7 @@
             }
 
             .input-area {
-                padding: 8px 8px 12px;
+                padding: 8px 8px 8px;
             }
 
             .input-box {
@@ -639,6 +605,10 @@
             .sidebar {
                 width: 285px;
             }
+
+            .copyright {
+                padding-bottom: 5px;
+            }
         }
     </style>
 </head>
@@ -647,23 +617,18 @@
 
 <div class="app">
 
-    <!-- Header -->
     <header class="header">
 
-        <button
-            id="menuButton"
-            class="icon-button"
-            title="القائمة">
-
+        <button id="menuButton" class="icon-button" title="القائمة">
             <svg viewBox="0 0 24 24">
                 <path
                     d="M4 7h16M4 12h16M4 17h16"
                     fill="none"
                     stroke="currentColor"
                     stroke-width="2"
-                    stroke-linecap="round"/>
+                    stroke-linecap="round">
+                </path>
             </svg>
-
         </button>
 
         <div class="header-title">
@@ -683,7 +648,8 @@
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
-                        stroke-linejoin="round"/>
+                        stroke-linejoin="round">
+                    </path>
                 </svg>
 
             </button>
@@ -692,16 +658,9 @@
 
     </header>
 
+    <main id="chatBox" class="chat-box">
 
-    <!-- Chat -->
-
-    <main
-        id="chatBox"
-        class="chat-box">
-
-        <div
-            id="welcomeMessage"
-            class="welcome">
+        <div id="welcomeMessage" class="welcome">
 
             <h1>
                 Dino AI
@@ -717,24 +676,13 @@
 
     </main>
 
-
-    <!-- Input -->
-
     <div class="input-area">
 
-        <div
-            id="imagePreview"
-            class="preview">
-        </div>
+        <div id="imagePreview" class="preview"></div>
 
-        <div
-            id="audioPreview"
-            class="audio-preview">
-        </div>
+        <div id="audioPreview" class="audio-preview"></div>
 
         <div class="input-box">
-
-            <!-- Attach -->
 
             <button
                 id="attachButton"
@@ -747,7 +695,8 @@
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
-                        stroke-linecap="round"/>
+                        stroke-linecap="round">
+                    </path>
                 </svg>
 
             </button>
@@ -757,9 +706,6 @@
                 type="file"
                 accept="image/*"
                 style="display:none;">
-
-
-            <!-- Microphone -->
 
             <button
                 id="audioButton"
@@ -775,20 +721,19 @@
                         rx="4"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"/>
+                        stroke-width="2">
+                    </rect>
 
                     <path
                         d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
-                        stroke-linecap="round"/>
+                        stroke-linecap="round">
+                    </path>
                 </svg>
 
             </button>
-
-
-            <!-- Input -->
 
             <input
                 id="userInput"
@@ -796,9 +741,6 @@
                 type="text"
                 placeholder="اكتب رسالتك هنا..."
                 autocomplete="off">
-
-
-            <!-- Send -->
 
             <button
                 id="sendButton"
@@ -813,14 +755,16 @@
 
     </div>
 
-</div>
+    <!-- حقوق النشر -->
+    <footer class="copyright">
+        © 2026 Dino AI — جميع الحقوق محفوظة لـ Mohamed Reda
+    </footer>
 
+</div>
 
 <!-- Sidebar -->
 
-<aside
-    id="sidebar"
-    class="sidebar">
+<aside id="sidebar" class="sidebar">
 
     <div class="sidebar-header">
 
@@ -828,56 +772,33 @@
             Dino AI
         </strong>
 
-        <button
-            id="closeSidebar"
-            class="icon-button">
-
+        <button id="closeSidebar" class="icon-button">
             ✕
-
         </button>
 
     </div>
 
-    <button
-        id="newChatButton"
-        class="sidebar-item">
-
+    <button id="newChatButton" class="sidebar-item">
         ➕ محادثة جديدة
-
     </button>
 
-    <button
-        id="memoryButton"
-        class="sidebar-item">
-
+    <button id="memoryButton" class="sidebar-item">
         🧠 الذاكرة
-
     </button>
 
-    <button
-        id="chatsButton"
-        class="sidebar-item">
-
+    <button id="chatsButton" class="sidebar-item">
         💬 المحادثات
-
     </button>
 
-    <button
-        id="settingsButton"
-        class="sidebar-item">
-
+    <button id="settingsButton" class="sidebar-item">
         ⚙️ الإعدادات
-
     </button>
 
 </aside>
 
-
 <!-- Memory -->
 
-<div
-    id="memoryPanel"
-    class="panel">
+<div id="memoryPanel" class="panel">
 
     <div class="panel-content">
 
@@ -887,12 +808,8 @@
                 🧠 الذاكرة
             </strong>
 
-            <button
-                id="closeMemory"
-                class="icon-button">
-
+            <button id="closeMemory" class="icon-button">
                 ✕
-
             </button>
 
         </div>
@@ -915,12 +832,9 @@
 
 </div>
 
-
 <!-- Chats -->
 
-<div
-    id="chatsPanel"
-    class="panel">
+<div id="chatsPanel" class="panel">
 
     <div class="panel-content">
 
@@ -930,12 +844,8 @@
                 💬 المحادثات
             </strong>
 
-            <button
-                id="closeChats"
-                class="icon-button">
-
+            <button id="closeChats" class="icon-button">
                 ✕
-
             </button>
 
         </div>
@@ -946,12 +856,9 @@
 
 </div>
 
-
 <!-- Settings -->
 
-<div
-    id="settingsPanel"
-    class="panel">
+<div id="settingsPanel" class="panel">
 
     <div class="panel-content">
 
@@ -961,12 +868,8 @@
                 ⚙️ الإعدادات
             </strong>
 
-            <button
-                id="closeSettings"
-                class="icon-button">
-
+            <button id="closeSettings" class="icon-button">
                 ✕
-
             </button>
 
         </div>
@@ -999,12 +902,9 @@
 
 </div>
 
-
 <!-- Voice Call -->
 
-<div
-    id="voiceCallPanel"
-    class="voice-call-panel">
+<div id="voiceCallPanel" class="voice-call-panel">
 
     <div class="voice-avatar">
         AI
@@ -1026,9 +926,11 @@
 
         <button
             id="voiceMicButton"
-            class="voice-control voice-mic">
+            class="voice-control voice-mic"
+            title="ابدأ الكلام">
 
             <svg viewBox="0 0 24 24" width="23" height="23">
+
                 <rect
                     x="8"
                     y="3"
@@ -1037,21 +939,25 @@
                     rx="4"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"/>
+                    stroke-width="2">
+                </rect>
 
                 <path
                     d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"
                     fill="none"
                     stroke="currentColor"
                     stroke-width="2"
-                    stroke-linecap="round"/>
+                    stroke-linecap="round">
+                </path>
+
             </svg>
 
         </button>
 
         <button
             id="endVoiceCallButton"
-            class="voice-control voice-end">
+            class="voice-control voice-end"
+            title="إنهاء المكالمة">
 
             ✕
 
@@ -1171,34 +1077,22 @@
     ========================= */
 
     const voiceCallButton =
-        document.getElementById(
-            "voiceCallButton"
-        );
+        document.getElementById("voiceCallButton");
 
     const voiceCallPanel =
-        document.getElementById(
-            "voiceCallPanel"
-        );
+        document.getElementById("voiceCallPanel");
 
     const voiceMicButton =
-        document.getElementById(
-            "voiceMicButton"
-        );
+        document.getElementById("voiceMicButton");
 
     const endVoiceCallButton =
-        document.getElementById(
-            "endVoiceCallButton"
-        );
+        document.getElementById("endVoiceCallButton");
 
     const voiceStatus =
-        document.getElementById(
-            "voiceStatus"
-        );
+        document.getElementById("voiceStatus");
 
     const voiceTranscript =
-        document.getElementById(
-            "voiceTranscript"
-        );
+        document.getElementById("voiceTranscript");
 
 
     /* =========================
@@ -1208,20 +1102,17 @@
     let selectedImage = null;
 
     let mediaRecorder = null;
-
     let audioChunks = [];
-
     let selectedAudio = null;
-
     let microphoneStream = null;
 
     let voiceCallActive = false;
-
     let voiceRecorder = null;
-
     let voiceChunks = [];
-
     let voiceStream = null;
+
+    let voiceProcessing = false;
+    let currentVoiceAudio = null;
 
 
     /* =========================
@@ -1326,13 +1217,26 @@
 
         try {
 
+            if (!base64) {
+                return null;
+            }
+
             const audio =
                 new Audio(
                     "data:audio/mpeg;base64," +
                     base64
                 );
 
-            audio.play().catch(() => {});
+            audio.volume = 1;
+
+            audio.play().catch(error => {
+                console.log(
+                    "تعذر تشغيل الصوت تلقائياً:",
+                    error
+                );
+            });
+
+            currentVoiceAudio = audio;
 
             return audio;
 
@@ -1341,9 +1245,64 @@
             console.error(error);
 
             return null;
+        }
+    }
 
+
+    /* =========================
+       إجابات Dino AI الأساسية
+    ========================= */
+
+    function getOwnerAnswer(message) {
+
+        const text =
+            message
+                .toLowerCase()
+                .replace(/[؟?!.,،]/g, "")
+                .trim();
+
+        const creatorQuestions = [
+            "مين صانعك",
+            "من صانعك",
+            "مين صنعك",
+            "من صنعك",
+            "مين مطورك",
+            "من مطورك",
+            "مين عملك",
+            "من عملك",
+            "مين اللي صنعك",
+            "من الذي صنعك"
+        ];
+
+        const copyrightQuestions = [
+            "مين مالك حقوق الطبع والنشر ليك",
+            "مين مالك حقوق النشر",
+            "من مالك حقوق النشر",
+            "مين صاحب حقوق النشر",
+            "من صاحب حقوق النشر",
+            "مين مالك حقوقك",
+            "من يملك حقوقك",
+            "مين مالك التطبيق",
+            "من مالك التطبيق"
+        ];
+
+        for (const question of creatorQuestions) {
+
+            if (text.includes(question)) {
+
+                return "أنا Dino AI، تم تصميمي وتطويري بواسطة Mohamed Reda.";
+            }
         }
 
+        for (const question of copyrightQuestions) {
+
+            if (text.includes(question)) {
+
+                return "حقوق تطبيق Dino AI ومحتواه وتصميمه محفوظة لمالكه ومطوّره Mohamed Reda، مع مراعاة حقوق وتراخيص أي تقنيات أو خدمات خارجية مستخدمة داخل التطبيق.";
+            }
+        }
+
+        return null;
     }
 
 
@@ -1373,7 +1332,6 @@
                 ) +
                 "🖼️ صورة مرفقة: " +
                 selectedImage.name;
-
         }
 
         if (message) {
@@ -1396,6 +1354,22 @@
             );
 
         try {
+
+            const ownerAnswer =
+                getOwnerAnswer(message);
+
+            if (ownerAnswer) {
+
+                loading.remove();
+
+                displayBotReply(
+                    ownerAnswer
+                );
+
+                loadingComplete();
+
+                return;
+            }
 
             let response;
 
@@ -1444,7 +1418,6 @@
                                 })
                         }
                     );
-
             }
 
             const data =
@@ -1478,27 +1451,31 @@
 
         } catch (error) {
 
+            console.error(error);
+
             loading.remove();
 
             displayBotReply(
                 "⚠️ حصل خطأ في الاتصال بـ Dino AI."
             );
 
+        } finally {
+
+            loadingComplete();
         }
+    }
+
+
+    function loadingComplete() {
 
         selectedAudio = null;
-
         selectedImage = null;
 
         imagePreview.innerHTML = "";
-
-        imagePreview.style.display =
-            "none";
+        imagePreview.style.display = "none";
 
         audioPreview.innerHTML = "";
-
-        audioPreview.style.display =
-            "none";
+        audioPreview.style.display = "none";
 
         sendButton.disabled = false;
     }
@@ -1519,7 +1496,6 @@
                 mediaRecorder.stop();
 
                 return;
-
             }
 
             try {
@@ -1548,9 +1524,7 @@
                             audioChunks.push(
                                 event.data
                             );
-
                         }
-
                     };
 
                 mediaRecorder.onstop =
@@ -1590,7 +1564,6 @@
                                     track =>
                                         track.stop()
                                 );
-
                         }
 
                         audioButton.classList.remove(
@@ -1598,7 +1571,6 @@
                         );
 
                         sendMessage();
-
                     };
 
                 mediaRecorder.start();
@@ -1612,9 +1584,7 @@
                 alert(
                     "اسمح للمتصفح باستخدام الميكروفون."
                 );
-
             }
-
         };
 
 
@@ -1626,8 +1596,8 @@
         function() {
 
             imageInput.click();
-
         };
+
 
     imageInput.onchange =
         function() {
@@ -1649,7 +1619,6 @@
 
             imagePreview.style.display =
                 "block";
-
         };
 
 
@@ -1661,8 +1630,8 @@
         function() {
 
             sendMessage();
-
         };
+
 
     userInput.addEventListener(
         "keydown",
@@ -1675,9 +1644,7 @@
                 event.preventDefault();
 
                 sendMessage();
-
             }
-
         }
     );
 
@@ -1692,8 +1659,8 @@
             sidebar.classList.add(
                 "open"
             );
-
         };
+
 
     closeSidebar.onclick =
         function() {
@@ -1701,7 +1668,6 @@
             sidebar.classList.remove(
                 "open"
             );
-
         };
 
 
@@ -1732,7 +1698,6 @@
             sidebar.classList.remove(
                 "open"
             );
-
         };
 
 
@@ -1747,8 +1712,8 @@
                 "dinoMemory"
             ) || "[]"
         );
-
     }
+
 
     function renderMemory() {
 
@@ -1765,7 +1730,6 @@
                 "لا توجد ذكريات محفوظة.";
 
             return;
-
         }
 
         memory.forEach(
@@ -1796,17 +1760,15 @@
                         );
 
                         renderMemory();
-
                     };
 
                 memoryList.appendChild(
                     div
                 );
-
             }
         );
-
     }
+
 
     memoryButton.onclick =
         function() {
@@ -1820,8 +1782,8 @@
             sidebar.classList.remove(
                 "open"
             );
-
         };
+
 
     closeMemory.onclick =
         function() {
@@ -1829,8 +1791,8 @@
             memoryPanel.classList.remove(
                 "active"
             );
-
         };
+
 
     saveMemoryButton.onclick =
         function() {
@@ -1855,7 +1817,6 @@
             memoryInput.value = "";
 
             renderMemory();
-
         };
 
 
@@ -1906,8 +1867,8 @@
                 chats.slice(0, 20)
             )
         );
-
     }
+
 
     function renderChats() {
 
@@ -1928,7 +1889,6 @@
                 "لا توجد محادثات محفوظة.";
 
             return;
-
         }
 
         chats.forEach(
@@ -1963,24 +1923,21 @@
                                 displayBotReply(
                                     message
                                 );
-
                             }
                         );
 
                         chatsPanel.classList.remove(
                             "active"
                         );
-
                     };
 
                 chatsList.appendChild(
                     div
                 );
-
             }
         );
-
     }
+
 
     chatsButton.onclick =
         function() {
@@ -1994,8 +1951,8 @@
             sidebar.classList.remove(
                 "open"
             );
-
         };
+
 
     closeChats.onclick =
         function() {
@@ -2003,7 +1960,6 @@
             chatsPanel.classList.remove(
                 "active"
             );
-
         };
 
 
@@ -2021,8 +1977,8 @@
             sidebar.classList.remove(
                 "open"
             );
-
         };
+
 
     closeSettings.onclick =
         function() {
@@ -2030,8 +1986,8 @@
             settingsPanel.classList.remove(
                 "active"
             );
-
         };
+
 
     darkModeButton.onclick =
         function() {
@@ -2046,8 +2002,8 @@
                     "dark-mode"
                 )
             );
-
         };
+
 
     deleteMemoryButton.onclick =
         function() {
@@ -2057,8 +2013,8 @@
             );
 
             renderMemory();
-
         };
+
 
     deleteChatsButton.onclick =
         function() {
@@ -2068,7 +2024,6 @@
             );
 
             renderChats();
-
         };
 
 
@@ -2085,16 +2040,32 @@
         document.body.classList.add(
             "dark-mode"
         );
-
     }
 
 
-    /* =========================
-       Voice Call
-    ========================= */
+    /* ==================================================
+       VOICE CALL
+       مكالمة صوتية حقيقية:
+       المستخدم يتكلم
+       ↓
+       Whisper
+       ↓
+       Dino AI
+       ↓
+       TTS
+       ↓
+       Dino يتكلم
+       ↓
+       الاستماع يبدأ مرة أخرى
+    ================================================== */
+
 
     voiceCallButton.onclick =
         async function() {
+
+            if (voiceCallActive) {
+                return;
+            }
 
             try {
 
@@ -2112,88 +2083,66 @@
                 );
 
                 voiceStatus.innerText =
-                    "اضغط على الميكروفون وابدأ الكلام";
+                    "🎤 جاهز أسمعك";
 
                 voiceTranscript.innerText =
                     "";
 
+                startVoiceRecording();
+
             } catch (error) {
+
+                console.error(error);
 
                 alert(
                     "اسمح للمتصفح باستخدام الميكروفون."
                 );
-
             }
-
         };
 
 
     /* =========================
-       Voice Recording
+       بدء التسجيل الصوتي
     ========================= */
-
-    voiceMicButton.onclick =
-        function() {
-
-            if (!voiceCallActive) {
-                return;
-            }
-
-            if (
-                voiceRecorder &&
-                voiceRecorder.state ===
-                "recording"
-            ) {
-
-                voiceRecorder.stop();
-
-                return;
-
-            }
-
-            voiceChunks = [];
-
-            if (!voiceStream) {
-
-                navigator
-                    .mediaDevices
-                    .getUserMedia({
-                        audio: true
-                    })
-                    .then(
-                        function(stream) {
-
-                            voiceStream =
-                                stream;
-
-                            startVoiceRecording();
-
-                        }
-                    )
-                    .catch(
-                        function() {
-
-                            voiceStatus.innerText =
-                                "لم أستطع الوصول للميكروفون.";
-
-                        }
-                    );
-
-            } else {
-
-                startVoiceRecording();
-
-            }
-
-        };
-
 
     function startVoiceRecording() {
 
-        voiceRecorder =
-            new MediaRecorder(
-                voiceStream
-            );
+        if (!voiceCallActive) {
+            return;
+        }
+
+        if (voiceProcessing) {
+            return;
+        }
+
+        if (
+            voiceRecorder &&
+            voiceRecorder.state === "recording"
+        ) {
+            return;
+        }
+
+        if (!voiceStream) {
+            return;
+        }
+
+        voiceChunks = [];
+
+        try {
+
+            voiceRecorder =
+                new MediaRecorder(
+                    voiceStream
+                );
+
+        } catch (error) {
+
+            voiceStatus.innerText =
+                "⚠️ المتصفح لا يدعم تسجيل الصوت.";
+
+            return;
+        }
+
 
         voiceRecorder.ondataavailable =
             function(event) {
@@ -2205,10 +2154,9 @@
                     voiceChunks.push(
                         event.data
                     );
-
                 }
-
             };
+
 
         voiceRecorder.onstart =
             function() {
@@ -2218,9 +2166,10 @@
                 );
 
                 voiceStatus.innerText =
-                    "🔴 جاري الاستماع... اضغط مرة أخرى للإرسال";
+                    "🔴 جاري الاستماع...";
 
             };
+
 
         voiceRecorder.onstop =
             async function() {
@@ -2228,6 +2177,12 @@
                 voiceMicButton.classList.remove(
                     "recording"
                 );
+
+                if (!voiceCallActive) {
+                    return;
+                }
+
+                voiceProcessing = true;
 
                 voiceStatus.innerText =
                     "⏳ Dino AI بيسمعك...";
@@ -2241,16 +2196,83 @@
                         }
                     );
 
-                selectedAudio =
-                    blob;
+                if (
+                    blob.size === 0
+                ) {
+
+                    voiceProcessing = false;
+
+                    if (voiceCallActive) {
+                        setTimeout(
+                            startVoiceRecording,
+                            300
+                        );
+                    }
+
+                    return;
+                }
+
+                selectedAudio = blob;
 
                 await sendVoiceMessage();
 
             };
 
-        voiceRecorder.start();
 
+        voiceRecorder.onerror =
+            function(error) {
+
+                console.error(
+                    "Voice recorder error:",
+                    error
+                );
+
+                voiceProcessing = false;
+
+                if (voiceCallActive) {
+
+                    voiceStatus.innerText =
+                        "⚠️ حصلت مشكلة في تسجيل الصوت.";
+
+                    setTimeout(
+                        startVoiceRecording,
+                        1000
+                    );
+                }
+            };
+
+
+        voiceRecorder.start();
     }
+
+
+    /* =========================
+       زر الميكروفون داخل المكالمة
+    ========================= */
+
+    voiceMicButton.onclick =
+        function() {
+
+            if (!voiceCallActive) {
+                return;
+            }
+
+            if (voiceProcessing) {
+                return;
+            }
+
+            if (
+                voiceRecorder &&
+                voiceRecorder.state === "recording"
+            ) {
+
+                voiceRecorder.stop();
+
+                return;
+            }
+
+            startVoiceRecording();
+        };
 
 
     /* =========================
@@ -2275,6 +2297,7 @@
                 "voice.webm"
             );
 
+
             const response =
                 await fetch(
                     API_URL,
@@ -2284,41 +2307,82 @@
                     }
                 );
 
+
             const data =
                 await response.json();
+
+
+            if (!voiceCallActive) {
+                return;
+            }
+
 
             if (data.error) {
 
                 voiceStatus.innerText =
                     "⚠️ " + data.error;
 
-                return;
+                voiceProcessing = false;
 
+                setTimeout(
+                    startVoiceRecording,
+                    1200
+                );
+
+                return;
             }
+
+
+            /* النص الذي فهمه النظام */
+            if (data.transcript) {
+
+                voiceTranscript.innerText =
+                    "أنت: " +
+                    data.transcript;
+            }
+
 
             const reply =
                 data.reply ||
                 "لم يصل رد.";
 
+
+            /* عرض الرد في الشات */
             displayBotReply(reply);
 
+
+            /* عرض الرد داخل المكالمة */
             voiceTranscript.innerText =
                 reply;
+
+
+            /* =========================
+               Dino يتكلم
+            ========================= */
 
             if (data.audio) {
 
                 voiceStatus.innerText =
-                    "🔊 Dino AI بيرد عليك...";
+                    "🔊 Dino AI بيتكلم...";
+
 
                 const audio =
                     playAudio(
                         data.audio
                     );
 
+
                 if (audio) {
 
                     audio.onended =
                         function() {
+
+                            currentVoiceAudio =
+                                null;
+
+                            voiceProcessing =
+                                false;
+
 
                             if (
                                 voiceCallActive
@@ -2327,28 +2391,111 @@
                                 voiceStatus.innerText =
                                     "🎤 جاهز أسمعك تاني";
 
-                            }
 
+                                setTimeout(
+                                    startVoiceRecording,
+                                    350
+                                );
+                            }
                         };
 
+
+                    audio.onerror =
+                        function() {
+
+                            currentVoiceAudio =
+                                null;
+
+                            voiceProcessing =
+                                false;
+
+
+                            if (
+                                voiceCallActive
+                            ) {
+
+                                voiceStatus.innerText =
+                                    "🎤 جاهز أسمعك تاني";
+
+
+                                setTimeout(
+                                    startVoiceRecording,
+                                    350
+                                );
+                            }
+                        };
+
+                } else {
+
+                    voiceProcessing =
+                        false;
+
+                    if (
+                        voiceCallActive
+                    ) {
+
+                        voiceStatus.innerText =
+                            "🎤 جاهز أسمعك تاني";
+
+                        setTimeout(
+                            startVoiceRecording,
+                            350
+                        );
+                    }
                 }
 
             } else {
 
+                /* لو الـWorker لم يرجع صوت */
                 voiceStatus.innerText =
-                    "🎤 جاهز أسمعك تاني";
+                    "⚠️ وصل الرد كنص فقط — خدمة الصوت غير متاحة حالياً.";
 
+                voiceProcessing =
+                    false;
+
+                setTimeout(
+                    function() {
+
+                        if (
+                            voiceCallActive
+                        ) {
+
+                            voiceStatus.innerText =
+                                "🎤 جاهز أسمعك تاني";
+
+                            startVoiceRecording();
+                        }
+
+                    },
+                    1200
+                );
             }
 
+
         } catch (error) {
+
+            console.error(error);
 
             voiceStatus.innerText =
                 "⚠️ حصل خطأ في الاتصال بـ Dino AI.";
 
+            voiceProcessing =
+                false;
+
+            if (
+                voiceCallActive
+            ) {
+
+                setTimeout(
+                    startVoiceRecording,
+                    1500
+                );
+            }
         }
 
-        selectedAudio = null;
 
+        selectedAudio =
+            null;
     }
 
 
@@ -2359,19 +2506,45 @@
     endVoiceCallButton.onclick =
         function() {
 
-            voiceCallActive = false;
+            voiceCallActive =
+                false;
+
+            voiceProcessing =
+                false;
+
+
+            if (
+                currentVoiceAudio
+            ) {
+
+                try {
+                    currentVoiceAudio.pause();
+                    currentVoiceAudio.currentTime = 0;
+                } catch (error) {
+                    console.log(error);
+                }
+
+                currentVoiceAudio =
+                    null;
+            }
+
 
             if (
                 voiceRecorder &&
-                voiceRecorder.state ===
-                "recording"
+                voiceRecorder.state === "recording"
             ) {
 
-                voiceRecorder.stop();
-
+                try {
+                    voiceRecorder.stop();
+                } catch (error) {
+                    console.log(error);
+                }
             }
 
-            if (voiceStream) {
+
+            if (
+                voiceStream
+            ) {
 
                 voiceStream
                     .getTracks()
@@ -2380,20 +2553,34 @@
                             track.stop()
                     );
 
-                voiceStream = null;
-
+                voiceStream =
+                    null;
             }
+
+
+            voiceRecorder =
+                null;
+
+            voiceChunks =
+                [];
+
+
+            voiceMicButton.classList.remove(
+                "recording"
+            );
+
 
             voiceCallPanel.classList.remove(
                 "active"
             );
 
+
             voiceStatus.innerText =
                 "اضغط على الميكروفون وابدأ الكلام";
 
+
             voiceTranscript.innerText =
                 "";
-
         };
 
 </script>
