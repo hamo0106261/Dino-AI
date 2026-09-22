@@ -1,3 +1,4 @@
+```javascript
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const chatBox = document.getElementById("chatBox");
@@ -5,7 +6,6 @@ const chatBox = document.getElementById("chatBox");
 const API_URL = "https://dino-ai-api.mmaojmmmoh.workers.dev";
 
 function displayBotReply(element, text) {
-    // تقسيم الرد إلى أجزاء: نص + روابط
     const urlRegex = /(https?:\/\/[^\s<>"']+)/g;
     const parts = text.split(urlRegex);
 
@@ -35,7 +35,6 @@ async function sendMessage() {
         return;
     }
 
-    // رسالة المستخدم
     const userMessage = document.createElement("div");
     userMessage.className = "message user";
     userMessage.textContent = message;
@@ -43,7 +42,6 @@ async function sendMessage() {
 
     userInput.value = "";
 
-    // رسالة Dino AI المؤقتة
     const botMessage = document.createElement("div");
     botMessage.className = "message bot";
     botMessage.textContent = "🤖 جاري التفكير...";
@@ -70,10 +68,8 @@ async function sendMessage() {
             return;
         }
 
-        // مسح رسالة "جاري التفكير..."
         botMessage.textContent = "";
 
-        // عرض الرد وتحويل الروابط إلى روابط قابلة للضغط
         displayBotReply(
             botMessage,
             data.reply || "لم يصل رد من Dino AI."
@@ -87,6 +83,9 @@ async function sendMessage() {
     }
 
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    // يرجع المؤشر لخانة الكتابة بعد كل رسالة
+    userInput.focus();
 }
 
 sendButton.addEventListener("click", sendMessage);
@@ -96,3 +95,9 @@ userInput.addEventListener("keydown", function(event) {
         sendMessage();
     }
 });
+
+// التركيز على خانة الكتابة تلقائيًا عند فتح الموقع
+window.addEventListener("load", function() {
+    userInput.focus();
+});
+```
