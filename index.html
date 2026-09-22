@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -563,7 +562,6 @@
             color: #6b7280;
         }
 
-        /* تحسينات الموبايل فقط */
         @media (max-width: 600px) {
 
             html,
@@ -577,7 +575,7 @@
             .app {
                 width: 100%;
                 height: 100dvh;
-                min-height: 100dvh;
+                min-height: 0;
                 overflow: hidden;
             }
 
@@ -611,12 +609,14 @@
             .chat-box {
                 width: 100%;
                 max-width: none;
-                flex: 1;
+                flex: 1 1 auto;
                 min-height: 0;
+                height: auto;
                 margin: 0;
                 padding: 14px 10px;
                 overflow-x: hidden;
                 overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .welcome {
@@ -662,7 +662,7 @@
 
             .input-area {
                 width: 100%;
-                flex-shrink: 0;
+                flex: 0 0 auto;
                 padding: 6px 6px 5px;
             }
 
@@ -699,7 +699,6 @@
                 height: 40px;
                 min-width: 40px;
                 flex-shrink: 0;
-                font-size: 17px;
             }
 
             .sidebar {
@@ -865,9 +864,7 @@
 
         <div id="welcomeMessage" class="welcome">
 
-            <h1>
-                Dino AI
-            </h1>
+            <h1>Dino AI</h1>
 
             <p>
                 أهلاً بك 👋
@@ -916,7 +913,6 @@
                 title="تسجيل صوت">
 
                 <svg viewBox="0 0 24 24">
-
                     <rect
                         x="8"
                         y="3"
@@ -935,7 +931,6 @@
                         stroke-width="2"
                         stroke-linecap="round">
                     </path>
-
                 </svg>
 
             </button>
@@ -966,15 +961,11 @@
 
 </div>
 
-<!-- Sidebar -->
-
 <aside id="sidebar" class="sidebar">
 
     <div class="sidebar-header">
 
-        <strong>
-            Dino AI
-        </strong>
+        <strong>Dino AI</strong>
 
         <button id="closeSidebar" class="icon-button">
             ✕
@@ -1000,17 +991,13 @@
 
 </aside>
 
-<!-- Memory -->
-
 <div id="memoryPanel" class="panel">
 
     <div class="panel-content">
 
         <div class="panel-header">
 
-            <strong>
-                🧠 الذاكرة
-            </strong>
+            <strong>🧠 الذاكرة</strong>
 
             <button id="closeMemory" class="icon-button">
                 ✕
@@ -1025,9 +1012,7 @@
         <button
             id="saveMemoryButton"
             class="sidebar-item">
-
             حفظ
-
         </button>
 
         <div id="memoryList"></div>
@@ -1036,17 +1021,13 @@
 
 </div>
 
-<!-- Chats -->
-
 <div id="chatsPanel" class="panel">
 
     <div class="panel-content">
 
         <div class="panel-header">
 
-            <strong>
-                💬 المحادثات
-            </strong>
+            <strong>💬 المحادثات</strong>
 
             <button id="closeChats" class="icon-button">
                 ✕
@@ -1060,17 +1041,13 @@
 
 </div>
 
-<!-- Settings -->
-
 <div id="settingsPanel" class="panel">
 
     <div class="panel-content">
 
         <div class="panel-header">
 
-            <strong>
-                ⚙️ الإعدادات
-            </strong>
+            <strong>⚙️ الإعدادات</strong>
 
             <button id="closeSettings" class="icon-button">
                 ✕
@@ -1081,32 +1058,24 @@
         <button
             id="darkModeButton"
             class="sidebar-item">
-
             🌙 الوضع الداكن
-
         </button>
 
         <button
             id="deleteMemoryButton"
             class="sidebar-item">
-
             🗑️ حذف الذاكرة
-
         </button>
 
         <button
             id="deleteChatsButton"
             class="sidebar-item">
-
             🗑️ حذف المحادثات
-
         </button>
 
     </div>
 
 </div>
-
-<!-- Voice Call -->
 
 <div id="voiceCallPanel" class="voice-call-panel">
 
@@ -1118,12 +1087,8 @@
         Dino AI
     </div>
 
-    <div
-        id="voiceStatus"
-        class="voice-status">
-
+    <div id="voiceStatus" class="voice-status">
         اضغط على الميكروفون وابدأ الكلام
-
     </div>
 
     <div class="voice-controls">
@@ -1178,1177 +1143,1202 @@
 
 <script>
 
-    /* =========================
-       API
-    ========================= */
+const API_URL =
+    "https://dino-ai-api.mmaojmmmoh.workers.dev";
 
-    const API_URL =
-        "https://dino-ai-api.mmaojmmmoh.workers.dev";
 
+const chatBox =
+    document.getElementById("chatBox");
 
-    /* =========================
-       Elements
-    ========================= */
+const userInput =
+    document.getElementById("userInput");
 
-    const chatBox =
-        document.getElementById("chatBox");
+const sendButton =
+    document.getElementById("sendButton");
 
-    const userInput =
-        document.getElementById("userInput");
+const audioButton =
+    document.getElementById("audioButton");
 
-    const sendButton =
-        document.getElementById("sendButton");
+const attachButton =
+    document.getElementById("attachButton");
 
-    const audioButton =
-        document.getElementById("audioButton");
+const imageInput =
+    document.getElementById("imageInput");
 
-    const attachButton =
-        document.getElementById("attachButton");
+const imagePreview =
+    document.getElementById("imagePreview");
 
-    const imageInput =
-        document.getElementById("imageInput");
+const audioPreview =
+    document.getElementById("audioPreview");
 
-    const imagePreview =
-        document.getElementById("imagePreview");
+const sidebar =
+    document.getElementById("sidebar");
 
-    const audioPreview =
-        document.getElementById("audioPreview");
+const menuButton =
+    document.getElementById("menuButton");
 
-    const sidebar =
-        document.getElementById("sidebar");
+const closeSidebar =
+    document.getElementById("closeSidebar");
 
-    const menuButton =
-        document.getElementById("menuButton");
+const newChatButton =
+    document.getElementById("newChatButton");
 
-    const closeSidebar =
-        document.getElementById("closeSidebar");
+const memoryButton =
+    document.getElementById("memoryButton");
 
-    const newChatButton =
-        document.getElementById("newChatButton");
+const chatsButton =
+    document.getElementById("chatsButton");
 
-    const memoryButton =
-        document.getElementById("memoryButton");
+const settingsButton =
+    document.getElementById("settingsButton");
 
-    const chatsButton =
-        document.getElementById("chatsButton");
+const memoryPanel =
+    document.getElementById("memoryPanel");
 
-    const settingsButton =
-        document.getElementById("settingsButton");
+const chatsPanel =
+    document.getElementById("chatsPanel");
 
-    const memoryPanel =
-        document.getElementById("memoryPanel");
+const settingsPanel =
+    document.getElementById("settingsPanel");
 
-    const chatsPanel =
-        document.getElementById("chatsPanel");
+const closeMemory =
+    document.getElementById("closeMemory");
 
-    const settingsPanel =
-        document.getElementById("settingsPanel");
+const closeChats =
+    document.getElementById("closeChats");
 
-    const closeMemory =
-        document.getElementById("closeMemory");
+const closeSettings =
+    document.getElementById("closeSettings");
 
-    const closeChats =
-        document.getElementById("closeChats");
+const memoryInput =
+    document.getElementById("memoryInput");
 
-    const closeSettings =
-        document.getElementById("closeSettings");
+const saveMemoryButton =
+    document.getElementById("saveMemoryButton");
 
-    const memoryInput =
-        document.getElementById("memoryInput");
+const memoryList =
+    document.getElementById("memoryList");
 
-    const saveMemoryButton =
-        document.getElementById("saveMemoryButton");
+const chatsList =
+    document.getElementById("chatsList");
 
-    const memoryList =
-        document.getElementById("memoryList");
+const darkModeButton =
+    document.getElementById("darkModeButton");
 
-    const chatsList =
-        document.getElementById("chatsList");
+const deleteMemoryButton =
+    document.getElementById("deleteMemoryButton");
 
-    const darkModeButton =
-        document.getElementById("darkModeButton");
+const deleteChatsButton =
+    document.getElementById("deleteChatsButton");
 
-    const deleteMemoryButton =
-        document.getElementById("deleteMemoryButton");
 
-    const deleteChatsButton =
-        document.getElementById("deleteChatsButton");
+const voiceCallButton =
+    document.getElementById("voiceCallButton");
 
+const voiceCallPanel =
+    document.getElementById("voiceCallPanel");
 
-    /* =========================
-       Voice
-    ========================= */
+const voiceMicButton =
+    document.getElementById("voiceMicButton");
 
-    const voiceCallButton =
-        document.getElementById("voiceCallButton");
+const endVoiceCallButton =
+    document.getElementById("endVoiceCallButton");
 
-    const voiceCallPanel =
-        document.getElementById("voiceCallPanel");
+const voiceStatus =
+    document.getElementById("voiceStatus");
 
-    const voiceMicButton =
-        document.getElementById("voiceMicButton");
+const voiceTranscript =
+    document.getElementById("voiceTranscript");
 
-    const endVoiceCallButton =
-        document.getElementById("endVoiceCallButton");
 
-    const voiceStatus =
-        document.getElementById("voiceStatus");
+let selectedImage = null;
 
-    const voiceTranscript =
-        document.getElementById("voiceTranscript");
+let mediaRecorder = null;
+let audioChunks = [];
+let selectedAudio = null;
+let microphoneStream = null;
 
+let voiceCallActive = false;
+let voiceRecorder = null;
+let voiceChunks = [];
+let voiceStream = null;
 
-    /* =========================
-       State
-    ========================= */
+let voiceProcessing = false;
+let currentVoiceAudio = null;
 
-    let selectedImage = null;
 
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let selectedAudio = null;
-    let microphoneStream = null;
+function addMessage(text, type) {
 
-    let voiceCallActive = false;
-    let voiceRecorder = null;
-    let voiceChunks = [];
-    let voiceStream = null;
+    const message =
+        document.createElement("div");
 
-    let voiceProcessing = false;
-    let currentVoiceAudio = null;
+    message.className =
+        "message " + type;
 
+    message.innerText =
+        text;
 
-    /* =========================
-       Add Message
-    ========================= */
+    chatBox.appendChild(message);
 
-    function addMessage(text, type) {
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 
-        const message =
-            document.createElement("div");
+    return message;
+}
 
-        message.className =
-            "message " + type;
 
-        message.innerText =
-            text;
+function displayBotReply(text) {
 
-        chatBox.appendChild(message);
+    const message =
+        document.createElement("div");
 
-        chatBox.scrollTop =
-            chatBox.scrollHeight;
+    message.className =
+        "message bot";
 
-        return message;
-    }
+    const urlRegex =
+        /(https?:\/\/[^\s]+)/g;
 
+    const parts =
+        String(text).split(urlRegex);
 
-    /* =========================
-       Bot Reply
-    ========================= */
+    for (let i = 0; i < parts.length; i++) {
 
-    function displayBotReply(text) {
+        const part = parts[i];
 
-        const message =
-            document.createElement("div");
+        if (/^https?:\/\//.test(part)) {
 
-        message.className =
-            "message bot";
+            const link =
+                document.createElement("a");
 
-        const urlRegex =
-            /(https?:\/\/[^\s]+)/g;
+            link.href =
+                part;
 
-        const parts =
-            text.split(urlRegex);
+            link.target =
+                "_blank";
 
-        for (
-            let i = 0;
-            i < parts.length;
-            i++
-        ) {
+            link.rel =
+                "noopener noreferrer";
 
-            const part = parts[i];
+            link.innerText =
+                "🔗 فتح الرابط";
 
-            if (
-                /^https?:\/\//.test(part)
-            ) {
+            message.appendChild(link);
 
-                const link =
-                    document.createElement("a");
+        } else if (part) {
 
-                link.href =
-                    part;
-
-                link.target =
-                    "_blank";
-
-                link.rel =
-                    "noopener noreferrer";
-
-                link.innerText =
-                    "🔗 فتح الرابط";
-
-                message.appendChild(link);
-
-            } else {
-
-                if (part) {
-
-                    message.appendChild(
-                        document.createTextNode(part)
-                    );
-
-                }
-
-            }
+            message.appendChild(
+                document.createTextNode(part)
+            );
 
         }
-
-        chatBox.appendChild(message);
-
-        chatBox.scrollTop =
-            chatBox.scrollHeight;
-
-        return message;
     }
 
+    chatBox.appendChild(message);
 
-    /* =========================
-       تشغيل الصوت
-    ========================= */
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 
-    function playAudio(base64) {
+    return message;
+}
 
-        try {
 
-            if (!base64) {
-                return null;
-            }
+function playAudio(base64) {
 
-            const audio =
-                new Audio(
-                    "data:audio/mpeg;base64," +
-                    base64
-                );
+    try {
 
-            audio.volume = 1;
-
-            audio.play().catch(error => {
-
-                console.log(
-                    "تعذر تشغيل الصوت تلقائياً:",
-                    error
-                );
-
-            });
-
-            currentVoiceAudio = audio;
-
-            return audio;
-
-        } catch (error) {
-
-            console.error(error);
-
+        if (!base64) {
             return null;
         }
-    }
 
+        const audio =
+            new Audio(
+                "data:audio/mpeg;base64," +
+                base64
+            );
 
-    /* =========================
-       إجابات Dino AI الأساسية
-    ========================= */
+        audio.volume = 1;
 
-    function getOwnerAnswer(message) {
+        audio.play().catch(error => {
 
-        const text =
-            message
-                .toLowerCase()
-                .replace(/[؟?!.,،]/g, "")
-                .trim();
+            console.log(
+                "تعذر تشغيل الصوت تلقائياً:",
+                error
+            );
 
-        const creatorQuestions = [
-            "مين صانعك",
-            "من صانعك",
-            "مين صنعك",
-            "من صنعك",
-            "مين مطورك",
-            "من مطورك",
-            "مين عملك",
-            "من عملك",
-            "مين اللي صنعك",
-            "من الذي صنعك"
-        ];
+        });
 
-        const copyrightQuestions = [
-            "مين مالك حقوق الطبع والنشر ليك",
-            "مين مالك حقوق النشر",
-            "من مالك حقوق النشر",
-            "مين صاحب حقوق النشر",
-            "من صاحب حقوق النشر",
-            "مين مالك حقوقك",
-            "من يملك حقوقك",
-            "مين مالك التطبيق",
-            "من مالك التطبيق"
-        ];
+        currentVoiceAudio =
+            audio;
 
-        for (const question of creatorQuestions) {
+        return audio;
 
-            if (text.includes(question)) {
+    } catch (error) {
 
-                return "أنا Dino AI، تم تصميمي وتطويري بواسطة Mohamed Rade.";
-
-            }
-
-        }
-
-        for (const question of copyrightQuestions) {
-
-            if (text.includes(question)) {
-
-                return "حقوق تطبيق Dino AI ومحتواه وتصميمه محفوظة لمالكه ومطوّره Mohamed Rade، مع مراعاة حقوق وتراخيص أي تقنيات أو خدمات خارجية مستخدمة داخل التطبيق.";
-
-            }
-
-        }
+        console.error(error);
 
         return null;
     }
+}
 
 
-    /* =========================
-       إرسال الرسالة
-    ========================= */
+function getOwnerAnswer(message) {
 
-    async function sendMessage() {
+    const text =
+        message
+            .toLowerCase()
+            .replace(/[؟?!.,،]/g, "")
+            .trim();
 
-        let message =
-            userInput.value.trim();
+    const creatorQuestions = [
+        "مين صانعك",
+        "من صانعك",
+        "مين صنعك",
+        "من صنعك",
+        "مين مطورك",
+        "من مطورك",
+        "مين عملك",
+        "من عملك",
+        "مين اللي صنعك",
+        "من الذي صنعك"
+    ];
 
-        if (
-            !message &&
-            !selectedAudio
-        ) {
-            return;
+    const copyrightQuestions = [
+        "مين مالك حقوق الطبع والنشر ليك",
+        "مين مالك حقوق النشر",
+        "من مالك حقوق النشر",
+        "مين صاحب حقوق النشر",
+        "من صاحب حقوق النشر",
+        "مين مالك حقوقك",
+        "من يملك حقوقك",
+        "مين مالك التطبيق",
+        "من مالك التطبيق"
+    ];
+
+    for (const question of creatorQuestions) {
+
+        if (text.includes(question)) {
+
+            return "أنا Dino AI، تم تصميمي وتطويري بواسطة Mohamed Rade.";
+
         }
+    }
 
-        if (selectedImage) {
+    for (const question of copyrightQuestions) {
 
-            message +=
-                (
-                    message
-                        ? "\n\n"
-                        : ""
-                ) +
-                "🖼️ صورة مرفقة: " +
-                selectedImage.name;
-        }
+        if (text.includes(question)) {
 
-        if (message) {
-
-            addMessage(
-                message,
-                "user"
-            );
+            return "حقوق تطبيق Dino AI ومحتواه وتصميمه محفوظة لمالكه ومطوّره Mohamed Rade، مع مراعاة حقوق وتراخيص أي تقنيات أو خدمات خارجية مستخدمة داخل التطبيق.";
 
         }
+    }
 
-        userInput.value = "";
+    return null;
+}
 
-        sendButton.disabled = true;
 
-        const loading =
-            addMessage(
-                "Dino AI يكتب...",
-                "bot"
-            );
+async function sendMessage() {
 
-        try {
+    let message =
+        userInput.value.trim();
 
-            const ownerAnswer =
-                getOwnerAnswer(message);
+    if (!message && !selectedAudio) {
+        return;
+    }
 
-            if (ownerAnswer) {
+    if (selectedImage) {
 
-                loading.remove();
+        message +=
+            (
+                message
+                    ? "\n\n"
+                    : ""
+            ) +
+            "🖼️ صورة مرفقة: " +
+            selectedImage.name;
+    }
 
-                displayBotReply(
-                    ownerAnswer
-                );
+    if (message) {
 
-                loadingComplete();
+        addMessage(
+            message,
+            "user"
+        );
+    }
 
-                return;
-            }
+    userInput.value = "";
 
-            let response;
+    sendButton.disabled = true;
 
-            if (selectedAudio) {
+    const loading =
+        addMessage(
+            "Dino AI يكتب...",
+            "bot"
+        );
 
-                const formData =
-                    new FormData();
+    try {
 
-                formData.append(
-                    "message",
-                    message
-                );
+        const ownerAnswer =
+            getOwnerAnswer(message);
 
-                formData.append(
-                    "audio",
-                    selectedAudio,
-                    "voice.webm"
-                );
-
-                response =
-                    await fetch(
-                        API_URL,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-            } else {
-
-                response =
-                    await fetch(
-                        API_URL,
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    message:
-                                        message
-                                })
-                        }
-                    );
-            }
-
-            const data =
-                await response.json();
-
-            loading.remove();
-
-            if (data.error) {
-
-                displayBotReply(
-                    "⚠️ " + data.error
-                );
-
-            } else {
-
-                const reply =
-                    data.reply ||
-                    "لم يصل رد.";
-
-                displayBotReply(reply);
-
-                if (data.audio) {
-
-                    playAudio(
-                        data.audio
-                    );
-
-                }
-
-            }
-
-        } catch (error) {
-
-            console.error(error);
+        if (ownerAnswer) {
 
             loading.remove();
 
             displayBotReply(
-                "⚠️ حصل خطأ في الاتصال بـ Dino AI."
+                ownerAnswer
             );
 
-        } finally {
-
             loadingComplete();
+
+            return;
         }
-    }
 
+        let response;
 
-    function loadingComplete() {
+        if (selectedAudio) {
 
-        selectedAudio = null;
-        selectedImage = null;
+            const formData =
+                new FormData();
 
-        imagePreview.innerHTML = "";
-        imagePreview.style.display = "none";
+            formData.append(
+                "message",
+                message
+            );
 
-        audioPreview.innerHTML = "";
-        audioPreview.style.display = "none";
+            formData.append(
+                "audio",
+                selectedAudio,
+                "voice.webm"
+            );
 
-        sendButton.disabled = false;
-    }
+            response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
 
+        } else {
 
-    /* =========================
-       الميكروفون العادي
-    ========================= */
+            response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
 
-    audioButton.onclick =
-        async function () {
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-            if (
-                mediaRecorder &&
-                mediaRecorder.state === "recording"
-            ) {
+                        body:
+                            JSON.stringify({
+                                message:
+                                    message
+                            })
+                    }
+                );
+        }
 
-                mediaRecorder.stop();
+        const data =
+            await response.json();
 
-                return;
+        loading.remove();
+
+        if (data.error) {
+
+            displayBotReply(
+                "⚠️ " + data.error
+            );
+
+        } else {
+
+            const reply =
+                data.reply ||
+                "لم يصل رد.";
+
+            displayBotReply(reply);
+
+            if (data.audio) {
+
+                playAudio(
+                    data.audio
+                );
             }
+        }
 
-            try {
+    } catch (error) {
 
-                microphoneStream =
-                    await navigator
-                        .mediaDevices
-                        .getUserMedia({
-                            audio: true
-                        });
+        console.error(error);
 
-                audioChunks = [];
+        loading.remove();
 
-                mediaRecorder =
-                    new MediaRecorder(
-                        microphoneStream
-                    );
+        displayBotReply(
+            "⚠️ حصل خطأ في الاتصال بـ Dino AI."
+        );
 
-                mediaRecorder.ondataavailable =
-                    function(event) {
+    } finally {
 
-                        if (
-                            event.data.size > 0
-                        ) {
+        loadingComplete();
+    }
+}
 
-                            audioChunks.push(
-                                event.data
-                            );
 
-                        }
+function loadingComplete() {
 
-                    };
+    selectedAudio = null;
+    selectedImage = null;
 
-                mediaRecorder.onstop =
-                    function() {
+    imagePreview.innerHTML = "";
+    imagePreview.style.display = "none";
 
-                        const blob =
-                            new Blob(
-                                audioChunks,
-                                {
-                                    type:
-                                        "audio/webm"
-                                }
-                            );
+    audioPreview.innerHTML = "";
+    audioPreview.style.display = "none";
 
-                        selectedAudio = blob;
+    sendButton.disabled = false;
+}
 
-                        const url =
-                            URL.createObjectURL(
-                                blob
-                            );
 
-                        audioPreview.innerHTML =
-                            `
-                            <audio controls src="${url}"></audio>
-                            `;
+audioButton.onclick =
+    async function() {
 
-                        audioPreview.style.display =
-                            "block";
+        if (
+            mediaRecorder &&
+            mediaRecorder.state === "recording"
+        ) {
 
-                        if (
-                            microphoneStream
-                        ) {
+            mediaRecorder.stop();
 
-                            microphoneStream
-                                .getTracks()
-                                .forEach(
-                                    track =>
-                                        track.stop()
-                                );
+            return;
+        }
 
-                        }
+        try {
 
-                        audioButton.classList.remove(
-                            "recording"
+            microphoneStream =
+                await navigator
+                    .mediaDevices
+                    .getUserMedia({
+                        audio: true
+                    });
+
+            audioChunks = [];
+
+            mediaRecorder =
+                new MediaRecorder(
+                    microphoneStream
+                );
+
+            mediaRecorder.ondataavailable =
+                function(event) {
+
+                    if (event.data.size > 0) {
+
+                        audioChunks.push(
+                            event.data
+                        );
+                    }
+                };
+
+            mediaRecorder.onstop =
+                function() {
+
+                    const blob =
+                        new Blob(
+                            audioChunks,
+                            {
+                                type:
+                                    "audio/webm"
+                            }
                         );
 
-                        sendMessage();
-                    };
+                    selectedAudio =
+                        blob;
 
-                mediaRecorder.start();
+                    const url =
+                        URL.createObjectURL(
+                            blob
+                        );
 
-                audioButton.classList.add(
-                    "recording"
-                );
+                    audioPreview.innerHTML =
+                        `<audio controls src="${url}"></audio>`;
 
-            } catch (error) {
+                    audioPreview.style.display =
+                        "block";
 
-                alert(
-                    "اسمح للمتصفح باستخدام الميكروفون."
-                );
+                    if (microphoneStream) {
 
-            }
+                        microphoneStream
+                            .getTracks()
+                            .forEach(
+                                track =>
+                                    track.stop()
+                            );
+                    }
 
-        };
+                    audioButton.classList.remove(
+                        "recording"
+                    );
 
+                    sendMessage();
+                };
 
-    /* =========================
-       المرفقات
-    ========================= */
+            mediaRecorder.start();
 
-    attachButton.onclick =
-        function() {
+            audioButton.classList.add(
+                "recording"
+            );
 
-            imageInput.click();
+        } catch (error) {
 
-        };
+            console.error(error);
 
-
-    imageInput.onchange =
-        function() {
-
-            const file =
-                imageInput.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            selectedImage = file;
-
-            const url =
-                URL.createObjectURL(file);
-
-            imagePreview.innerHTML =
-                `<img src="${url}">`;
-
-            imagePreview.style.display =
-                "block";
-        };
+            alert(
+                "اسمح للمتصفح باستخدام الميكروفون."
+            );
+        }
+    };
 
 
-    /* =========================
-       إرسال
-    ========================= */
+attachButton.onclick =
+    function() {
 
-    sendButton.onclick =
-        function() {
+        imageInput.click();
+
+    };
+
+
+imageInput.onchange =
+    function() {
+
+        const file =
+            imageInput.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        selectedImage =
+            file;
+
+        const url =
+            URL.createObjectURL(
+                file
+            );
+
+        imagePreview.innerHTML =
+            `<img src="${url}">`;
+
+        imagePreview.style.display =
+            "block";
+    };
+
+
+sendButton.onclick =
+    function() {
+
+        sendMessage();
+
+    };
+
+
+userInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
 
             sendMessage();
 
-        };
+        }
+
+    }
+);
 
 
-    userInput.addEventListener(
-        "keydown",
-        function(event) {
+menuButton.onclick =
+    function() {
 
-            if (
-                event.key === "Enter"
-            ) {
+        sidebar.classList.add(
+            "open"
+        );
 
-                event.preventDefault();
+    };
 
-                sendMessage();
 
-            }
+closeSidebar.onclick =
+    function() {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+    };
+
+
+newChatButton.onclick =
+    function() {
+
+        saveCurrentChat();
+
+        chatBox.innerHTML =
+            `
+            <div class="welcome">
+
+                <h1>Dino AI</h1>
+
+                <p>
+                    أهلاً بك 👋
+                    <br>
+                    أنا Dino AI، اسألني عن أي شيء.
+                </p>
+
+            </div>
+            `;
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+    };
+
+
+function getMemory() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "dinoMemory"
+        ) || "[]"
+    );
+
+}
+
+
+function renderMemory() {
+
+    const memory =
+        getMemory();
+
+    memoryList.innerHTML =
+        "";
+
+    if (memory.length === 0) {
+
+        memoryList.innerText =
+            "لا توجد ذكريات محفوظة.";
+
+        return;
+    }
+
+    memory.forEach(
+        function(item, index) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "sidebar-item";
+
+            div.innerText =
+                item;
+
+            div.onclick =
+                function() {
+
+                    memory.splice(
+                        index,
+                        1
+                    );
+
+                    localStorage.setItem(
+                        "dinoMemory",
+                        JSON.stringify(memory)
+                    );
+
+                    renderMemory();
+
+                };
+
+            memoryList.appendChild(
+                div
+            );
 
         }
     );
+}
 
 
-    /* =========================
-       القائمة
-    ========================= */
+memoryButton.onclick =
+    function() {
 
-    menuButton.onclick =
-        function() {
+        renderMemory();
 
-            sidebar.classList.add(
-                "open"
-            );
-
-        };
-
-
-    closeSidebar.onclick =
-        function() {
-
-            sidebar.classList.remove(
-                "open"
-            );
-
-        };
-
-
-    /* =========================
-       محادثة جديدة
-    ========================= */
-
-    newChatButton.onclick =
-        function() {
-
-            saveCurrentChat();
-
-            chatBox.innerHTML =
-                `
-                <div class="welcome">
-
-                    <h1>Dino AI</h1>
-
-                    <p>
-                        أهلاً بك 👋
-                        <br>
-                        أنا Dino AI، اسألني عن أي شيء.
-                    </p>
-
-                </div>
-                `;
-
-            sidebar.classList.remove(
-                "open"
-            );
-
-        };
-
-
-    /* =========================
-       الذاكرة
-    ========================= */
-
-    function getMemory() {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "dinoMemory"
-            ) || "[]"
+        memoryPanel.classList.add(
+            "active"
         );
 
-    }
+        sidebar.classList.remove(
+            "open"
+        );
+
+    };
 
 
-    function renderMemory() {
+closeMemory.onclick =
+    function() {
+
+        memoryPanel.classList.remove(
+            "active"
+        );
+
+    };
+
+
+saveMemoryButton.onclick =
+    function() {
+
+        const text =
+            memoryInput.value.trim();
+
+        if (!text) {
+            return;
+        }
 
         const memory =
             getMemory();
 
-        memoryList.innerHTML = "";
-
-        if (
-            memory.length === 0
-        ) {
-
-            memoryList.innerText =
-                "لا توجد ذكريات محفوظة.";
-
-            return;
-        }
-
-        memory.forEach(
-            function(item, index) {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "sidebar-item";
-
-                div.innerText =
-                    item;
-
-                div.onclick =
-                    function() {
-
-                        memory.splice(
-                            index,
-                            1
-                        );
-
-                        localStorage.setItem(
-                            "dinoMemory",
-                            JSON.stringify(memory)
-                        );
-
-                        renderMemory();
-
-                    };
-
-                memoryList.appendChild(
-                    div
-                );
-
-            }
-        );
-
-    }
-
-
-    memoryButton.onclick =
-        function() {
-
-            renderMemory();
-
-            memoryPanel.classList.add(
-                "active"
-            );
-
-            sidebar.classList.remove(
-                "open"
-            );
-
-        };
-
-
-    closeMemory.onclick =
-        function() {
-
-            memoryPanel.classList.remove(
-                "active"
-            );
-
-        };
-
-
-    saveMemoryButton.onclick =
-        function() {
-
-            const text =
-                memoryInput.value.trim();
-
-            if (!text) {
-                return;
-            }
-
-            const memory =
-                getMemory();
-
-            memory.push(text);
-
-            localStorage.setItem(
-                "dinoMemory",
-                JSON.stringify(memory)
-            );
-
-            memoryInput.value = "";
-
-            renderMemory();
-
-        };
-
-
-    /* =========================
-       المحادثات
-    ========================= */
-
-    function saveCurrentChat() {
-
-        const messages =
-            Array.from(
-                chatBox.querySelectorAll(
-                    ".message"
-                )
-            );
-
-        if (
-            messages.length === 0
-        ) {
-            return;
-        }
-
-        const chats =
-            JSON.parse(
-                localStorage.getItem(
-                    "dinoChats"
-                ) || "[]"
-            );
-
-        const content =
-            messages.map(
-                message =>
-                    message.innerText
-            );
-
-        chats.unshift({
-            date:
-                new Date().toLocaleString(
-                    "ar-EG"
-                ),
-            messages:
-                content
-        });
+        memory.push(text);
 
         localStorage.setItem(
-            "dinoChats",
-            JSON.stringify(
-                chats.slice(0, 20)
+            "dinoMemory",
+            JSON.stringify(memory)
+        );
+
+        memoryInput.value =
+            "";
+
+        renderMemory();
+
+    };
+
+
+function saveCurrentChat() {
+
+    const messages =
+        Array.from(
+            chatBox.querySelectorAll(
+                ".message"
             )
         );
 
+    if (messages.length === 0) {
+        return;
     }
 
-
-    function renderChats() {
-
-        const chats =
-            JSON.parse(
-                localStorage.getItem(
-                    "dinoChats"
-                ) || "[]"
-            );
-
-        chatsList.innerHTML = "";
-
-        if (
-            chats.length === 0
-        ) {
-
-            chatsList.innerText =
-                "لا توجد محادثات محفوظة.";
-
-            return;
-        }
-
-        chats.forEach(
-            function(chat) {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "sidebar-item";
-
-                div.innerText =
-                    "💬 " +
-                    (
-                        chat.messages[0] ||
-                        "محادثة"
-                    ).slice(0, 70) +
-                    "\n" +
-                    chat.date;
-
-                div.onclick =
-                    function() {
-
-                        chatBox.innerHTML =
-                            "";
-
-                        chat.messages.forEach(
-                            function(message) {
-
-                                displayBotReply(
-                                    message
-                                );
-
-                            }
-                        );
-
-                        chatsPanel.classList.remove(
-                            "active"
-                        );
-
-                    };
-
-                chatsList.appendChild(
-                    div
-                );
-
-            }
+    const chats =
+        JSON.parse(
+            localStorage.getItem(
+                "dinoChats"
+            ) || "[]"
         );
 
+    const content =
+        messages.map(
+            message =>
+                message.innerText
+        );
+
+    chats.unshift({
+        date:
+            new Date().toLocaleString(
+                "ar-EG"
+            ),
+        messages:
+            content
+    });
+
+    localStorage.setItem(
+        "dinoChats",
+        JSON.stringify(
+            chats.slice(0, 20)
+        )
+    );
+}
+
+
+function renderChats() {
+
+    const chats =
+        JSON.parse(
+            localStorage.getItem(
+                "dinoChats"
+            ) || "[]"
+        );
+
+    chatsList.innerHTML =
+        "";
+
+    if (chats.length === 0) {
+
+        chatsList.innerText =
+            "لا توجد محادثات محفوظة.";
+
+        return;
     }
 
+    chats.forEach(
+        function(chat) {
 
-    chatsButton.onclick =
-        function() {
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-            renderChats();
+            div.className =
+                "sidebar-item";
 
-            chatsPanel.classList.add(
-                "active"
+            div.innerText =
+                "💬 " +
+                (
+                    chat.messages[0] ||
+                    "محادثة"
+                ).slice(0, 70) +
+                "\n" +
+                chat.date;
+
+            div.onclick =
+                function() {
+
+                    chatBox.innerHTML =
+                        "";
+
+                    chat.messages.forEach(
+                        function(message) {
+
+                            displayBotReply(
+                                message
+                            );
+
+                        }
+                    );
+
+                    chatsPanel.classList.remove(
+                        "active"
+                    );
+                };
+
+            chatsList.appendChild(
+                div
             );
 
-            sidebar.classList.remove(
-                "open"
-            );
-
-        };
+        }
+    );
+}
 
 
-    closeChats.onclick =
-        function() {
+chatsButton.onclick =
+    function() {
 
-            chatsPanel.classList.remove(
-                "active"
-            );
+        renderChats();
 
-        };
+        chatsPanel.classList.add(
+            "active"
+        );
 
+        sidebar.classList.remove(
+            "open"
+        );
 
-    /* =========================
-       الإعدادات
-    ========================= */
-
-    settingsButton.onclick =
-        function() {
-
-            settingsPanel.classList.add(
-                "active"
-            );
-
-            sidebar.classList.remove(
-                "open"
-            );
-
-        };
+    };
 
 
-    closeSettings.onclick =
-        function() {
+closeChats.onclick =
+    function() {
 
-            settingsPanel.classList.remove(
-                "active"
-            );
+        chatsPanel.classList.remove(
+            "active"
+        );
 
-        };
-
-
-    darkModeButton.onclick =
-        function() {
-
-            document.body.classList.toggle(
-                "dark-mode"
-            );
-
-            localStorage.setItem(
-                "dinoDarkMode",
-                document.body.classList.contains(
-                    "dark-mode"
-                )
-            );
-
-        };
+    };
 
 
-    deleteMemoryButton.onclick =
-        function() {
+settingsButton.onclick =
+    function() {
 
-            localStorage.removeItem(
-                "dinoMemory"
-            );
+        settingsPanel.classList.add(
+            "active"
+        );
 
-            renderMemory();
+        sidebar.classList.remove(
+            "open"
+        );
 
-        };
-
-
-    deleteChatsButton.onclick =
-        function() {
-
-            localStorage.removeItem(
-                "dinoChats"
-            );
-
-            renderChats();
-
-        };
+    };
 
 
-    /* =========================
-       الوضع الداكن
-    ========================= */
+closeSettings.onclick =
+    function() {
 
-    if (
-        localStorage.getItem(
-            "dinoDarkMode"
-        ) === "true"
-    ) {
+        settingsPanel.classList.remove(
+            "active"
+        );
 
-        document.body.classList.add(
+    };
+
+
+darkModeButton.onclick =
+    function() {
+
+        document.body.classList.toggle(
             "dark-mode"
         );
 
+        localStorage.setItem(
+            "dinoDarkMode",
+            document.body.classList.contains(
+                "dark-mode"
+            )
+        );
+
+    };
+
+
+deleteMemoryButton.onclick =
+    function() {
+
+        localStorage.removeItem(
+            "dinoMemory"
+        );
+
+        renderMemory();
+
+    };
+
+
+deleteChatsButton.onclick =
+    function() {
+
+        localStorage.removeItem(
+            "dinoChats"
+        );
+
+        renderChats();
+
+    };
+
+
+if (
+    localStorage.getItem(
+        "dinoDarkMode"
+    ) === "true"
+) {
+
+    document.body.classList.add(
+        "dark-mode"
+    );
+
+}
+
+
+/* =========================
+   VOICE CALL
+========================= */
+
+voiceCallButton.onclick =
+    async function() {
+
+        if (voiceCallActive) {
+            return;
+        }
+
+        try {
+
+            voiceStream =
+                await navigator
+                    .mediaDevices
+                    .getUserMedia({
+                        audio: true
+                    });
+
+            voiceCallActive =
+                true;
+
+            voiceCallPanel.classList.add(
+                "active"
+            );
+
+            voiceStatus.innerText =
+                "🎤 جاهز أسمعك";
+
+            voiceTranscript.innerText =
+                "";
+
+            startVoiceRecording();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "اسمح للمتصفح باستخدام الميكروفون."
+            );
+
+        }
+    };
+
+
+function startVoiceRecording() {
+
+    if (!voiceCallActive) {
+        return;
     }
 
+    if (voiceProcessing) {
+        return;
+    }
 
-    /* ==================================================
-       VOICE CALL
+    if (
+        voiceRecorder &&
+        voiceRecorder.state === "recording"
+    ) {
+        return;
+    }
 
-       المستخدم يتكلم
-       ↓
-       Whisper
-       ↓
-       Dino AI
-       ↓
-       TTS
-       ↓
-       Dino يتكلم
-       ↓
-       الاستماع يبدأ مرة أخرى
-    ================================================== */
+    if (!voiceStream) {
+        return;
+    }
 
+    voiceChunks = [];
 
-    voiceCallButton.onclick =
-        async function() {
+    try {
 
-            if (voiceCallActive) {
-                return;
-            }
+        voiceRecorder =
+            new MediaRecorder(
+                voiceStream
+            );
 
-            try {
+    } catch (error) {
 
-                voiceStream =
-                    await navigator
-                        .mediaDevices
-                        .getUserMedia({
-                            audio: true
-                        });
+        voiceStatus.innerText =
+            "⚠️ المتصفح لا يدعم تسجيل الصوت.";
 
-                voiceCallActive = true;
+        return;
+    }
 
-                voiceCallPanel.classList.add(
-                    "active"
-                );
+    voiceRecorder.ondataavailable =
+        function(event) {
 
-                voiceStatus.innerText =
-                    "🎤 جاهز أسمعك";
+            if (event.data.size > 0) {
 
-                voiceTranscript.innerText =
-                    "";
-
-                startVoiceRecording();
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "اسمح للمتصفح باستخدام الميكروفون."
+                voiceChunks.push(
+                    event.data
                 );
 
             }
+        };
+
+
+    voiceRecorder.onstart =
+        function() {
+
+            voiceMicButton.classList.add(
+                "recording"
+            );
+
+            voiceStatus.innerText =
+                "🔴 جاري الاستماع...";
 
         };
 
 
-    /* =========================
-       بدء التسجيل الصوتي
-    ========================= */
+    voiceRecorder.onstop =
+        async function() {
 
-    function startVoiceRecording() {
+            voiceMicButton.classList.remove(
+                "recording"
+            );
+
+            if (!voiceCallActive) {
+                return;
+            }
+
+            voiceProcessing =
+                true;
+
+            voiceStatus.innerText =
+                "⏳ Dino AI بيسمعك...";
+
+            const blob =
+                new Blob(
+                    voiceChunks,
+                    {
+                        type:
+                            "audio/webm"
+                    }
+                );
+
+            if (blob.size === 0) {
+
+                voiceProcessing =
+                    false;
+
+                if (voiceCallActive) {
+
+                    setTimeout(
+                        startVoiceRecording,
+                        300
+                    );
+
+                }
+
+                return;
+            }
+
+            selectedAudio =
+                blob;
+
+            await sendVoiceMessage();
+
+        };
+
+
+    voiceRecorder.onerror =
+        function(error) {
+
+            console.error(
+                "Voice recorder error:",
+                error
+            );
+
+            voiceProcessing =
+                false;
+
+            if (voiceCallActive) {
+
+                voiceStatus.innerText =
+                    "⚠️ حصلت مشكلة في تسجيل الصوت.";
+
+                setTimeout(
+                    startVoiceRecording,
+                    1000
+                );
+
+            }
+        };
+
+
+    voiceRecorder.start();
+
+}
+
+
+voiceMicButton.onclick =
+    function() {
 
         if (!voiceCallActive) {
             return;
@@ -2362,437 +2352,285 @@
             voiceRecorder &&
             voiceRecorder.state === "recording"
         ) {
+
+            voiceRecorder.stop();
+
             return;
         }
 
-        if (!voiceStream) {
+        startVoiceRecording();
+
+    };
+
+
+async function sendVoiceMessage() {
+
+    try {
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "message",
+            ""
+        );
+
+        formData.append(
+            "audio",
+            selectedAudio,
+            "voice.webm"
+        );
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!voiceCallActive) {
             return;
         }
 
-        voiceChunks = [];
-
-        try {
-
-            voiceRecorder =
-                new MediaRecorder(
-                    voiceStream
-                );
-
-        } catch (error) {
+        if (data.error) {
 
             voiceStatus.innerText =
-                "⚠️ المتصفح لا يدعم تسجيل الصوت.";
+                "⚠️ " + data.error;
+
+            voiceProcessing =
+                false;
+
+            setTimeout(
+                startVoiceRecording,
+                1200
+            );
 
             return;
         }
 
-
-        voiceRecorder.ondataavailable =
-            function(event) {
-
-                if (
-                    event.data.size > 0
-                ) {
-
-                    voiceChunks.push(
-                        event.data
-                    );
-
-                }
-
-            };
-
-
-        voiceRecorder.onstart =
-            function() {
-
-                voiceMicButton.classList.add(
-                    "recording"
-                );
-
-                voiceStatus.innerText =
-                    "🔴 جاري الاستماع...";
-
-            };
-
-
-        voiceRecorder.onstop =
-            async function() {
-
-                voiceMicButton.classList.remove(
-                    "recording"
-                );
-
-                if (!voiceCallActive) {
-                    return;
-                }
-
-                voiceProcessing = true;
-
-                voiceStatus.innerText =
-                    "⏳ Dino AI بيسمعك...";
-
-                const blob =
-                    new Blob(
-                        voiceChunks,
-                        {
-                            type:
-                                "audio/webm"
-                        }
-                    );
-
-                if (
-                    blob.size === 0
-                ) {
-
-                    voiceProcessing = false;
-
-                    if (voiceCallActive) {
-
-                        setTimeout(
-                            startVoiceRecording,
-                            300
-                        );
-
-                    }
-
-                    return;
-                }
-
-                selectedAudio = blob;
-
-                await sendVoiceMessage();
-
-            };
-
-
-        voiceRecorder.onerror =
-            function(error) {
-
-                console.error(
-                    "Voice recorder error:",
-                    error
-                );
-
-                voiceProcessing = false;
-
-                if (voiceCallActive) {
-
-                    voiceStatus.innerText =
-                        "⚠️ حصلت مشكلة في تسجيل الصوت.";
-
-                    setTimeout(
-                        startVoiceRecording,
-                        1000
-                    );
-
-                }
-
-            };
-
-
-        voiceRecorder.start();
-
-    }
-
-
-    /* =========================
-       زر الميكروفون داخل المكالمة
-    ========================= */
-
-    voiceMicButton.onclick =
-        function() {
-
-            if (!voiceCallActive) {
-                return;
-            }
-
-            if (voiceProcessing) {
-                return;
-            }
-
-            if (
-                voiceRecorder &&
-                voiceRecorder.state === "recording"
-            ) {
-
-                voiceRecorder.stop();
-
-                return;
-            }
-
-            startVoiceRecording();
-
-        };
-
-
-    /* =========================
-       إرسال الصوت
-    ========================= */
-
-    async function sendVoiceMessage() {
-
-        try {
-
-            const formData =
-                new FormData();
-
-            formData.append(
-                "message",
-                ""
-            );
-
-            formData.append(
-                "audio",
-                selectedAudio,
-                "voice.webm"
-            );
-
-
-            const response =
-                await fetch(
-                    API_URL,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!voiceCallActive) {
-                return;
-            }
-
-
-            if (data.error) {
-
-                voiceStatus.innerText =
-                    "⚠️ " + data.error;
-
-                voiceProcessing = false;
-
-                setTimeout(
-                    startVoiceRecording,
-                    1200
-                );
-
-                return;
-            }
-
-
-            if (data.transcript) {
-
-                voiceTranscript.innerText =
-                    "أنت: " +
-                    data.transcript;
-
-            }
-
-
-            const reply =
-                data.reply ||
-                "لم يصل رد.";
-
-
-            displayBotReply(reply);
-
+        if (data.transcript) {
 
             voiceTranscript.innerText =
-                reply;
+                "أنت: " +
+                data.transcript;
 
+        }
 
-            /* Dino يتكلم */
+        const reply =
+            data.reply ||
+            "لم يصل رد.";
 
-            if (data.audio) {
+        displayBotReply(
+            reply
+        );
 
-                voiceStatus.innerText =
-                    "🔊 Dino AI بيتكلم...";
+        voiceTranscript.innerText =
+            reply;
 
+        if (data.audio) {
 
-                const audio =
-                    playAudio(
-                        data.audio
-                    );
+            voiceStatus.innerText =
+                "🔊 Dino AI بيتكلم...";
 
+            const audio =
+                playAudio(
+                    data.audio
+                );
 
-                if (audio) {
+            if (audio) {
 
-                    audio.onended =
-                        function() {
-
-                            currentVoiceAudio =
-                                null;
-
-                            voiceProcessing =
-                                false;
-
-
-                            if (
-                                voiceCallActive
-                            ) {
-
-                                voiceStatus.innerText =
-                                    "🎤 جاهز أسمعك تاني";
-
-
-                                setTimeout(
-                                    startVoiceRecording,
-                                    350
-                                );
-
-                            }
-
-                        };
-
-
-                    audio.onerror =
-                        function() {
-
-                            currentVoiceAudio =
-                                null;
-
-                            voiceProcessing =
-                                false;
-
-
-                            if (
-                                voiceCallActive
-                            ) {
-
-                                voiceStatus.innerText =
-                                    "🎤 جاهز أسمعك تاني";
-
-
-                                setTimeout(
-                                    startVoiceRecording,
-                                    350
-                                );
-
-                            }
-
-                        };
-
-                } else {
-
-                    voiceProcessing =
-                        false;
-
-                    if (
-                        voiceCallActive
-                    ) {
-
-                        voiceStatus.innerText =
-                            "🎤 جاهز أسمعك تاني";
-
-                        setTimeout(
-                            startVoiceRecording,
-                            350
-                        );
-
-                    }
-
-                }
-
-            } else {
-
-                voiceStatus.innerText =
-                    "⚠️ وصل الرد كنص فقط — خدمة الصوت غير متاحة حالياً.";
-
-                voiceProcessing =
-                    false;
-
-                setTimeout(
+                audio.onended =
                     function() {
 
-                        if (
-                            voiceCallActive
-                        ) {
+                        currentVoiceAudio =
+                            null;
+
+                        voiceProcessing =
+                            false;
+
+                        if (voiceCallActive) {
 
                             voiceStatus.innerText =
                                 "🎤 جاهز أسمعك تاني";
 
-                            startVoiceRecording();
+                            setTimeout(
+                                startVoiceRecording,
+                                350
+                            );
 
                         }
+                    };
 
-                    },
-                    1200
-                );
+                audio.onerror =
+                    function() {
 
+                        currentVoiceAudio =
+                            null;
+
+                        voiceProcessing =
+                            false;
+
+                        if (voiceCallActive) {
+
+                            voiceStatus.innerText =
+                                "🎤 جاهز أسمعك تاني";
+
+                            setTimeout(
+                                startVoiceRecording,
+                                350
+                            );
+
+                        }
+                    };
+
+            } else {
+
+                voiceProcessing =
+                    false;
+
+                if (voiceCallActive) {
+
+                    voiceStatus.innerText =
+                        "🎤 جاهز أسمعك تاني";
+
+                    setTimeout(
+                        startVoiceRecording,
+                        350
+                    );
+                }
             }
 
-
-        } catch (error) {
-
-            console.error(error);
+        } else {
 
             voiceStatus.innerText =
-                "⚠️ حصل خطأ في الاتصال بـ Dino AI.";
+                "⚠️ وصل الرد كنص فقط — خدمة الصوت غير متاحة حالياً.";
 
             voiceProcessing =
                 false;
 
-            if (
-                voiceCallActive
-            ) {
+            setTimeout(
+                function() {
 
-                setTimeout(
-                    startVoiceRecording,
-                    1500
-                );
+                    if (voiceCallActive) {
 
-            }
+                        voiceStatus.innerText =
+                            "🎤 جاهز أسمعك تاني";
 
+                        startVoiceRecording();
+
+                    }
+
+                },
+                1200
+            );
         }
 
+    } catch (error) {
 
-        selectedAudio =
-            null;
+        console.error(error);
+
+        voiceStatus.innerText =
+            "⚠️ حصل خطأ في الاتصال بـ Dino AI.";
+
+        voiceProcessing =
+            false;
+
+        if (voiceCallActive) {
+
+            setTimeout(
+                startVoiceRecording,
+                1500
+            );
+        }
 
     }
 
-
-    /* =========================
-       إنهاء المكالمة
-    ========================= */
-
-    endVoiceCallButton.onclick =
-        function() {
-
-            voiceCallActive =
-                false;
-
-            voiceProcessing =
-                false;
+    selectedAudio =
+        null;
+}
 
 
-            if (
-                currentVoiceAudio
-            ) {
+endVoiceCallButton.onclick =
+    function() {
 
-                try {
+        voiceCallActive =
+            false;
 
-                    currentVoiceAudio.pause();
+        voiceProcessing =
+            false;
 
-                    currentVoiceAudio.currentTime =
-                        0;
+        if (currentVoiceAudio) {
 
-                } catch (error) {
+            try {
 
-                    console.log(error);
+                currentVoiceAudio.pause();
 
-                }
+                currentVoiceAudio.currentTime =
+                    0;
 
-                currentVoiceAudio =
-                    null;
+            } catch (error) {
+
+                console.log(error);
 
             }
 
+            currentVoiceAudio =
+                null;
+        }
 
-            if (
-                voiceRecorder &&
-                voiceRecorder.state ===
+        if (
+            voiceRecorder &&
+            voiceRecorder.state === "recording"
+        ) {
+
+            try {
+
+                voiceRecorder.stop();
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+        }
+
+        if (voiceStream) {
+
+            voiceStream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+            voiceStream =
+                null;
+        }
+
+        voiceRecorder =
+            null;
+
+        voiceChunks =
+            [];
+
+        voiceCallPanel.classList.remove(
+            "active"
+        );
+
+        voiceStatus.innerText =
+            "اضغط على الميكروفون وابدأ الكلام";
+
+        voiceTranscript.innerText =
+            "";
+
+    };
+
+</script>
+
+</body>
+</html>
