@@ -12,17 +12,11 @@
 
 <div class="app">
 
-    <!-- =========================
-         القائمة الجانبية
-         ========================= -->
-
+    <!-- القائمة الجانبية -->
     <aside id="sidebar" class="sidebar">
 
         <div class="sidebar-header">
-
-            <div class="sidebar-logo">
-                Dino AI
-            </div>
+            <div class="sidebar-logo">Dino AI</div>
 
             <button
                 id="closeSidebar"
@@ -30,7 +24,6 @@
                 type="button">
                 ×
             </button>
-
         </div>
 
         <button
@@ -66,48 +59,15 @@
         </div>
 
         <div class="sidebar-bottom">
-
             <div class="sidebar-info">
                 Dino AI
             </div>
-
         </div>
 
     </aside>
 
 
-    <!-- =========================
-         نافذة المحادثات
-         ========================= -->
-
-    <div
-        id="chatsPanel"
-        class="memory-panel">
-
-        <div class="memory-header">
-
-            <h2>💬 المحادثات</h2>
-
-            <button
-                id="closeChats"
-                type="button">
-                ×
-            </button>
-
-        </div>
-
-        <div
-            id="chatsList"
-            class="memory-content">
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         نافذة الذاكرة
-         ========================= -->
-
+    <!-- نافذة الذاكرة -->
     <div
         id="memoryPanel"
         class="memory-panel">
@@ -127,8 +87,8 @@
         <div class="memory-content">
 
             <p>
-                يمكنك إضافة معلومات تريد أن يتذكرها
-                Dino AI على هذا الجهاز.
+                يمكنك إضافة معلومات تريد أن يتذكرها Dino AI
+                على هذا الجهاز.
             </p>
 
             <div
@@ -157,10 +117,32 @@
     </div>
 
 
-    <!-- =========================
-         نافذة الإعدادات
-         ========================= -->
+    <!-- نافذة المحادثات -->
+    <div
+        id="chatsPanel"
+        class="memory-panel">
 
+        <div class="memory-header">
+
+            <h2>💬 المحادثات</h2>
+
+            <button
+                id="closeChats"
+                type="button">
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="chatsList"
+            class="memory-content">
+        </div>
+
+    </div>
+
+
+    <!-- نافذة الإعدادات -->
     <div
         id="settingsPanel"
         class="memory-panel">
@@ -221,39 +203,13 @@
 
             </div>
 
-            <div
-                style="
-                margin-top:20px;
-                color:#777;
-                line-height:1.8;
-                font-size:13px;
-                ">
-
-                <strong>Dino AI</strong>
-
-                <br>
-
-                الإصدار 1.0
-
-                <br>
-
-                © 2026 Mohamed Reda
-
-            </div>
-
         </div>
 
     </div>
 
 
-    <!-- =========================
-         المنطقة الرئيسية
-         ========================= -->
-
+    <!-- المنطقة الرئيسية -->
     <main class="main-area">
-
-
-        <!-- الشريط العلوي -->
 
         <header class="top-bar">
 
@@ -271,10 +227,7 @@
         </header>
 
 
-        <!-- =========================
-             المحادثة
-             ========================= -->
-
+        <!-- المحادثة -->
         <main
             id="chatBox"
             class="chat-box">
@@ -294,53 +247,59 @@
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك وسأحاول مساعدتك.
+                اكتب سؤالك أو أرسل صورة.
 
             </div>
 
         </main>
 
 
-        <!-- =========================
-             الكتابة
-             ========================= -->
-
+        <!-- منطقة الكتابة -->
         <div class="input-wrapper">
 
             <div class="input-area">
 
+                <!-- زر الصورة -->
                 <button
                     id="attachButton"
                     class="attach-button"
-                    type="button">
-                    ＋
+                    type="button"
+                    aria-label="إضافة صورة">
+                    📎
                 </button>
 
+                <!-- اختيار الصور -->
                 <input
-                    id="fileInput"
+                    id="imageInput"
                     type="file"
-                    accept="image/*,audio/*"
+                    accept="image/*"
                     hidden>
 
+                <!-- مربع السؤال -->
                 <input
-                    type="text"
                     id="userInput"
+                    type="text"
                     placeholder="اسأل Dino AI..."
                     autocomplete="off"
                     spellcheck="false">
 
+                <!-- إرسال -->
                 <button
                     id="sendButton"
-                    type="button">
+                    type="button"
+                    aria-label="إرسال">
                     ↑
                 </button>
 
             </div>
 
+
+            <!-- معاينة الصورة -->
             <div
-                id="attachmentPreview"
+                id="imagePreview"
                 class="attachment-preview">
             </div>
+
 
             <div class="input-note">
 
@@ -364,7 +323,7 @@
 <script>
 
 /* =========================
-   الإعدادات الأساسية
+   API
    ========================= */
 
 const API_URL =
@@ -384,35 +343,35 @@ const menuButton =
 const closeSidebar =
     document.getElementById("closeSidebar");
 
+const newChatButton =
+    document.getElementById("newChatButton");
+
 const memoryButton =
     document.getElementById("memoryButton");
-
-const memoryPanel =
-    document.getElementById("memoryPanel");
-
-const closeMemory =
-    document.getElementById("closeMemory");
 
 const chatsButton =
     document.getElementById("chatsButton");
 
-const chatsPanel =
-    document.getElementById("chatsPanel");
-
-const closeChats =
-    document.getElementById("closeChats");
-
 const settingsButton =
     document.getElementById("settingsButton");
+
+const memoryPanel =
+    document.getElementById("memoryPanel");
+
+const chatsPanel =
+    document.getElementById("chatsPanel");
 
 const settingsPanel =
     document.getElementById("settingsPanel");
 
+const closeMemory =
+    document.getElementById("closeMemory");
+
+const closeChats =
+    document.getElementById("closeChats");
+
 const closeSettings =
     document.getElementById("closeSettings");
-
-const newChatButton =
-    document.getElementById("newChatButton");
 
 const memoryInput =
     document.getElementById("memoryInput");
@@ -438,11 +397,11 @@ const sendButton =
 const attachButton =
     document.getElementById("attachButton");
 
-const fileInput =
-    document.getElementById("fileInput");
+const imageInput =
+    document.getElementById("imageInput");
 
-const attachmentPreview =
-    document.getElementById("attachmentPreview");
+const imagePreview =
+    document.getElementById("imagePreview");
 
 const darkModeButton =
     document.getElementById("darkModeButton");
@@ -455,7 +414,7 @@ const clearChatsButton =
 
 
 /* =========================
-   فتح وإغلاق القائمة
+   القائمة
    ========================= */
 
 menuButton.addEventListener(
@@ -479,7 +438,7 @@ closeSidebar.addEventListener(
 
 
 /* =========================
-   إغلاق كل النوافذ
+   إغلاق النوافذ
    ========================= */
 
 function closePanels() {
@@ -516,7 +475,7 @@ function getMemory() {
 }
 
 
-function saveMemoryData(memory) {
+function saveMemory(memory) {
 
     localStorage.setItem(
         "dinoMemory",
@@ -526,36 +485,20 @@ function saveMemoryData(memory) {
 }
 
 
-function escapeHtml(text) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-
-}
-
-
 function displayMemory() {
-
-    memoryList.innerHTML = "";
 
     const memory =
         getMemory();
+
+    memoryList.innerHTML = "";
 
 
     if (memory.length === 0) {
 
         memoryList.innerHTML = `
-
             <div class="empty-memory">
-
                 لا توجد معلومات محفوظة حتى الآن.
-
             </div>
-
         `;
 
         return;
@@ -572,23 +515,25 @@ function displayMemory() {
             div.className =
                 "memory-item";
 
-            div.innerHTML = `
 
-                <span>
-                    ${escapeHtml(item)}
-                </span>
+            const span =
+                document.createElement("span");
 
-                <button
-                    type="button">
-                    ×
-                </button>
-
-            `;
+            span.textContent =
+                item;
 
 
-            div.querySelector(
-                "button"
-            ).addEventListener(
+            const button =
+                document.createElement("button");
+
+            button.type =
+                "button";
+
+            button.textContent =
+                "×";
+
+
+            button.addEventListener(
                 "click",
                 function () {
 
@@ -600,15 +545,17 @@ function displayMemory() {
                         1
                     );
 
-                    saveMemoryData(
-                        current
-                    );
+                    saveMemory(current);
 
                     displayMemory();
 
                 }
             );
 
+
+            div.appendChild(span);
+
+            div.appendChild(button);
 
             memoryList.appendChild(div);
 
@@ -624,7 +571,9 @@ memoryButton.addEventListener(
 
         closePanels();
 
-        memoryPanel.classList.add("open");
+        memoryPanel.classList.add(
+            "open"
+        );
 
         displayMemory();
 
@@ -636,7 +585,9 @@ closeMemory.addEventListener(
     "click",
     function () {
 
-        memoryPanel.classList.remove("open");
+        memoryPanel.classList.remove(
+            "open"
+        );
 
     }
 );
@@ -651,12 +602,13 @@ saveMemoryButton.addEventListener(
 
         if (!text) return;
 
+
         const memory =
             getMemory();
 
         memory.push(text);
 
-        saveMemoryData(memory);
+        saveMemory(memory);
 
         memoryInput.value = "";
 
@@ -722,9 +674,7 @@ function saveCurrentChat() {
             ".message"
         );
 
-    if (messages.length === 0) {
-        return;
-    }
+    if (!messages.length) return;
 
 
     const chatMessages = [];
@@ -751,7 +701,7 @@ function saveCurrentChat() {
     );
 
 
-    const firstUserMessage =
+    const firstUser =
         chatMessages.find(
             item =>
                 item.type === "user"
@@ -759,8 +709,8 @@ function saveCurrentChat() {
 
 
     const title =
-        firstUserMessage
-        ? firstUserMessage.text.substring(
+        firstUser
+        ? firstUser.text.substring(
             0,
             45
         )
@@ -805,13 +755,9 @@ function displayChats() {
     if (chats.length === 0) {
 
         chatsList.innerHTML = `
-
             <div class="empty-memory">
-
                 لا توجد محادثات محفوظة حتى الآن.
-
             </div>
-
         `;
 
         return;
@@ -829,23 +775,24 @@ function displayChats() {
                 "memory-item";
 
 
-            div.innerHTML = `
+            const span =
+                document.createElement("span");
 
-                <span>
-                    💬 ${escapeHtml(chat.title)}
-                </span>
-
-                <button
-                    type="button">
-                    فتح
-                </button>
-
-            `;
+            span.textContent =
+                "💬 " + chat.title;
 
 
-            div.querySelector(
-                "button"
-            ).addEventListener(
+            const button =
+                document.createElement("button");
+
+            button.type =
+                "button";
+
+            button.textContent =
+                "فتح";
+
+
+            button.addEventListener(
                 "click",
                 function () {
 
@@ -854,6 +801,10 @@ function displayChats() {
                 }
             );
 
+
+            div.appendChild(span);
+
+            div.appendChild(button);
 
             chatsList.appendChild(div);
 
@@ -871,7 +822,6 @@ function loadChat(index) {
     const chat =
         chats[index];
 
-
     if (!chat) return;
 
 
@@ -881,10 +831,10 @@ function loadChat(index) {
     chat.messages.forEach(
         function (item) {
 
-            const message =
+            const div =
                 document.createElement("div");
 
-            message.className =
+            div.className =
                 "message " +
                 (
                     item.type === "user"
@@ -892,12 +842,10 @@ function loadChat(index) {
                     : "bot"
                 );
 
-            message.textContent =
+            div.textContent =
                 item.text;
 
-            chatBox.appendChild(
-                message
-            );
+            chatBox.appendChild(div);
 
         }
     );
@@ -910,7 +858,6 @@ function loadChat(index) {
     sidebar.classList.remove(
         "open"
     );
-
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
@@ -974,18 +921,18 @@ newChatButton.addEventListener(
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك وسأحاول مساعدتك.
+                اكتب سؤالك أو أرسل صورة.
 
             </div>
 
         `;
 
 
-        userInput.value = "";
-
         sidebar.classList.remove(
             "open"
         );
+
+        userInput.value = "";
 
         userInput.focus();
 
@@ -1045,8 +992,8 @@ darkModeButton.addEventListener(
         localStorage.setItem(
             "dinoDarkMode",
             dark
-                ? "on"
-                : "off"
+            ? "on"
+            : "off"
         );
 
 
@@ -1058,8 +1005,6 @@ darkModeButton.addEventListener(
     }
 );
 
-
-/* استرجاع الوضع */
 
 if (
     localStorage.getItem(
@@ -1122,129 +1067,110 @@ clearChatsButton.addEventListener(
 
 
 /* =========================
-   المرفقات
+   الصور
    ========================= */
 
-let selectedFile = null;
+let selectedImage = null;
 
 
 attachButton.addEventListener(
     "click",
     function () {
 
-        fileInput.click();
+        imageInput.click();
 
     }
 );
 
 
-fileInput.addEventListener(
+imageInput.addEventListener(
     "change",
     function () {
 
         const file =
-            fileInput.files[0];
+            imageInput.files[0];
 
         if (!file) return;
 
 
-        selectedFile = file;
+        selectedImage = file;
 
 
-        attachmentPreview.innerHTML = `
-
-            <div class="attachment-item">
-
-                📎
-                ${escapeHtml(file.name)}
-
-                <button
-                    id="removeAttachment"
-                    type="button">
-                    ×
-                </button>
-
-            </div>
-
-        `;
+        const reader =
+            new FileReader();
 
 
-        document
-            .getElementById(
-                "removeAttachment"
-            )
-            .addEventListener(
-                "click",
-                function () {
+        reader.onload =
+            function (event) {
 
-                    selectedFile = null;
+                imagePreview.innerHTML = `
 
-                    fileInput.value = "";
+                    <div
+                        style="
+                        position:relative;
+                        display:inline-block;
+                        margin-top:8px;
+                        ">
 
-                    attachmentPreview.innerHTML =
-                        "";
+                        <img
+                            src="${event.target.result}"
+                            alt="الصورة المرفقة"
+                            style="
+                            width:140px;
+                            max-height:140px;
+                            object-fit:cover;
+                            border-radius:12px;
+                            border:1px solid #ddd;
+                            ">
 
-                }
-            );
+                        <button
+                            id="removeImage"
+                            type="button"
+                            style="
+                            position:absolute;
+                            top:5px;
+                            left:5px;
+                            width:28px;
+                            height:28px;
+                            border:none;
+                            border-radius:50%;
+                            background:#202123;
+                            color:white;
+                            cursor:pointer;
+                            ">
+                            ×
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                document
+                    .getElementById(
+                        "removeImage"
+                    )
+                    .addEventListener(
+                        "click",
+                        function () {
+
+                            selectedImage = null;
+
+                            imageInput.value = "";
+
+                            imagePreview.innerHTML =
+                                "";
+
+                        }
+                    );
+
+            };
+
+
+        reader.readAsDataURL(file);
 
     }
 );
-
-
-/* =========================
-   عرض روابط الرد
-   ========================= */
-
-function displayBotReply(
-    element,
-    text
-) {
-
-    const urlRegex =
-        /(https?:\/\/[^\s<>"']+)/g;
-
-    const parts =
-        text.split(urlRegex);
-
-
-    parts.forEach(
-        function (part) {
-
-            if (
-                /^https?:\/\//i.test(part)
-            ) {
-
-                const link =
-                    document.createElement("a");
-
-                link.href = part;
-
-                link.textContent =
-                    "🔗 فتح الرابط";
-
-                link.target = "_blank";
-
-                link.rel =
-                    "noopener noreferrer";
-
-                element.appendChild(
-                    link
-                );
-
-            } else {
-
-                element.appendChild(
-                    document.createTextNode(
-                        part
-                    )
-                );
-
-            }
-
-        }
-    );
-
-}
 
 
 /* =========================
@@ -1259,7 +1185,7 @@ async function sendMessage() {
 
     if (
         !message &&
-        !selectedFile
+        !selectedImage
     ) {
 
         return;
@@ -1271,7 +1197,7 @@ async function sendMessage() {
         message;
 
 
-    if (selectedFile) {
+    if (selectedImage) {
 
         messageToSend +=
             (
@@ -1279,8 +1205,8 @@ async function sendMessage() {
                 ? "\n\n"
                 : ""
             ) +
-            "📎 ملف مرفق: " +
-            selectedFile.name;
+            "🖼️ صورة مرفقة: " +
+            selectedImage.name;
 
     }
 
@@ -1301,13 +1227,11 @@ async function sendMessage() {
 
     userInput.value = "";
 
+    selectedImage = null;
 
-    selectedFile = null;
+    imageInput.value = "";
 
-    fileInput.value = "";
-
-    attachmentPreview.innerHTML =
-        "";
+    imagePreview.innerHTML = "";
 
 
     const botMessage =
@@ -1380,8 +1304,6 @@ async function sendMessage() {
         );
 
 
-        /* حفظ المحادثة */
-
         saveCurrentChat();
 
 
@@ -1399,6 +1321,63 @@ async function sendMessage() {
         chatBox.scrollHeight;
 
     userInput.focus();
+
+}
+
+
+/* =========================
+   عرض الرد والروابط
+   ========================= */
+
+function displayBotReply(
+    element,
+    text
+) {
+
+    const urlRegex =
+        /(https?:\/\/[^\s<>"']+)/g;
+
+    const parts =
+        text.split(urlRegex);
+
+
+    parts.forEach(
+        function (part) {
+
+            if (
+                /^https?:\/\//i.test(part)
+            ) {
+
+                const link =
+                    document.createElement("a");
+
+                link.href = part;
+
+                link.textContent =
+                    "🔗 فتح الرابط";
+
+                link.target =
+                    "_blank";
+
+                link.rel =
+                    "noopener noreferrer";
+
+                element.appendChild(
+                    link
+                );
+
+            } else {
+
+                element.appendChild(
+                    document.createTextNode(
+                        part
+                    )
+                );
+
+            }
+
+        }
+    );
 
 }
 
