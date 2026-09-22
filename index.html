@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -434,7 +435,6 @@
             line-height: 1.8;
         }
 
-        /* حقوق النشر */
         .copyright {
             width: 100%;
             text-align: center;
@@ -566,208 +566,250 @@
         /* تحسينات الموبايل فقط */
         @media (max-width: 600px) {
 
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .app {
+                width: 100%;
+                height: 100dvh;
+                min-height: 100dvh;
+                overflow: hidden;
+            }
+
             .header {
-                height: 60px;
-                min-height: 60px;
-                padding: 0 8px;
+                width: 100%;
+                height: 56px;
+                min-height: 56px;
+                padding: 0 6px;
+                flex-shrink: 0;
             }
 
             .header-title {
-                font-size: 19px;
+                font-size: 18px;
             }
 
             .header-buttons {
-                gap: 2px;
+                gap: 0;
             }
 
             .icon-button {
-                width: 46px;
-                height: 46px;
+                width: 42px;
+                height: 42px;
+                flex-shrink: 0;
             }
 
             .icon-button svg {
-                width: 23px;
-                height: 23px;
+                width: 22px;
+                height: 22px;
             }
 
             .chat-box {
                 width: 100%;
                 max-width: none;
-                padding: 18px 10px 12px;
+                flex: 1;
+                min-height: 0;
+                margin: 0;
+                padding: 14px 10px;
+                overflow-x: hidden;
+                overflow-y: auto;
             }
 
             .welcome {
                 width: 100%;
                 max-width: none;
                 padding: 20px 8px;
+                margin: auto;
             }
 
             .welcome h1 {
-                font-size: 27px;
+                font-size: 25px;
             }
 
             .welcome p {
-                font-size: 16px;
+                font-size: 15px;
                 line-height: 1.8;
             }
 
             .message {
                 max-width: 94%;
-                font-size: 16px;
-                line-height: 1.8;
+                font-size: 15px;
+                line-height: 1.75;
+                margin: 8px 0;
                 overflow-wrap: anywhere;
                 word-break: break-word;
             }
 
             .message.user {
                 max-width: 88%;
-                padding: 11px 14px;
+                padding: 10px 13px;
             }
 
             .message.bot {
                 max-width: 94%;
-                padding: 9px 0;
+                padding: 7px 0;
             }
 
             .message.bot a {
                 max-width: 100%;
                 overflow-wrap: anywhere;
+                word-break: break-word;
             }
 
             .input-area {
                 width: 100%;
-                padding: 8px 7px 7px;
+                flex-shrink: 0;
+                padding: 6px 6px 5px;
             }
 
             .input-box {
                 width: 100%;
                 max-width: none;
-                min-height: 58px;
-                padding: 6px;
-                gap: 3px;
-                border-radius: 29px;
+                min-height: 52px;
+                padding: 5px;
+                gap: 2px;
+                border-radius: 27px;
             }
 
             .small-button {
-                width: 44px;
-                height: 44px;
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
                 flex-shrink: 0;
             }
 
             .small-button svg {
-                width: 23px;
-                height: 23px;
+                width: 21px;
+                height: 21px;
             }
 
             .user-input {
-                min-width: 0;
                 width: 100%;
-                padding: 10px 5px;
-                font-size: 16px;
+                min-width: 0;
+                padding: 9px 4px;
+                font-size: 15px;
             }
 
             .send-button {
-                width: 44px;
-                height: 44px;
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
                 flex-shrink: 0;
-                font-size: 19px;
+                font-size: 17px;
             }
 
             .sidebar {
-                width: min(320px, 88vw);
-                padding: 18px 14px;
+                width: min(290px, 85vw);
+                height: 100dvh;
+                padding: 16px 12px;
+                overflow-y: auto;
             }
 
             .sidebar-header {
-                font-size: 20px;
-                margin-bottom: 22px;
+                font-size: 19px;
+                margin-bottom: 20px;
             }
 
             .sidebar-item {
-                min-height: 50px;
-                padding: 14px 16px;
-                margin-bottom: 10px;
-                font-size: 16px;
+                min-height: 48px;
+                padding: 13px 14px;
+                margin-bottom: 8px;
+                font-size: 15px;
             }
 
             .panel {
-                padding: 10px;
+                width: 100%;
+                height: 100dvh;
+                padding: 8px;
+                overflow: hidden;
             }
 
             .panel-content {
                 width: 100%;
                 max-width: none;
-                max-height: 88vh;
-                padding: 18px;
-                border-radius: 16px;
+                max-height: 90dvh;
+                padding: 16px;
+                border-radius: 15px;
+                overflow-y: auto;
             }
 
             .panel-header {
-                font-size: 19px;
+                font-size: 18px;
             }
 
             textarea {
-                min-height: 140px;
-                font-size: 16px;
+                min-height: 120px;
+                font-size: 15px;
             }
 
             .voice-call-panel {
-                padding: 20px;
+                width: 100%;
+                height: 100dvh;
+                padding: 18px;
+                overflow: hidden;
             }
 
             .voice-avatar {
-                width: 100px;
-                height: 100px;
-                font-size: 34px;
+                width: 85px;
+                height: 85px;
+                font-size: 30px;
+                margin-bottom: 16px;
             }
 
             .voice-title {
-                font-size: 26px;
+                font-size: 23px;
             }
 
             .voice-status {
                 max-width: 90%;
-                font-size: 16px;
+                font-size: 15px;
                 line-height: 1.7;
             }
 
             .voice-controls {
-                gap: 22px;
-                margin-top: 35px;
+                gap: 18px;
+                margin-top: 30px;
             }
 
             .voice-control {
-                width: 66px;
-                height: 66px;
-                font-size: 22px;
+                width: 58px;
+                height: 58px;
+                font-size: 20px;
             }
 
             .voice-transcript {
-                left: 12px;
-                right: 12px;
-                bottom: 18px;
+                left: 10px;
+                right: 10px;
+                bottom: 15px;
                 max-width: 94%;
-                font-size: 15px;
-                line-height: 1.8;
+                font-size: 14px;
+                line-height: 1.7;
                 overflow-wrap: anywhere;
+                word-break: break-word;
             }
 
             .preview,
             .audio-preview {
                 width: 100%;
                 max-width: none;
-                margin: 0 auto 8px;
+                margin: 0 auto 6px;
             }
 
             .preview img {
-                max-width: 150px;
-                max-height: 130px;
+                max-width: 130px;
+                max-height: 110px;
             }
 
             .copyright {
-                padding: 5px 8px 7px;
-                font-size: 10px;
-                line-height: 1.5;
+                width: 100%;
+                padding: 4px 6px 5px;
+                font-size: 9px;
+                line-height: 1.4;
+                flex-shrink: 0;
                 white-space: normal;
             }
         }
@@ -918,7 +960,6 @@
 
     </div>
 
-    <!-- حقوق النشر -->
     <footer class="copyright">
         © 2026 Dino AI — جميع الحقوق محفوظة لـ Mohamed Rade
     </footer>
@@ -2245,6 +2286,7 @@
 
     /* ==================================================
        VOICE CALL
+
        المستخدم يتكلم
        ↓
        Whisper
@@ -2753,66 +2795,4 @@
 
             if (
                 voiceRecorder &&
-                voiceRecorder.state === "recording"
-            ) {
-
-                try {
-
-                    voiceRecorder.stop();
-
-                } catch (error) {
-
-                    console.log(error);
-
-                }
-
-            }
-
-
-            if (
-                voiceStream
-            ) {
-
-                voiceStream
-                    .getTracks()
-                    .forEach(
-                        track =>
-                            track.stop()
-                    );
-
-                voiceStream =
-                    null;
-
-            }
-
-
-            voiceRecorder =
-                null;
-
-            voiceChunks =
-                [];
-
-
-            voiceMicButton.classList.remove(
-                "recording"
-            );
-
-
-            voiceCallPanel.classList.remove(
-                "active"
-            );
-
-
-            voiceStatus.innerText =
-                "اضغط على الميكروفون وابدأ الكلام";
-
-
-            voiceTranscript.innerText =
-                "";
-
-        };
-
-</script>
-
-</body>
-</html>
+                voiceRecorder.state ===
