@@ -1,6 +1,4 @@
 ```javascript
-alert("SCRIPT WORKS");
-
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const chatBox = document.getElementById("chatBox");
@@ -12,9 +10,7 @@ function displayBotReply(element, text) {
     const parts = text.split(urlRegex);
 
     parts.forEach((part) => {
-
         if (/^https?:\/\//i.test(part)) {
-
             const link = document.createElement("a");
 
             link.href = part;
@@ -26,20 +22,13 @@ function displayBotReply(element, text) {
             link.style.marginTop = "8px";
 
             element.appendChild(link);
-
         } else {
-
-            element.appendChild(
-                document.createTextNode(part)
-            );
-
+            element.appendChild(document.createTextNode(part));
         }
-
     });
 }
 
 async function sendMessage() {
-
     const message = userInput.value.trim();
 
     if (message === "") {
@@ -47,49 +36,35 @@ async function sendMessage() {
     }
 
     const userMessage = document.createElement("div");
-
     userMessage.className = "message user";
-
     userMessage.textContent = message;
-
     chatBox.appendChild(userMessage);
 
     userInput.value = "";
 
     const botMessage = document.createElement("div");
-
     botMessage.className = "message bot";
-
     botMessage.textContent = "🤖 جاري التفكير...";
-
     chatBox.appendChild(botMessage);
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-
         const response = await fetch(API_URL, {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
                 message: message
             })
-
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-
             botMessage.textContent =
-                "❌ خطأ: " +
-                (data.error || "خطأ غير معروف");
-
+                "❌ خطأ: " + (data.error || "خطأ غير معروف");
             return;
         }
 
@@ -101,36 +76,28 @@ async function sendMessage() {
         );
 
     } catch (error) {
-
-        console.error("Dino AI Error:", error);
+        console.error(error);
 
         botMessage.textContent =
-            "❌ حصل خطأ في الاتصال بالخدمة.";
+            "❌ حصل خطأ في الاتصال: " + error.message;
     }
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
+    // يرجع المؤشر لخانة الكتابة بعد كل رسالة
     userInput.focus();
 }
 
-sendButton.addEventListener("click", function () {
-    sendMessage();
-});
+sendButton.addEventListener("click", sendMessage);
 
-userInput.addEventListener("keydown", function (event) {
-
+userInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
-
-        event.preventDefault();
-
         sendMessage();
     }
-
 });
 
-window.addEventListener("load", function () {
-
+// التركيز على خانة الكتابة تلقائيًا عند فتح الموقع
+window.addEventListener("load", function() {
     userInput.focus();
-
 });
 ```
