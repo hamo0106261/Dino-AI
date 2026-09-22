@@ -1,74 +1,51 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dino AI</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="app">
+    <div class="chat-container">
 
-        <header class="top-bar">
-            <div class="logo">
-                Dino AI
-            </div>
-        </header>
+        <h1>Dino AI</h1>
+        <p class="subtitle">مساعدك الذكي</p>
 
-        <main id="chatBox" class="chat-box">
-
-            <div class="welcome">
-                <div class="dino-icon">🦖</div>
-
-                <h1>مرحباً بك في Dino AI</h1>
-
-                <p>
-                    اسألني عن الألعاب والشخصيات أو أي شيء تريد معرفته.
-                </p>
-            </div>
+        <div id="chatBox" class="chat-box">
 
             <div class="message bot">
-                أهلاً بك 👋 أنا Dino AI، كيف يمكنني مساعدتك؟
-            </div>
-
-        </main>
-
-        <div class="input-wrapper">
-
-            <div class="input-area">
-
-                <input
-                    type="text"
-                    id="userInput"
-                    placeholder="اكتب رسالتك..."
-                    autocomplete="off"
-                    spellcheck="false"
-                >
-
-                <button id="sendButton" type="button">↑</button>
-
-            </div>
-
-            <div class="input-note">
-                Dino AI يمكن أن يخطئ أحيانًا، تحقق من المعلومات المهمة.
+                أهلاً بك 👋 أنا Dino AI، كيف يمكنني مساعدتك اليوم؟
             </div>
 
         </div>
 
-        <footer>
-            © 2026 Mohamed Reda — Dino AI
-        </footer>
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="اكتب رسالتك..."
+                autocomplete="off"
+            >
+
+            <button id="sendButton" aria-label="إرسال">
+                ↑
+            </button>
+
+        </div>
 
     </div>
 
-    <script src="./script.js"></script>
+    <footer>
+        © 2026 Mohamed Reda — Dino AI
+    </footer>
+
+    <script src="script.js"></script>
 
 </body>
-
 </html>
-```
