@@ -11,16 +11,13 @@ async function sendMessage() {
         return;
     }
 
-    // رسالة المستخدم
     const userMessage = document.createElement("div");
     userMessage.className = "message user";
     userMessage.textContent = message;
     chatBox.appendChild(userMessage);
 
-    // مسح خانة الكتابة
     userInput.value = "";
 
-    // رسالة مؤقتة
     const botMessage = document.createElement("div");
     botMessage.className = "message bot";
     botMessage.textContent = "🤖 جاري التفكير...";
@@ -42,22 +39,26 @@ async function sendMessage() {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || "حدث خطأ");
+            botMessage.textContent =
+                "❌ خطأ: " + (data.error || "خطأ غير معروف");
+            return;
         }
 
-        botMessage.textContent = data.reply || "لم يصل رد من Dino AI.";
+        botMessage.textContent =
+            data.reply || "لم يصل رد من Dino AI.";
+
     } catch (error) {
         console.error(error);
-        botMessage.textContent = "❌ الخدمة غير متاحة مؤقتًا. حاول مرة أخرى.";
+
+        botMessage.textContent =
+            "❌ حصل خطأ في الاتصال: " + error.message;
     }
 
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// زر الإرسال
 sendButton.addEventListener("click", sendMessage);
 
-// زر Enter
 userInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         sendMessage();
