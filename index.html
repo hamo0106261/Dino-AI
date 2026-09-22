@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Dino AI</title>
 
     <link rel="stylesheet" href="style.css">
@@ -12,66 +11,161 @@
 
 <body>
 
-    <div class="app">
+<div class="app">
 
-        <!-- الشريط العلوي -->
-        <header class="top-bar">
-            <div class="logo">
-                🦖 Dino AI
-            </div>
-        </header>
+    <header class="top-bar">
+        <div class="logo">🦖 Dino AI</div>
+    </header>
 
-        <!-- منطقة المحادثة -->
-        <main id="chatBox" class="chat-box">
+    <main id="chatBox" class="chat-box">
 
-            <div class="welcome">
-                <div class="dino-icon">🦖</div>
+        <div class="welcome">
+            <div class="dino-icon">🦖</div>
+            <h1>مرحباً بك في Dino AI</h1>
+            <p>اسألني عن الألعاب والشخصيات أو أي شيء تريد معرفته.</p>
+        </div>
 
-                <h1>مرحباً بك في Dino AI</h1>
+        <div class="message bot">
+            أهلاً بك 👋 أنا Dino AI، كيف يمكنني مساعدتك؟
+        </div>
 
-                <p>
-                    اسألني عن الألعاب والشخصيات أو أي شيء تريد معرفته.
-                </p>
-            </div>
+    </main>
 
-            <div class="message bot">
-                أهلاً بك 👋 أنا Dino AI، كيف يمكنني مساعدتك؟
-            </div>
+    <div class="input-wrapper">
 
-        </main>
+        <div class="input-area">
 
-        <!-- منطقة الكتابة -->
-        <div class="input-wrapper">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="اكتب رسالتك..."
+                autocomplete="off"
+                spellcheck="false"
+            >
 
-            <div class="input-area">
-
-                <input
-                    type="text"
-                    id="userInput"
-                    placeholder="اكتب رسالتك..."
-                    autocomplete="off"
-                    spellcheck="false"
-                >
-
-                <button id="sendButton" type="button">
-                    ↑
-                </button>
-
-            </div>
-
-            <div class="input-note">
-                Dino AI يمكن أن يخطئ أحيانًا، تحقق من المعلومات المهمة.
-            </div>
+            <button id="sendButton" type="button">↑</button>
 
         </div>
 
-        <footer>
-            © 2026 Mohamed Reda — Dino AI
-        </footer>
+        <div class="input-note">
+            Dino AI يمكن أن يخطئ أحيانًا، تحقق من المعلومات المهمة.
+        </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <footer>
+        © 2026 Mohamed Reda — Dino AI
+    </footer>
+
+</div>
+
+<script>
+
+const userInput = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
+const chatBox = document.getElementById("chatBox");
+
+const API_URL = "https://dino-ai-api.mmaojmmmoh.workers.dev";
+
+
+async function sendMessage() {
+
+    const message = userInput.value.trim();
+
+    if (!message) {
+        return;
+    }
+
+    // إظهار رسالة المستخدم
+    const userMessage = document.createElement("div");
+
+    userMessage.className = "message user";
+    userMessage.textContent = message;
+
+    chatBox.appendChild(userMessage);
+
+    // مسح خانة الكتابة
+    userInput.value = "";
+
+    // رسالة مؤقتة
+    const botMessage = document.createElement("div");
+
+    botMessage.className = "message bot";
+    botMessage.textContent = "🤖 جاري التفكير...";
+
+    chatBox.appendChild(botMessage);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+
+    try {
+
+        const response = await fetch(API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                message: message
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+            botMessage.textContent =
+                "❌ خطأ: " +
+                (data.error || "حدث خطأ");
+
+            return;
+        }
+
+
+        botMessage.textContent =
+            data.reply || "لم يصل رد من Dino AI.";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        botMessage.textContent =
+            "❌ حصل خطأ في الاتصال بـ Dino AI.";
+
+    }
+
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    userInput.focus();
+}
+
+
+// زر الإرسال
+sendButton.addEventListener("click", sendMessage);
+
+
+// زر Enter
+userInput.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+});
+
+</script>
 
 </body>
 
