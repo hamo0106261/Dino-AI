@@ -27,7 +27,6 @@
             white-space: pre-wrap;
         }
 
-        /* رد Dino AI بدون مربع */
         .message.bot {
             margin-right: auto;
             margin-left: 0;
@@ -39,7 +38,6 @@
             box-shadow: none !important;
         }
 
-        /* رسائل المستخدم تظل داخل مربع */
         .message.user {
             margin-left: auto;
             margin-right: 0;
@@ -51,7 +49,6 @@
             border-bottom-left-radius: 6px;
         }
 
-        /* روابط داخل رد Dino */
         .message.bot a {
             display: inline-block;
             margin-top: 8px;
@@ -63,7 +60,6 @@
             font-weight: 600;
         }
 
-        /* الوضع الداكن */
         body.dark-mode .message.bot {
             background: transparent !important;
             color: #f5f7fa !important;
@@ -83,7 +79,123 @@
         }
 
         /* =========================
-           المعاينة
+           أزرار الصوت
+        ========================= */
+
+        #voiceCallButton,
+        #audioButton,
+        #attachButton {
+            cursor: pointer;
+        }
+
+        #voiceCallButton {
+            border: none;
+            background: transparent;
+            font-size: 21px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        #voiceCallButton:hover {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        #voiceCallButton.active {
+            background: #ef4444;
+            color: white;
+            animation: voicePulse 1.2s infinite;
+        }
+
+        @keyframes voicePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        /* =========================
+           نافذة المكالمة
+        ========================= */
+
+        #voiceCallPanel {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(8px);
+        }
+
+        #voiceCallPanel.open {
+            display: flex;
+        }
+
+        .voiceCallBox {
+            width: min(420px, 90%);
+            background: white;
+            border-radius: 28px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .voiceCallBox {
+            background: #111827;
+            color: white;
+        }
+
+        .dinoAvatar {
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            background: #2563eb;
+        }
+
+        .voiceCallTitle {
+            margin-top: 20px;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        #voiceCallStatus {
+            margin-top: 10px;
+            color: #777;
+        }
+
+        body.dark-mode #voiceCallStatus {
+            color: #aaa;
+        }
+
+        #endVoiceCall {
+            margin-top: 30px;
+            width: 65px;
+            height: 65px;
+            border: none;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           المعاينات
         ========================= */
 
         #imagePreview,
@@ -95,10 +207,6 @@
             max-width: 180px;
             border-radius: 12px;
         }
-
-        /* =========================
-           تسجيل الصوت
-        ========================= */
 
         #audioButton.recording {
             background: #ef4444 !important;
@@ -184,16 +292,7 @@
         </section>
 
 
-        <!-- =========================
-             معاينة الصورة
-        ========================= -->
-
         <div id="imagePreview"></div>
-
-
-        <!-- =========================
-             معاينة الصوت
-        ========================= -->
 
         <div id="audioPreview"></div>
 
@@ -204,7 +303,7 @@
 
         <div id="inputArea">
 
-            <!-- إرفاق صورة -->
+            <!-- صورة -->
 
             <button id="attachButton" title="إرفاق صورة">
 
@@ -231,9 +330,22 @@
             >
 
 
-            <!-- تسجيل الصوت -->
+            <!-- زر المكالمة -->
 
-            <button id="audioButton" title="تسجيل صوت">
+            <button
+                id="voiceCallButton"
+                title="مكالمة صوتية"
+            >
+                📞
+            </button>
+
+
+            <!-- تسجيل صوت -->
+
+            <button
+                id="audioButton"
+                title="تسجيل صوت"
+            >
 
                 <svg id="micIcon"
                      width="22"
@@ -255,7 +367,7 @@
             </button>
 
 
-            <!-- مربع الكتابة -->
+            <!-- الكتابة -->
 
             <input
                 type="text"
@@ -264,8 +376,6 @@
                 autocomplete="off"
             >
 
-
-            <!-- إرسال -->
 
             <button id="sendButton">
                 إرسال
@@ -277,7 +387,36 @@
 
 
     <!-- =========================
-         لوحة الذاكرة
+         نافذة المكالمة الصوتية
+    ========================= -->
+
+    <div id="voiceCallPanel">
+
+        <div class="voiceCallBox">
+
+            <div class="dinoAvatar">
+                🦖
+            </div>
+
+            <div class="voiceCallTitle">
+                Dino AI
+            </div>
+
+            <div id="voiceCallStatus">
+                جاهز للمكالمة
+            </div>
+
+            <button id="endVoiceCall">
+                📞
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         الذاكرة
     ========================= -->
 
     <div id="memoryPanel" class="panel">
@@ -308,7 +447,7 @@
 
 
     <!-- =========================
-         لوحة المحادثات
+         المحادثات
     ========================= -->
 
     <div id="chatsPanel" class="panel">
@@ -329,7 +468,7 @@
 
 
     <!-- =========================
-         لوحة الإعدادات
+         الإعدادات
     ========================= -->
 
     <div id="settingsPanel" class="panel">
@@ -369,9 +508,7 @@
             "https://dino-ai-api.mmaojmmmoh.workers.dev";
 
 
-        /* =========================
-           العناصر
-        ========================= */
+        /* العناصر */
 
         const sidebar =
             document.getElementById("sidebar");
@@ -394,7 +531,6 @@
         const settingsButton =
             document.getElementById("settingsButton");
 
-
         const memoryPanel =
             document.getElementById("memoryPanel");
 
@@ -404,7 +540,6 @@
         const settingsPanel =
             document.getElementById("settingsPanel");
 
-
         const closeMemory =
             document.getElementById("closeMemory");
 
@@ -413,7 +548,6 @@
 
         const closeSettings =
             document.getElementById("closeSettings");
-
 
         const memoryInput =
             document.getElementById("memoryInput");
@@ -427,7 +561,6 @@
         const chatsList =
             document.getElementById("chatsList");
 
-
         const chatBox =
             document.getElementById("chatBox");
 
@@ -436,7 +569,6 @@
 
         const sendButton =
             document.getElementById("sendButton");
-
 
         const attachButton =
             document.getElementById("attachButton");
@@ -447,13 +579,23 @@
         const imagePreview =
             document.getElementById("imagePreview");
 
-
         const audioButton =
             document.getElementById("audioButton");
 
         const audioPreview =
             document.getElementById("audioPreview");
 
+        const voiceCallButton =
+            document.getElementById("voiceCallButton");
+
+        const voiceCallPanel =
+            document.getElementById("voiceCallPanel");
+
+        const voiceCallStatus =
+            document.getElementById("voiceCallStatus");
+
+        const endVoiceCall =
+            document.getElementById("endVoiceCall");
 
         const darkModeButton =
             document.getElementById("darkModeButton");
@@ -465,9 +607,7 @@
             document.getElementById("clearChatsButton");
 
 
-        /* =========================
-           المتغيرات
-        ========================= */
+        /* المتغيرات */
 
         let selectedImage = null;
 
@@ -481,10 +621,10 @@
 
         let isRecording = false;
 
+        let voiceCallActive = false;
 
-        /* =========================
-           القائمة
-        ========================= */
+
+        /* القائمة */
 
         menuButton.onclick = () => {
 
@@ -500,9 +640,7 @@
         };
 
 
-        /* =========================
-           فتح اللوحات
-        ========================= */
+        /* اللوحات */
 
         function closeAllPanels() {
 
@@ -567,9 +705,7 @@
         };
 
 
-        /* =========================
-           إضافة رسالة
-        ========================= */
+        /* الرسائل */
 
         function addMessage(text, type) {
 
@@ -591,10 +727,6 @@
 
         }
 
-
-        /* =========================
-           عرض رد Dino AI
-        ========================= */
 
         function displayBotReply(text) {
 
@@ -654,9 +786,7 @@
         }
 
 
-        /* =========================
-           إرسال الرسالة
-        ========================= */
+        /* إرسال */
 
         async function sendMessage() {
 
@@ -731,8 +861,6 @@
 
             sendButton.disabled = true;
 
-            audioButton.disabled = true;
-
 
             const loading =
                 addMessage(
@@ -760,17 +888,13 @@
                 loading.remove();
 
 
-                if (
-                    data.reply
-                ) {
+                if (data.reply) {
 
                     displayBotReply(
                         data.reply
                     );
 
-                } else if (
-                    data.error
-                ) {
+                } else if (data.error) {
 
                     displayBotReply(
                         "❌ " + data.error
@@ -783,7 +907,6 @@
                     );
 
                 }
-
 
             } catch (error) {
 
@@ -798,21 +921,13 @@
 
             sendButton.disabled = false;
 
-            audioButton.disabled = false;
+            selectedAudio = null;
 
+            audioPreview.innerHTML = "";
 
-            selectedAudio =
-                null;
+            selectedImage = null;
 
-            audioPreview.innerHTML =
-                "";
-
-
-            selectedImage =
-                null;
-
-            imagePreview.innerHTML =
-                "";
+            imagePreview.innerHTML = "";
 
         }
 
@@ -825,9 +940,7 @@
             "keydown",
             event => {
 
-                if (
-                    event.key === "Enter"
-                ) {
+                if (event.key === "Enter") {
 
                     sendMessage();
 
@@ -837,9 +950,7 @@
         );
 
 
-        /* =========================
-           الصور
-        ========================= */
+        /* الصور */
 
         attachButton.onclick = () => {
 
@@ -853,72 +964,24 @@
             const file =
                 event.target.files[0];
 
+            if (!file) return;
 
-            if (!file) {
+            selectedImage = file;
 
-                return;
-
-            }
-
-
-            selectedImage =
-                file;
-
-
-            imagePreview.innerHTML =
-                "";
-
-
-            const wrapper =
-                document.createElement("div");
-
+            imagePreview.innerHTML = "";
 
             const image =
                 document.createElement("img");
 
-
             image.src =
                 URL.createObjectURL(file);
 
-
-            const removeButton =
-                document.createElement("button");
-
-
-            removeButton.textContent =
-                "✕";
-
-
-            removeButton.onclick = () => {
-
-                selectedImage =
-                    null;
-
-                imagePreview.innerHTML =
-                    "";
-
-                imageInput.value =
-                    "";
-
-            };
-
-
-            wrapper.appendChild(image);
-
-            wrapper.appendChild(
-                removeButton
-            );
-
-            imagePreview.appendChild(
-                wrapper
-            );
+            imagePreview.appendChild(image);
 
         };
 
 
-        /* =========================
-           تسجيل الصوت
-        ========================= */
+        /* تسجيل الصوت */
 
         audioButton.onclick =
             async () => {
@@ -928,16 +991,12 @@
                     try {
 
                         microphoneStream =
-                            await navigator.mediaDevices.getUserMedia(
-                                {
-                                    audio: true
-                                }
-                            );
+                            await navigator.mediaDevices.getUserMedia({
+                                audio: true
+                            });
 
 
-                        audioChunks =
-                            [];
-
+                        audioChunks = [];
 
                         mediaRecorder =
                             new MediaRecorder(
@@ -987,7 +1046,6 @@
                                         "audio"
                                     );
 
-
                                 audio.controls =
                                     true;
 
@@ -1023,32 +1081,11 @@
 
                         mediaRecorder.start();
 
-                        isRecording =
-                            true;
-
+                        isRecording = true;
 
                         audioButton.classList.add(
                             "recording"
                         );
-
-
-                        audioButton.innerHTML =
-                            `
-                            <svg
-                                width="22"
-                                height="22"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                            >
-                                <rect
-                                    x="6"
-                                    y="6"
-                                    width="12"
-                                    height="12"
-                                    rx="2"
-                                />
-                            </svg>
-                            `;
 
                     } catch (error) {
 
@@ -1060,47 +1097,95 @@
 
                 } else {
 
-                    if (
-                        mediaRecorder &&
-                        mediaRecorder.state !== "inactive"
-                    ) {
+                    mediaRecorder.stop();
 
-                        mediaRecorder.stop();
-
-                    }
-
-
-                    isRecording =
-                        false;
-
+                    isRecording = false;
 
                     audioButton.classList.remove(
                         "recording"
                     );
 
+                }
 
-                    audioButton.innerHTML =
-                        `
-                        <svg
-                            width="22"
-                            height="22"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path d="M12 1a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                            <line x1="12" y1="19" x2="12" y2="23"/>
-                            <line x1="8" y1="23" x2="16" y2="23"/>
-                        </svg>
-                        `;
+            };
+
+
+        /* =========================
+           زر المكالمة
+        ========================= */
+
+        voiceCallButton.onclick =
+            async () => {
+
+                if (voiceCallActive) {
+
+                    endVoiceCallFunction();
+
+                    return;
+
+                }
+
+
+                try {
+
+                    await navigator.mediaDevices.getUserMedia({
+                        audio: true
+                    });
+
+
+                    voiceCallActive =
+                        true;
+
+
+                    voiceCallButton.classList.add(
+                        "active"
+                    );
+
+
+                    voiceCallPanel.classList.add(
+                        "open"
+                    );
+
+
+                    voiceCallStatus.textContent =
+                        "🎤 المكالمة بدأت — تحدث مع Dino AI";
+
+
+                } catch (error) {
+
+                    alert(
+                        "اسمح للمتصفح باستخدام الميكروفون أولاً."
+                    );
 
                 }
 
             };
+
+
+        endVoiceCall.onclick =
+            endVoiceCallFunction;
+
+
+        function endVoiceCallFunction() {
+
+            voiceCallActive =
+                false;
+
+
+            voiceCallButton.classList.remove(
+                "active"
+            );
+
+
+            voiceCallPanel.classList.remove(
+                "open"
+            );
+
+
+            voiceCallStatus.textContent =
+                "جاهز للمكالمة";
+
+        }
 
 
         /* =========================
@@ -1130,9 +1215,7 @@
 
         function loadMemory() {
 
-            memoryList.innerHTML =
-                "";
-
+            memoryList.innerHTML = "";
 
             const memory =
                 getMemory();
@@ -1158,20 +1241,16 @@
                             "div"
                         );
 
-
                     div.textContent =
                         item;
-
 
                     const deleteButton =
                         document.createElement(
                             "button"
                         );
 
-
                     deleteButton.textContent =
                         "🗑️";
-
 
                     deleteButton.onclick =
                         () => {
@@ -1192,11 +1271,9 @@
 
                         };
 
-
                     div.appendChild(
                         deleteButton
                     );
-
 
                     memoryList.appendChild(
                         div
@@ -1215,11 +1292,7 @@
                     memoryInput.value.trim();
 
 
-                if (!value) {
-
-                    return;
-
-                }
+                if (!value) return;
 
 
                 const memory =
@@ -1261,11 +1334,7 @@
 
             if (
                 messages.length <= 1
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const chat =
@@ -1295,9 +1364,7 @@
 
             localStorage.setItem(
                 "dinoChats",
-                JSON.stringify(
-                    chats
-                )
+                JSON.stringify(chats)
             );
 
         }
@@ -1307,7 +1374,6 @@
 
             chatsList.innerHTML =
                 "";
-
 
             const chats =
                 JSON.parse(
@@ -1409,17 +1475,14 @@
                 selectedAudio =
                     null;
 
-
                 imagePreview.innerHTML =
                     "";
 
                 audioPreview.innerHTML =
                     "";
 
-
                 imageInput.value =
                     "";
-
 
                 sidebar.classList.remove(
                     "open"
@@ -1471,9 +1534,7 @@
         applyDarkMode();
 
 
-        /* =========================
-           حذف الذاكرة
-        ========================= */
+        /* حذف الذاكرة */
 
         clearMemoryButton.onclick =
             () => {
@@ -1495,9 +1556,7 @@
             };
 
 
-        /* =========================
-           حذف المحادثات
-        ========================= */
+        /* حذف المحادثات */
 
         clearChatsButton.onclick =
             () => {
