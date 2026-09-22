@@ -7,12 +7,120 @@
 
     <title>Dino AI</title>
 
-    <link rel="stylesheet" href="style.css">
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #111827;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        body.dark-mode {
+            background: #0b1118;
+            color: #f5f7fa;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* =========================
-           الرسائل
+           Header
         ========================= */
+
+        .header {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffff;
+            z-index: 5;
+        }
+
+        body.dark-mode .header {
+            background: #101720;
+            border-color: #25303b;
+        }
+
+        .header-title {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            font-size: 21px;
+        }
+
+        .icon-button:hover {
+            background: #f1f5f9;
+        }
+
+        body.dark-mode .icon-button:hover {
+            background: #1b2632;
+        }
+
+        /* =========================
+           Chat
+        ========================= */
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .welcome {
+            text-align: center;
+            margin: auto;
+            max-width: 600px;
+        }
+
+        .dino {
+            font-size: 65px;
+            margin-bottom: 10px;
+        }
+
+        .welcome h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+            line-height: 1.8;
+        }
+
+        body.dark-mode .welcome p {
+            color: #9ca3af;
+        }
 
         .message {
             max-width: 78%;
@@ -23,8 +131,15 @@
             font-size: 15px;
             word-wrap: break-word;
             overflow-wrap: anywhere;
-            transition: 0.2s ease;
             white-space: pre-wrap;
+        }
+
+        .message.user {
+            margin-left: auto;
+            margin-right: 0;
+            background: #2563eb;
+            color: white;
+            border-bottom-left-radius: 6px;
         }
 
         .message.bot {
@@ -38,15 +153,9 @@
             box-shadow: none !important;
         }
 
-        .message.user {
-            margin-left: auto;
-            margin-right: 0;
-            background: #2563eb;
-            color: white;
-            border: 1px solid #2563eb;
-            border-radius: 18px;
-            padding: 13px 17px;
-            border-bottom-left-radius: 6px;
+        body.dark-mode .message.bot {
+            background: transparent !important;
+            color: #f5f7fa !important;
         }
 
         .message.bot a {
@@ -60,170 +169,324 @@
             font-weight: 600;
         }
 
-        body.dark-mode .message.bot {
-            background: transparent !important;
-            color: #f5f7fa !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        body.dark-mode .message.user {
-            background: #2563eb !important;
-            color: white !important;
-            border-color: #2563eb !important;
-        }
-
         body.dark-mode .message.bot a {
-            background: #18263d;
-            color: #70a7ff;
+            background: #182538;
+            color: #78a9ff;
         }
 
         /* =========================
-           أزرار الصوت
+           Input
         ========================= */
 
-        #voiceCallButton,
-        #audioButton,
-        #attachButton {
-            cursor: pointer;
+        .input-area {
+            padding: 12px 15px 16px;
+            border-top: 1px solid #e5e7eb;
+            background: #ffffff;
         }
 
-        #voiceCallButton {
+        body.dark-mode .input-area {
+            background: #101720;
+            border-color: #25303b;
+        }
+
+        .input-box {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 25px;
+            padding: 6px 8px;
+            background: #ffffff;
+        }
+
+        body.dark-mode .input-box {
+            background: #151e28;
+            border-color: #33404d;
+        }
+
+        .user-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 10px;
+            font-size: 16px;
+            color: inherit;
+        }
+
+        .small-button {
+            width: 40px;
+            height: 40px;
             border: none;
             background: transparent;
-            font-size: 21px;
+            border-radius: 50%;
+            font-size: 20px;
+        }
+
+        .small-button:hover {
+            background: #f1f5f9;
+        }
+
+        body.dark-mode .small-button:hover {
+            background: #202b37;
+        }
+
+        .send-button {
             width: 42px;
             height: 42px;
+            border: none;
             border-radius: 50%;
-            transition: 0.2s;
-        }
-
-        #voiceCallButton:hover {
-            background: rgba(37, 99, 235, 0.1);
-        }
-
-        #voiceCallButton.active {
-            background: #ef4444;
+            background: #2563eb;
             color: white;
-            animation: voicePulse 1.2s infinite;
+            font-size: 19px;
         }
 
-        @keyframes voicePulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
-            }
+        .send-button:hover {
+            background: #1d4ed8;
+        }
 
-            70% {
-                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
-            }
+        .send-button:disabled {
+            opacity: 0.5;
+        }
 
-            100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        .recording {
+            background: #dc2626 !important;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                transform: scale(1.08);
             }
         }
 
         /* =========================
-           نافذة المكالمة
+           Sidebar
         ========================= */
 
-        #voiceCallPanel {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -310px;
+            width: 310px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 20;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
+            transition: 0.25s;
+            padding: 20px;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        body.dark-mode .sidebar {
+            background: #101720;
+            color: white;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .sidebar-item {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #f3f4f6;
+            text-align: right;
+            font-size: 16px;
+        }
+
+        body.dark-mode .sidebar-item {
+            background: #1b2632;
+            color: white;
+        }
+
+        /* =========================
+           Panels
+        ========================= */
+
+        .panel {
             position: fixed;
             inset: 0;
-            z-index: 9999;
+            background: rgba(0, 0, 0, 0.45);
             display: none;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.72);
-            backdrop-filter: blur(8px);
+            z-index: 30;
+            padding: 20px;
         }
 
-        #voiceCallPanel.open {
+        .panel.active {
             display: flex;
         }
 
-        .voiceCallBox {
-            width: min(420px, 90%);
+        .panel-content {
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
             background: white;
-            border-radius: 28px;
-            padding: 35px 25px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 18px;
+            padding: 20px;
         }
 
-        body.dark-mode .voiceCallBox {
-            background: #111827;
+        body.dark-mode .panel-content {
+            background: #111a23;
             color: white;
         }
 
-        .dinoAvatar {
-            width: 100px;
-            height: 100px;
-            margin: auto;
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 12px;
+            font-family: inherit;
+            background: transparent;
+            color: inherit;
+        }
+
+        /* =========================
+           Image preview
+        ========================= */
+
+        .preview {
+            display: none;
+            margin: 8px auto;
+            max-width: 900px;
+        }
+
+        .preview img {
+            max-width: 180px;
+            max-height: 150px;
+            border-radius: 12px;
+        }
+
+        .audio-preview {
+            display: none;
+            margin: 8px auto;
+            max-width: 900px;
+        }
+
+        .audio-preview audio {
+            width: 100%;
+        }
+
+        /* =========================
+           Voice Call
+        ========================= */
+
+        .voice-call-panel {
+            position: fixed;
+            inset: 0;
+            background: #0b1118;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .voice-call-panel.active {
+            display: flex;
+        }
+
+        .voice-avatar {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 55px;
-            background: #2563eb;
+            background: #182536;
+            font-size: 65px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.12);
         }
 
-        .voiceCallTitle {
-            margin-top: 20px;
-            font-size: 23px;
+        .voice-title {
+            font-size: 28px;
             font-weight: bold;
         }
 
-        #voiceCallStatus {
+        .voice-status {
             margin-top: 10px;
-            color: #777;
+            color: #aeb9c6;
+            min-height: 25px;
+            text-align: center;
         }
 
-        body.dark-mode #voiceCallStatus {
-            color: #aaa;
+        .voice-controls {
+            margin-top: 45px;
+            display: flex;
+            gap: 20px;
         }
 
-        #endVoiceCall {
-            margin-top: 30px;
+        .voice-control {
             width: 65px;
             height: 65px;
             border: none;
             border-radius: 50%;
-            background: #ef4444;
-            color: white;
             font-size: 25px;
-            cursor: pointer;
+        }
+
+        .voice-mic {
+            background: #2563eb;
+            color: white;
+        }
+
+        .voice-end {
+            background: #dc2626;
+            color: white;
+        }
+
+        .voice-transcript {
+            position: absolute;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            max-width: 700px;
+            margin: auto;
+            text-align: center;
+            color: #d1d5db;
+            line-height: 1.7;
         }
 
         /* =========================
-           المعاينات
+           Responsive
         ========================= */
 
-        #imagePreview,
-        #audioPreview {
-            margin: 8px 0;
-        }
-
-        #imagePreview img {
-            max-width: 180px;
-            border-radius: 12px;
-        }
-
-        #audioButton.recording {
-            background: #ef4444 !important;
-            animation: pulseMic 1s infinite;
-        }
-
-        @keyframes pulseMic {
-            0% {
-                transform: scale(1);
+        @media (max-width: 600px) {
+            .message {
+                max-width: 90%;
             }
 
-            50% {
-                transform: scale(1.08);
+            .chat-box {
+                padding: 15px;
             }
 
-            100% {
-                transform: scale(1);
+            .header-title {
+                font-size: 18px;
             }
         }
     </style>
@@ -231,232 +494,226 @@
 
 <body>
 
-    <!-- =========================
-         القائمة الجانبية
-    ========================= -->
+<div class="app">
 
-    <aside id="sidebar">
+    <!-- Header -->
+    <header class="header">
 
-        <button id="closeSidebar">✕</button>
-
-        <h2>Dino AI</h2>
-
-        <button id="newChatButton">
-            ➕ محادثة جديدة
-        </button>
-
-        <button id="memoryButton">
-            🧠 الذاكرة
-        </button>
-
-        <button id="chatsButton">
-            💬 المحادثات
-        </button>
-
-        <button id="settingsButton">
-            ⚙️ الإعدادات
-        </button>
-
-    </aside>
-
-
-    <!-- =========================
-         الهيدر
-    ========================= -->
-
-    <header>
-
-        <button id="menuButton">
+        <button
+            id="menuButton"
+            class="icon-button"
+            title="القائمة">
             ☰
         </button>
 
-        <h1>Dino AI</h1>
+        <div class="header-title">
+            Dino AI
+        </div>
+
+        <div class="header-buttons">
+
+            <button
+                id="voiceCallButton"
+                class="icon-button"
+                title="وضع المكالمة">
+                📞
+            </button>
+
+        </div>
 
     </header>
 
 
-    <!-- =========================
-         المحتوى
-    ========================= -->
+    <!-- Chat -->
+    <main
+        id="chatBox"
+        class="chat-box">
 
-    <main>
+        <div
+            id="welcomeMessage"
+            class="welcome">
 
-        <section id="chatBox">
-
-            <div class="message bot">
-                أهلاً بك 👋
-                أنا Dino AI 🦖
-                اسألني عن أي شيء.
+            <div class="dino">
+                🦖
             </div>
 
-        </section>
+            <h1>
+                أهلاً بك في Dino AI
+            </h1>
 
-
-        <div id="imagePreview"></div>
-
-        <div id="audioPreview"></div>
-
-
-        <!-- =========================
-             شريط الكتابة
-        ========================= -->
-
-        <div id="inputArea">
-
-            <!-- صورة -->
-
-            <button id="attachButton" title="إرفاق صورة">
-
-                <svg width="22"
-                     height="22"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 1 1-2.83-2.83l8.49-8.48"/>
-
-                </svg>
-
-            </button>
-
-            <input
-                type="file"
-                id="imageInput"
-                accept="image/*"
-                hidden
-            >
-
-
-            <!-- زر المكالمة -->
-
-            <button
-                id="voiceCallButton"
-                title="مكالمة صوتية"
-            >
-                📞
-            </button>
-
-
-            <!-- تسجيل صوت -->
-
-            <button
-                id="audioButton"
-                title="تسجيل صوت"
-            >
-
-                <svg id="micIcon"
-                     width="22"
-                     height="22"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <path d="M12 1a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                    <line x1="12" y1="19" x2="12" y2="23"/>
-                    <line x1="8" y1="23" x2="16" y2="23"/>
-
-                </svg>
-
-            </button>
-
-
-            <!-- الكتابة -->
-
-            <input
-                type="text"
-                id="userInput"
-                placeholder="اكتب رسالتك..."
-                autocomplete="off"
-            >
-
-
-            <button id="sendButton">
-                إرسال
-            </button>
+            <p>
+                اسألني أي سؤال وسأحاول مساعدتك.
+                <br>
+                يمكنك الكتابة أو استخدام الميكروفون.
+            </p>
 
         </div>
 
     </main>
 
 
-    <!-- =========================
-         نافذة المكالمة الصوتية
-    ========================= -->
+    <!-- Input -->
+    <div class="input-area">
 
-    <div id="voiceCallPanel">
+        <div
+            id="imagePreview"
+            class="preview">
+        </div>
 
-        <div class="voiceCallBox">
+        <div
+            id="audioPreview"
+            class="audio-preview">
+        </div>
 
-            <div class="dinoAvatar">
-                🦖
-            </div>
+        <div class="input-box">
 
-            <div class="voiceCallTitle">
-                Dino AI
-            </div>
+            <!-- Attachment -->
+            <button
+                id="attachButton"
+                class="small-button"
+                title="إرفاق صورة">
+                📎
+            </button>
 
-            <div id="voiceCallStatus">
-                جاهز للمكالمة
-            </div>
+            <input
+                id="imageInput"
+                type="file"
+                accept="image/*"
+                style="display:none;">
 
-            <button id="endVoiceCall">
-                📞
+            <!-- Microphone -->
+            <button
+                id="audioButton"
+                class="small-button"
+                title="تسجيل صوت">
+                🎤
+            </button>
+
+            <!-- Text -->
+            <input
+                id="userInput"
+                class="user-input"
+                type="text"
+                placeholder="اكتب رسالتك هنا..."
+                autocomplete="off">
+
+            <!-- Send -->
+            <button
+                id="sendButton"
+                class="send-button">
+                ➤
             </button>
 
         </div>
 
     </div>
 
+</div>
 
-    <!-- =========================
-         الذاكرة
-    ========================= -->
 
-    <div id="memoryPanel" class="panel">
+<!-- Sidebar -->
 
-        <div class="panelHeader">
+<aside
+    id="sidebar"
+    class="sidebar">
 
-            <h2>🧠 الذاكرة</h2>
+    <div class="sidebar-header">
 
-            <button id="closeMemory">
+        <strong>
+            Dino AI
+        </strong>
+
+        <button
+            id="closeSidebar"
+            class="icon-button">
+            ✕
+        </button>
+
+    </div>
+
+    <button
+        id="newChatButton"
+        class="sidebar-item">
+        ➕ محادثة جديدة
+    </button>
+
+    <button
+        id="memoryButton"
+        class="sidebar-item">
+        🧠 الذاكرة
+    </button>
+
+    <button
+        id="chatsButton"
+        class="sidebar-item">
+        💬 المحادثات
+    </button>
+
+    <button
+        id="settingsButton"
+        class="sidebar-item">
+        ⚙️ الإعدادات
+    </button>
+
+</aside>
+
+
+<!-- Memory Panel -->
+
+<div
+    id="memoryPanel"
+    class="panel">
+
+    <div class="panel-content">
+
+        <div class="panel-header">
+
+            <strong>
+                🧠 الذاكرة
+            </strong>
+
+            <button
+                id="closeMemory"
+                class="icon-button">
                 ✕
             </button>
 
         </div>
 
-        <input
-            type="text"
+        <textarea
             id="memoryInput"
-            placeholder="اكتب شيئًا تريد أن يتذكره Dino..."
-        >
+            placeholder="اكتب شيئاً تريد أن يتذكره Dino AI..."></textarea>
 
-        <button id="saveMemoryButton">
-            حفظ
+        <button
+            id="saveMemoryButton"
+            class="sidebar-item">
+            حفظ الذاكرة
         </button>
 
         <div id="memoryList"></div>
 
     </div>
 
+</div>
 
-    <!-- =========================
-         المحادثات
-    ========================= -->
 
-    <div id="chatsPanel" class="panel">
+<!-- Chats Panel -->
 
-        <div class="panelHeader">
+<div
+    id="chatsPanel"
+    class="panel">
 
-            <h2>💬 المحادثات</h2>
+    <div class="panel-content">
 
-            <button id="closeChats">
+        <div class="panel-header">
+
+            <strong>
+                💬 المحادثات
+            </strong>
+
+            <button
+                id="closeChats"
+                class="icon-button">
                 ✕
             </button>
 
@@ -466,412 +723,450 @@
 
     </div>
 
+</div>
 
-    <!-- =========================
-         الإعدادات
-    ========================= -->
 
-    <div id="settingsPanel" class="panel">
+<!-- Settings Panel -->
 
-        <div class="panelHeader">
+<div
+    id="settingsPanel"
+    class="panel">
 
-            <h2>⚙️ الإعدادات</h2>
+    <div class="panel-content">
 
-            <button id="closeSettings">
+        <div class="panel-header">
+
+            <strong>
+                ⚙️ الإعدادات
+            </strong>
+
+            <button
+                id="closeSettings"
+                class="icon-button">
                 ✕
             </button>
 
         </div>
 
-        <button id="darkModeButton">
+        <button
+            id="darkModeButton"
+            class="sidebar-item">
             🌙 الوضع الداكن
         </button>
 
-        <button id="clearMemoryButton">
+        <button
+            id="deleteMemoryButton"
+            class="sidebar-item">
             🗑️ حذف الذاكرة
         </button>
 
-        <button id="clearChatsButton">
+        <button
+            id="deleteChatsButton"
+            class="sidebar-item">
             🗑️ حذف المحادثات
         </button>
 
     </div>
 
+</div>
 
-    <!-- =========================
-         JavaScript
-    ========================= -->
 
-    <script>
+<!-- Voice Call -->
 
-        const API_URL =
-            "https://dino-ai-api.mmaojmmmoh.workers.dev";
+<div
+    id="voiceCallPanel"
+    class="voice-call-panel">
 
+    <div class="voice-avatar">
+        🦖
+    </div>
 
-        /* العناصر */
+    <div class="voice-title">
+        Dino AI
+    </div>
 
-        const sidebar =
-            document.getElementById("sidebar");
+    <div
+        id="voiceStatus"
+        class="voice-status">
+        اضغط على الميكروفون وابدأ الكلام
+    </div>
 
-        const menuButton =
-            document.getElementById("menuButton");
+    <div class="voice-controls">
 
-        const closeSidebar =
-            document.getElementById("closeSidebar");
+        <button
+            id="voiceMicButton"
+            class="voice-control voice-mic">
+            🎤
+        </button>
 
-        const newChatButton =
-            document.getElementById("newChatButton");
+        <button
+            id="endVoiceCallButton"
+            class="voice-control voice-end">
+            📞
+        </button>
 
-        const memoryButton =
-            document.getElementById("memoryButton");
+    </div>
 
-        const chatsButton =
-            document.getElementById("chatsButton");
+    <div
+        id="voiceTranscript"
+        class="voice-transcript">
+    </div>
 
-        const settingsButton =
-            document.getElementById("settingsButton");
+</div>
 
-        const memoryPanel =
-            document.getElementById("memoryPanel");
 
-        const chatsPanel =
-            document.getElementById("chatsPanel");
+<script>
 
-        const settingsPanel =
-            document.getElementById("settingsPanel");
+    /* =========================
+       API
+    ========================= */
 
-        const closeMemory =
-            document.getElementById("closeMemory");
+    const API_URL =
+        "https://dino-ai-api.mmaojmmmoh.workers.dev";
 
-        const closeChats =
-            document.getElementById("closeChats");
 
-        const closeSettings =
-            document.getElementById("closeSettings");
+    /* =========================
+       Elements
+    ========================= */
 
-        const memoryInput =
-            document.getElementById("memoryInput");
+    const chatBox =
+        document.getElementById("chatBox");
 
-        const saveMemoryButton =
-            document.getElementById("saveMemoryButton");
+    const userInput =
+        document.getElementById("userInput");
 
-        const memoryList =
-            document.getElementById("memoryList");
+    const sendButton =
+        document.getElementById("sendButton");
 
-        const chatsList =
-            document.getElementById("chatsList");
+    const audioButton =
+        document.getElementById("audioButton");
 
-        const chatBox =
-            document.getElementById("chatBox");
+    const attachButton =
+        document.getElementById("attachButton");
 
-        const userInput =
-            document.getElementById("userInput");
+    const imageInput =
+        document.getElementById("imageInput");
 
-        const sendButton =
-            document.getElementById("sendButton");
+    const imagePreview =
+        document.getElementById("imagePreview");
 
-        const attachButton =
-            document.getElementById("attachButton");
+    const audioPreview =
+        document.getElementById("audioPreview");
 
-        const imageInput =
-            document.getElementById("imageInput");
+    const sidebar =
+        document.getElementById("sidebar");
 
-        const imagePreview =
-            document.getElementById("imagePreview");
+    const menuButton =
+        document.getElementById("menuButton");
 
-        const audioButton =
-            document.getElementById("audioButton");
+    const closeSidebar =
+        document.getElementById("closeSidebar");
 
-        const audioPreview =
-            document.getElementById("audioPreview");
+    const newChatButton =
+        document.getElementById("newChatButton");
 
-        const voiceCallButton =
-            document.getElementById("voiceCallButton");
+    const memoryButton =
+        document.getElementById("memoryButton");
 
-        const voiceCallPanel =
-            document.getElementById("voiceCallPanel");
+    const chatsButton =
+        document.getElementById("chatsButton");
 
-        const voiceCallStatus =
-            document.getElementById("voiceCallStatus");
+    const settingsButton =
+        document.getElementById("settingsButton");
 
-        const endVoiceCall =
-            document.getElementById("endVoiceCall");
+    const memoryPanel =
+        document.getElementById("memoryPanel");
 
-        const darkModeButton =
-            document.getElementById("darkModeButton");
+    const chatsPanel =
+        document.getElementById("chatsPanel");
 
-        const clearMemoryButton =
-            document.getElementById("clearMemoryButton");
+    const settingsPanel =
+        document.getElementById("settingsPanel");
 
-        const clearChatsButton =
-            document.getElementById("clearChatsButton");
+    const closeMemory =
+        document.getElementById("closeMemory");
 
+    const closeChats =
+        document.getElementById("closeChats");
 
-        /* المتغيرات */
+    const closeSettings =
+        document.getElementById("closeSettings");
 
-        let selectedImage = null;
+    const memoryInput =
+        document.getElementById("memoryInput");
 
-        let selectedAudio = null;
+    const saveMemoryButton =
+        document.getElementById("saveMemoryButton");
 
-        let mediaRecorder = null;
+    const memoryList =
+        document.getElementById("memoryList");
 
-        let audioChunks = [];
+    const chatsList =
+        document.getElementById("chatsList");
 
-        let microphoneStream = null;
+    const darkModeButton =
+        document.getElementById("darkModeButton");
 
-        let isRecording = false;
+    const deleteMemoryButton =
+        document.getElementById("deleteMemoryButton");
 
-        let voiceCallActive = false;
+    const deleteChatsButton =
+        document.getElementById("deleteChatsButton");
 
 
-        /* القائمة */
+    /* =========================
+       Voice Call
+    ========================= */
 
-        menuButton.onclick = () => {
+    const voiceCallButton =
+        document.getElementById(
+            "voiceCallButton"
+        );
 
-            sidebar.classList.add("open");
+    const voiceCallPanel =
+        document.getElementById(
+            "voiceCallPanel"
+        );
 
-        };
+    const voiceMicButton =
+        document.getElementById(
+            "voiceMicButton"
+        );
 
+    const endVoiceCallButton =
+        document.getElementById(
+            "endVoiceCallButton"
+        );
 
-        closeSidebar.onclick = () => {
+    const voiceStatus =
+        document.getElementById(
+            "voiceStatus"
+        );
 
-            sidebar.classList.remove("open");
+    const voiceTranscript =
+        document.getElementById(
+            "voiceTranscript"
+        );
 
-        };
 
+    /* =========================
+       State
+    ========================= */
 
-        /* اللوحات */
+    let selectedImage = null;
 
-        function closeAllPanels() {
+    let mediaRecorder = null;
 
-            memoryPanel.classList.remove("open");
+    let audioChunks = [];
 
-            chatsPanel.classList.remove("open");
+    let selectedAudio = null;
 
-            settingsPanel.classList.remove("open");
+    let microphoneStream = null;
 
-        }
+    let voiceCallActive = false;
 
+    let voiceCallRecording = false;
 
-        memoryButton.onclick = () => {
 
-            closeAllPanels();
+    /* =========================
+       Add Message
+    ========================= */
 
-            memoryPanel.classList.add("open");
+    function addMessage(
+        text,
+        type
+    ) {
 
-            loadMemory();
+        const message =
+            document.createElement(
+                "div"
+            );
 
-        };
+        message.className =
+            "message " + type;
 
+        message.innerText =
+            text;
 
-        chatsButton.onclick = () => {
+        chatBox.appendChild(
+            message
+        );
 
-            closeAllPanels();
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
 
-            chatsPanel.classList.add("open");
+        return message;
+    }
 
-            loadChats();
 
-        };
+    /* =========================
+       Bot Reply
+    ========================= */
 
+    function displayBotReply(
+        text
+    ) {
 
-        settingsButton.onclick = () => {
+        const message =
+            document.createElement(
+                "div"
+            );
 
-            closeAllPanels();
+        message.className =
+            "message bot";
 
-            settingsPanel.classList.add("open");
+        const urlRegex =
+            /(https?:\/\/[^\s]+)/g;
 
-        };
+        const parts =
+            text.split(urlRegex);
 
+        for (
+            let i = 0;
+            i < parts.length;
+            i++
+        ) {
 
-        closeMemory.onclick = () => {
+            const part =
+                parts[i];
 
-            memoryPanel.classList.remove("open");
+            if (
+                /^https?:\/\//.test(
+                    part
+                )
+            ) {
 
-        };
+                const link =
+                    document.createElement(
+                        "a"
+                    );
 
+                link.href =
+                    part;
 
-        closeChats.onclick = () => {
+                link.target =
+                    "_blank";
 
-            chatsPanel.classList.remove("open");
+                link.rel =
+                    "noopener noreferrer";
 
-        };
+                link.innerText =
+                    "🔗 فتح الرابط";
 
+                message.appendChild(
+                    link
+                );
 
-        closeSettings.onclick = () => {
+            } else {
 
-            settingsPanel.classList.remove("open");
-
-        };
-
-
-        /* الرسائل */
-
-        function addMessage(text, type) {
-
-            const message =
-                document.createElement("div");
-
-            message.className =
-                "message " + type;
-
-            message.textContent =
-                text;
-
-            chatBox.appendChild(message);
-
-            chatBox.scrollTop =
-                chatBox.scrollHeight;
-
-            return message;
-
-        }
-
-
-        function displayBotReply(text) {
-
-            const message =
-                document.createElement("div");
-
-            message.className =
-                "message bot";
-
-            const urlRegex =
-                /(https?:\/\/[^\s]+)/g;
-
-            const parts =
-                text.split(urlRegex);
-
-
-            parts.forEach(part => {
-
-                if (
-                    part.startsWith("http://") ||
-                    part.startsWith("https://")
-                ) {
-
-                    const link =
-                        document.createElement("a");
-
-                    link.href =
-                        part;
-
-                    link.target =
-                        "_blank";
-
-                    link.rel =
-                        "noopener noreferrer";
-
-                    link.textContent =
-                        "🔗 فتح الرابط";
-
-                    message.appendChild(link);
-
-                } else {
+                if (part) {
 
                     message.appendChild(
-                        document.createTextNode(part)
+                        document.createTextNode(
+                            part
+                        )
                     );
 
                 }
+            }
+        }
 
-            });
+        chatBox.appendChild(
+            message
+        );
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+
+        return message;
+    }
 
 
-            chatBox.appendChild(message);
+    /* =========================
+       Send Message
+    ========================= */
 
-            chatBox.scrollTop =
-                chatBox.scrollHeight;
+    async function sendMessage(
+        voiceMode = false
+    ) {
+
+        let message =
+            userInput.value.trim();
+
+        if (
+            !message &&
+            !selectedAudio
+        ) {
+            return;
+        }
+
+        if (
+            selectedImage
+        ) {
+
+            message +=
+                (
+                    message
+                        ? "\n\n"
+                        : ""
+                ) +
+                "🖼️ صورة مرفقة: " +
+                selectedImage.name;
+        }
+
+
+        /* User message */
+
+        if (message) {
+
+            addMessage(
+                message,
+                "user"
+            );
 
         }
 
 
-        /* إرسال */
+        /* Clear input */
 
-        async function sendMessage() {
+        userInput.value = "";
 
-            const text =
-                userInput.value.trim();
-
-
-            if (
-                text === "" &&
-                !selectedAudio &&
-                !selectedImage
-            ) {
-
-                return;
-
-            }
+        sendButton.disabled = true;
 
 
-            let messageText =
-                text;
+        /* Loading */
 
-
-            if (selectedImage) {
-
-                messageText +=
-                    (messageText ? "\n" : "") +
-                    "🖼️ صورة مرفقة: " +
-                    selectedImage.name;
-
-            }
-
-
-            if (messageText) {
-
-                addMessage(
-                    messageText,
-                    "user"
-                );
-
-            } else if (selectedAudio) {
-
-                addMessage(
-                    "🎤 رسالة صوتية",
-                    "user"
-                );
-
-            }
-
-
-            const formData =
-                new FormData();
-
-
-            formData.append(
-                "message",
-                text
+        const loading =
+            addMessage(
+                "Dino AI يكتب...",
+                "bot"
             );
 
 
-            if (selectedAudio) {
+        try {
+
+            let response;
+
+
+            if (
+                selectedAudio
+            ) {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "message",
+                    message
+                );
 
                 formData.append(
                     "audio",
                     selectedAudio,
-                    "dino-voice.webm"
+                    "voice.webm"
                 );
 
-            }
-
-
-            userInput.value = "";
-
-            sendButton.disabled = true;
-
-
-            const loading =
-                addMessage(
-                    "⌛ Dino AI يفكر...",
-                    "bot"
-                );
-
-
-            try {
-
-                const response =
+                response =
                     await fetch(
                         API_URL,
                         {
@@ -880,281 +1175,940 @@
                         }
                     );
 
+            } else {
 
-                const data =
-                    await response.json();
+                response =
+                    await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
 
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                loading.remove();
-
-
-                if (data.reply) {
-
-                    displayBotReply(
-                        data.reply
+                            body:
+                                JSON.stringify({
+                                    message:
+                                        message
+                                })
+                        }
                     );
-
-                } else if (data.error) {
-
-                    displayBotReply(
-                        "❌ " + data.error
-                    );
-
-                } else {
-
-                    displayBotReply(
-                        "❌ حصلت مشكلة في الرد."
-                    );
-
-                }
-
-            } catch (error) {
-
-                loading.remove();
-
-                displayBotReply(
-                    "❌ تعذر الاتصال بخدمة Dino AI."
-                );
 
             }
 
 
-            sendButton.disabled = false;
+            const data =
+                await response.json();
 
-            selectedAudio = null;
 
-            audioPreview.innerHTML = "";
+            loading.remove();
 
-            selectedImage = null;
 
-            imagePreview.innerHTML = "";
+            if (
+                data.error
+            ) {
+
+                displayBotReply(
+                    "⚠️ " +
+                    data.error
+                );
+
+            } else {
+
+                const reply =
+                    data.reply ||
+                    "لم يصل رد.";
+
+                displayBotReply(
+                    reply
+                );
+
+
+                /* تشغيل صوت Dino */
+
+                if (
+                    data.audio
+                ) {
+
+                    playAudio(
+                        data.audio
+                    );
+
+                }
+
+            }
+
+
+        } catch (error) {
+
+            loading.remove();
+
+            displayBotReply(
+                "⚠️ حصل خطأ في الاتصال بـ Dino AI."
+            );
 
         }
 
 
-        sendButton.onclick =
-            sendMessage;
+        selectedAudio =
+            null;
+
+        selectedImage =
+            null;
+
+        imagePreview.innerHTML =
+            "";
+
+        imagePreview.style.display =
+            "none";
+
+        audioPreview.innerHTML =
+            "";
+
+        audioPreview.style.display =
+            "none";
+
+        sendButton.disabled =
+            false;
+
+    }
 
 
-        userInput.addEventListener(
-            "keydown",
-            event => {
+    /* =========================
+       Play AI Audio
+    ========================= */
 
-                if (event.key === "Enter") {
+    function playAudio(
+        base64
+    ) {
 
-                    sendMessage();
+        try {
 
-                }
+            const audio =
+                new Audio(
+                    "data:audio/mpeg;base64," +
+                    base64
+                );
+
+            audio.play().catch(
+                () => {}
+            );
+
+            return audio;
+
+        } catch (
+            error
+        ) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       Microphone Recording
+    ========================= */
+
+    audioButton.onclick =
+        async function () {
+
+            if (
+                mediaRecorder &&
+                mediaRecorder.state ===
+                "recording"
+            ) {
+
+                mediaRecorder.stop();
+
+                return;
+            }
+
+
+            try {
+
+                microphoneStream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
+                            audio: true
+                        });
+
+
+                audioChunks = [];
+
+                mediaRecorder =
+                    new MediaRecorder(
+                        microphoneStream
+                    );
+
+
+                mediaRecorder.ondataavailable =
+                    function (
+                        event
+                    ) {
+
+                        if (
+                            event.data.size >
+                            0
+                        ) {
+
+                            audioChunks.push(
+                                event.data
+                            );
+
+                        }
+
+                    };
+
+
+                mediaRecorder.onstop =
+                    function () {
+
+                        const blob =
+                            new Blob(
+                                audioChunks,
+                                {
+                                    type:
+                                        "audio/webm"
+                                }
+                            );
+
+                        selectedAudio =
+                            blob;
+
+
+                        const url =
+                            URL.createObjectURL(
+                                blob
+                            );
+
+
+                        audioPreview.innerHTML =
+                            `
+                            <audio
+                                controls
+                                src="${url}">
+                            </audio>
+                            `;
+
+                        audioPreview.style.display =
+                            "block";
+
+
+                        if (
+                            microphoneStream
+                        ) {
+
+                            microphoneStream
+                                .getTracks()
+                                .forEach(
+                                    track =>
+                                        track.stop()
+                                );
+
+                        }
+
+
+                        audioButton.classList
+                            .remove(
+                                "recording"
+                            );
+
+
+                        sendMessage();
+
+                    };
+
+
+                mediaRecorder.start();
+
+                audioButton.classList.add(
+                    "recording"
+                );
+
+
+            } catch (
+                error
+            ) {
+
+                alert(
+                    "لازم تسمح للمتصفح باستخدام الميكروفون."
+                );
 
             }
-        );
+
+        };
 
 
-        /* الصور */
+    /* =========================
+       Image
+    ========================= */
 
-        attachButton.onclick = () => {
+    attachButton.onclick =
+        function () {
 
             imageInput.click();
 
         };
 
 
-        imageInput.onchange = event => {
+    imageInput.onchange =
+        function () {
 
             const file =
-                event.target.files[0];
+                imageInput.files[0];
 
-            if (!file) return;
+            if (!file) {
+                return;
+            }
 
-            selectedImage = file;
+            selectedImage =
+                file;
 
-            imagePreview.innerHTML = "";
+            const url =
+                URL.createObjectURL(
+                    file
+                );
 
-            const image =
-                document.createElement("img");
+            imagePreview.innerHTML =
+                `
+                <img src="${url}">
+                `;
 
-            image.src =
-                URL.createObjectURL(file);
-
-            imagePreview.appendChild(image);
+            imagePreview.style.display =
+                "block";
 
         };
 
 
-        /* تسجيل الصوت */
+    /* =========================
+       Send Button
+    ========================= */
 
-        audioButton.onclick =
-            async () => {
+    sendButton.onclick =
+        function () {
 
-                if (!isRecording) {
+            sendMessage();
 
-                    try {
-
-                        microphoneStream =
-                            await navigator.mediaDevices.getUserMedia({
-                                audio: true
-                            });
+        };
 
 
-                        audioChunks = [];
+    userInput.addEventListener(
+        "keydown",
+        function (event) {
 
-                        mediaRecorder =
-                            new MediaRecorder(
-                                microphoneStream
-                            );
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
+                event.preventDefault();
 
-                        mediaRecorder.ondataavailable =
-                            event => {
+                sendMessage();
 
-                                if (
-                                    event.data.size > 0
-                                ) {
+            }
 
-                                    audioChunks.push(
-                                        event.data
-                                    );
-
-                                }
-
-                            };
+        }
+    );
 
 
-                        mediaRecorder.onstop =
-                            () => {
+    /* =========================
+       Sidebar
+    ========================= */
 
-                                const audioBlob =
-                                    new Blob(
-                                        audioChunks,
-                                        {
-                                            type:
-                                                "audio/webm"
-                                        }
-                                    );
+    menuButton.onclick =
+        function () {
 
+            sidebar.classList.add(
+                "open"
+            );
 
-                                selectedAudio =
-                                    audioBlob;
+        };
 
 
-                                audioPreview.innerHTML =
-                                    "";
+    closeSidebar.onclick =
+        function () {
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        };
 
 
-                                const audio =
-                                    document.createElement(
-                                        "audio"
-                                    );
+    /* =========================
+       New Chat
+    ========================= */
 
-                                audio.controls =
-                                    true;
+    newChatButton.onclick =
+        function () {
 
-                                audio.src =
-                                    URL.createObjectURL(
-                                        audioBlob
-                                    );
+            saveCurrentChat();
+
+            chatBox.innerHTML =
+                `
+                <div
+                    id="welcomeMessage"
+                    class="welcome">
+
+                    <div class="dino">
+                        🦖
+                    </div>
+
+                    <h1>
+                        أهلاً بك في Dino AI
+                    </h1>
+
+                    <p>
+                        اسألني أي سؤال وسأحاول مساعدتك.
+                    </p>
+
+                </div>
+                `;
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        };
 
 
-                                audioPreview.appendChild(
-                                    audio
+    /* =========================
+       Memory
+    ========================= */
+
+    function getMemory() {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "dinoMemory"
+            ) || "[]"
+        );
+
+    }
+
+
+    function renderMemory() {
+
+        const memory =
+            getMemory();
+
+        memoryList.innerHTML =
+            "";
+
+        if (
+            memory.length === 0
+        ) {
+
+            memoryList.innerText =
+                "لا توجد ذكريات محفوظة.";
+
+            return;
+        }
+
+        memory.forEach(
+            function (
+                item,
+                index
+            ) {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "sidebar-item";
+
+                div.innerText =
+                    item;
+
+                div.onclick =
+                    function () {
+
+                        memory.splice(
+                            index,
+                            1
+                        );
+
+                        localStorage.setItem(
+                            "dinoMemory",
+                            JSON.stringify(
+                                memory
+                            )
+                        );
+
+                        renderMemory();
+
+                    };
+
+                memoryList.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    memoryButton.onclick =
+        function () {
+
+            renderMemory();
+
+            memoryPanel.classList.add(
+                "active"
+            );
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        };
+
+
+    closeMemory.onclick =
+        function () {
+
+            memoryPanel.classList.remove(
+                "active"
+            );
+
+        };
+
+
+    saveMemoryButton.onclick =
+        function () {
+
+            const text =
+                memoryInput.value.trim();
+
+            if (!text) {
+                return;
+            }
+
+            const memory =
+                getMemory();
+
+            memory.push(text);
+
+            localStorage.setItem(
+                "dinoMemory",
+                JSON.stringify(
+                    memory
+                )
+            );
+
+            memoryInput.value =
+                "";
+
+            renderMemory();
+
+        };
+
+
+    /* =========================
+       Chats
+    ========================= */
+
+    function saveCurrentChat() {
+
+        const messages =
+            Array.from(
+                chatBox.querySelectorAll(
+                    ".message"
+                )
+            );
+
+        if (
+            messages.length === 0
+        ) {
+            return;
+        }
+
+        const chats =
+            JSON.parse(
+                localStorage.getItem(
+                    "dinoChats"
+                ) || "[]"
+            );
+
+        const content =
+            messages.map(
+                message =>
+                    message.innerText
+            );
+
+        chats.unshift(
+            {
+                date:
+                    new Date()
+                        .toLocaleString(
+                            "ar-EG"
+                        ),
+
+                messages:
+                    content
+            }
+        );
+
+        localStorage.setItem(
+            "dinoChats",
+            JSON.stringify(
+                chats.slice(
+                    0,
+                    20
+                )
+            )
+        );
+
+    }
+
+
+    function renderChats() {
+
+        const chats =
+            JSON.parse(
+                localStorage.getItem(
+                    "dinoChats"
+                ) || "[]"
+            );
+
+        chatsList.innerHTML =
+            "";
+
+        if (
+            chats.length === 0
+        ) {
+
+            chatsList.innerText =
+                "لا توجد محادثات محفوظة.";
+
+            return;
+
+        }
+
+        chats.forEach(
+            function (
+                chat,
+                index
+            ) {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "sidebar-item";
+
+                div.innerText =
+                    "💬 " +
+                    (
+                        chat.messages[0] ||
+                        "محادثة"
+                    ).slice(
+                        0,
+                        70
+                    ) +
+                    "\n" +
+                    chat.date;
+
+                div.onclick =
+                    function () {
+
+                        chatBox.innerHTML =
+                            "";
+
+                        chat.messages.forEach(
+                            function (
+                                message
+                            ) {
+
+                                const type =
+                                    message.startsWith(
+                                        "⚠️"
+                                    )
+                                        ? "bot"
+                                        : "user";
+
+                                addMessage(
+                                    message,
+                                    type
                                 );
 
-
-                                if (
-                                    microphoneStream
-                                ) {
-
-                                    microphoneStream
-                                        .getTracks()
-                                        .forEach(
-                                            track =>
-                                                track.stop()
-                                        );
-
-                                }
-
-
-                                sendMessage();
-
-                            };
-
-
-                        mediaRecorder.start();
-
-                        isRecording = true;
-
-                        audioButton.classList.add(
-                            "recording"
+                            }
                         );
 
-                    } catch (error) {
-
-                        alert(
-                            "لا يمكن الوصول إلى الميكروفون."
+                        chatsPanel.classList.remove(
+                            "active"
                         );
 
-                    }
+                    };
 
-                } else {
+                chatsList.appendChild(
+                    div
+                );
 
-                    mediaRecorder.stop();
+            }
+        );
 
-                    isRecording = false;
-
-                    audioButton.classList.remove(
-                        "recording"
-                    );
-
-                }
-
-            };
+    }
 
 
-        /* =========================
-           زر المكالمة
-        ========================= */
+    chatsButton.onclick =
+        function () {
 
-        voiceCallButton.onclick =
-            async () => {
+            renderChats();
 
-                if (voiceCallActive) {
+            chatsPanel.classList.add(
+                "active"
+            );
 
-                    endVoiceCallFunction();
+            sidebar.classList.remove(
+                "open"
+            );
 
-                    return;
-
-                }
+        };
 
 
-                try {
+    closeChats.onclick =
+        function () {
 
-                    await navigator.mediaDevices.getUserMedia({
+            chatsPanel.classList.remove(
+                "active"
+            );
+
+        };
+
+
+    /* =========================
+       Settings
+    ========================= */
+
+    settingsButton.onclick =
+        function () {
+
+            settingsPanel.classList.add(
+                "active"
+            );
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        };
+
+
+    closeSettings.onclick =
+        function () {
+
+            settingsPanel.classList.remove(
+                "active"
+            );
+
+        };
+
+
+    darkModeButton.onclick =
+        function () {
+
+            document.body.classList.toggle(
+                "dark-mode"
+            );
+
+            localStorage.setItem(
+                "dinoDarkMode",
+                document.body.classList.contains(
+                    "dark-mode"
+                )
+            );
+
+        };
+
+
+    deleteMemoryButton.onclick =
+        function () {
+
+            localStorage.removeItem(
+                "dinoMemory"
+            );
+
+            renderMemory();
+
+        };
+
+
+    deleteChatsButton.onclick =
+        function () {
+
+            localStorage.removeItem(
+                "dinoChats"
+            );
+
+            renderChats();
+
+        };
+
+
+    /* =========================
+       Load Dark Mode
+    ========================= */
+
+    if (
+        localStorage.getItem(
+            "dinoDarkMode"
+        ) === "true"
+    ) {
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+    }
+
+
+    /* ==================================================
+       VOICE MODE
+    ================================================== */
+
+    let voiceRecorder = null;
+
+    let voiceChunks = [];
+
+    let voiceStream = null;
+
+
+    voiceCallButton.onclick =
+        async function () {
+
+            try {
+
+                voiceStream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
+                            audio: true
+                        });
+
+                voiceCallActive =
+                    true;
+
+                voiceCallPanel.classList.add(
+                    "active"
+                );
+
+                voiceStatus.innerText =
+                    "🎤 المكالمة بدأت — اضغط الميكروفون وتحدث";
+
+                voiceTranscript.innerText =
+                    "";
+
+            } catch (
+                error
+            ) {
+
+                alert(
+                    "اسمح للمتصفح باستخدام الميكروفون أولاً."
+                );
+
+            }
+
+        };
+
+
+    /* =========================
+       Voice Record
+    ========================= */
+
+    voiceMicButton.onclick =
+        function () {
+
+            if (
+                !voiceCallActive
+            ) {
+                return;
+            }
+
+            if (
+                voiceRecorder &&
+                voiceRecorder.state ===
+                "recording"
+            ) {
+
+                voiceRecorder.stop();
+
+                return;
+
+            }
+
+
+            voiceChunks = [];
+
+
+            if (
+                !voiceStream
+            ) {
+
+                navigator
+                    .mediaDevices
+                    .getUserMedia({
                         audio: true
-                    });
+                    })
+                    .then(
+                        stream => {
 
+                            voiceStream =
+                                stream;
 
-                    voiceCallActive =
-                        true;
+                            startVoiceRecording();
 
+                        }
+                    )
+                    .catch(
+                        () => {
 
-                    voiceCallButton.classList.add(
-                        "active"
+                            voiceStatus.innerText =
+                                "لم أستطع الوصول إلى الميكروفون.";
+
+                        }
                     );
 
+            } else {
 
-                    voiceCallPanel.classList.add(
-                        "open"
-                    );
+                startVoiceRecording();
+
+            }
+
+        };
 
 
-                    voiceCallStatus.textContent =
-                        "🎤 المكالمة بدأت — تحدث مع Dino AI";
+    function startVoiceRecording() {
+
+        voiceRecorder =
+            new MediaRecorder(
+                voiceStream
+            );
 
 
-                } catch (error) {
+        voiceRecorder.ondataavailable =
+            function (
+                event
+            ) {
 
-                    alert(
-                        "اسمح للمتصفح باستخدام الميكروفون أولاً."
+                if (
+                    event.data.size > 0
+                ) {
+
+                    voiceChunks.push(
+                        event.data
                     );
 
                 }
@@ -1162,423 +2116,238 @@
             };
 
 
-        endVoiceCall.onclick =
-            endVoiceCallFunction;
+        voiceRecorder.onstop =
+            async function () {
+
+                voiceMicButton.innerText =
+                    "🎤";
+
+                voiceMicButton.classList.remove(
+                    "recording"
+                );
+
+                voiceStatus.innerText =
+                    "⏳ Dino AI بيسمعك...";
 
 
-        function endVoiceCallFunction() {
+                const blob =
+                    new Blob(
+                        voiceChunks,
+                        {
+                            type:
+                                "audio/webm"
+                        }
+                    );
+
+
+                voiceTranscript.innerText =
+                    "🎤 تم تسجيل صوتك...";
+
+
+                selectedAudio =
+                    blob;
+
+
+                await sendVoiceMessage();
+
+            };
+
+
+        voiceRecorder.start();
+
+        voiceRecorder.onstart =
+            function () {
+
+                voiceMicButton.innerText =
+                    "⏹️";
+
+                voiceMicButton.classList.add(
+                    "recording"
+                );
+
+                voiceStatus.innerText =
+                    "🔴 جاري الاستماع... اضغط مرة ثانية للإرسال";
+
+            };
+
+    }
+
+
+    /* =========================
+       Send Voice Message
+    ========================= */
+
+    async function sendVoiceMessage() {
+
+        try {
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "message",
+                ""
+            );
+
+            formData.append(
+                "audio",
+                selectedAudio,
+                "voice.webm"
+            );
+
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.error
+            ) {
+
+                voiceStatus.innerText =
+                    "⚠️ " +
+                    data.error;
+
+                return;
+
+            }
+
+
+            const reply =
+                data.reply ||
+                "لم يصل رد.";
+
+
+            /* عرض النص داخل المحادثة */
+
+            displayBotReply(
+                reply
+            );
+
+
+            voiceTranscript.innerText =
+                reply;
+
+
+            /* تشغيل صوت Dino */
+
+            if (
+                data.audio
+            ) {
+
+                voiceStatus.innerText =
+                    "🔊 Dino AI بيرد عليك...";
+
+                const audio =
+                    playAudio(
+                        data.audio
+                    );
+
+
+                if (audio) {
+
+                    audio.onended =
+                        function () {
+
+                            if (
+                                voiceCallActive
+                            ) {
+
+                                voiceStatus.innerText =
+                                    "🎤 جاهز أسمعك تاني";
+
+                            }
+
+                        };
+
+                }
+
+            } else {
+
+                voiceStatus.innerText =
+                    "🎤 جاهز أسمعك تاني";
+
+            }
+
+
+        } catch (
+            error
+        ) {
+
+            voiceStatus.innerText =
+                "⚠️ حصل خطأ في الاتصال بـ Dino AI.";
+
+        }
+
+        selectedAudio =
+            null;
+
+    }
+
+
+    /* =========================
+       End Voice Call
+    ========================= */
+
+    endVoiceCallButton.onclick =
+        function () {
 
             voiceCallActive =
                 false;
 
 
-            voiceCallButton.classList.remove(
+            if (
+                voiceRecorder &&
+                voiceRecorder.state ===
+                "recording"
+            ) {
+
+                voiceRecorder.stop();
+
+            }
+
+
+            if (
+                voiceStream
+            ) {
+
+                voiceStream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                            track.stop()
+                    );
+
+                voiceStream =
+                    null;
+
+            }
+
+
+            voiceCallPanel.classList.remove(
                 "active"
             );
 
 
-            voiceCallPanel.classList.remove(
-                "open"
-            );
+            voiceStatus.innerText =
+                "اضغط على الميكروفون وابدأ الكلام";
 
-
-            voiceCallStatus.textContent =
-                "جاهز للمكالمة";
-
-        }
-
-
-        /* =========================
-           الذاكرة
-        ========================= */
-
-        function getMemory() {
-
-            return JSON.parse(
-                localStorage.getItem(
-                    "dinoMemory"
-                ) || "[]"
-            );
-
-        }
-
-
-        function saveMemoryData(memory) {
-
-            localStorage.setItem(
-                "dinoMemory",
-                JSON.stringify(memory)
-            );
-
-        }
-
-
-        function loadMemory() {
-
-            memoryList.innerHTML = "";
-
-            const memory =
-                getMemory();
-
-
-            if (
-                memory.length === 0
-            ) {
-
-                memoryList.textContent =
-                    "لا توجد ذكريات محفوظة.";
-
-                return;
-
-            }
-
-
-            memory.forEach(
-                (item, index) => {
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-                    div.textContent =
-                        item;
-
-                    const deleteButton =
-                        document.createElement(
-                            "button"
-                        );
-
-                    deleteButton.textContent =
-                        "🗑️";
-
-                    deleteButton.onclick =
-                        () => {
-
-                            const current =
-                                getMemory();
-
-                            current.splice(
-                                index,
-                                1
-                            );
-
-                            saveMemoryData(
-                                current
-                            );
-
-                            loadMemory();
-
-                        };
-
-                    div.appendChild(
-                        deleteButton
-                    );
-
-                    memoryList.appendChild(
-                        div
-                    );
-
-                }
-            );
-
-        }
-
-
-        saveMemoryButton.onclick =
-            () => {
-
-                const value =
-                    memoryInput.value.trim();
-
-
-                if (!value) return;
-
-
-                const memory =
-                    getMemory();
-
-
-                memory.push(
-                    value
-                );
-
-
-                saveMemoryData(
-                    memory
-                );
-
-
-                memoryInput.value =
-                    "";
-
-
-                loadMemory();
-
-            };
-
-
-        /* =========================
-           المحادثات
-        ========================= */
-
-        function saveCurrentChat() {
-
-            const messages =
-                Array.from(
-                    chatBox.querySelectorAll(
-                        ".message"
-                    )
-                );
-
-
-            if (
-                messages.length <= 1
-            ) return;
-
-
-            const chat =
-                messages.map(
-                    message =>
-                        message.innerText
-                );
-
-
-            const chats =
-                JSON.parse(
-                    localStorage.getItem(
-                        "dinoChats"
-                    ) || "[]"
-                );
-
-
-            chats.push({
-                date:
-                    new Date().toLocaleString(
-                        "ar-EG"
-                    ),
-                messages:
-                    chat
-            });
-
-
-            localStorage.setItem(
-                "dinoChats",
-                JSON.stringify(chats)
-            );
-
-        }
-
-
-        function loadChats() {
-
-            chatsList.innerHTML =
+            voiceTranscript.innerText =
                 "";
 
-            const chats =
-                JSON.parse(
-                    localStorage.getItem(
-                        "dinoChats"
-                    ) || "[]"
-                );
+        };
 
-
-            if (
-                chats.length === 0
-            ) {
-
-                chatsList.textContent =
-                    "لا توجد محادثات محفوظة.";
-
-                return;
-
-            }
-
-
-            chats.reverse().forEach(
-                chat => {
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    div.className =
-                        "savedChat";
-
-
-                    div.textContent =
-                        "💬 " +
-                        chat.date;
-
-
-                    div.onclick =
-                        () => {
-
-                            chatBox.innerHTML =
-                                "";
-
-
-                            chat.messages.forEach(
-                                message => {
-
-                                    addMessage(
-                                        message,
-                                        "bot"
-                                    );
-
-                                }
-                            );
-
-
-                            chatsPanel.classList.remove(
-                                "open"
-                            );
-
-                        };
-
-
-                    chatsList.appendChild(
-                        div
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* =========================
-           محادثة جديدة
-        ========================= */
-
-        newChatButton.onclick =
-            () => {
-
-                saveCurrentChat();
-
-
-                chatBox.innerHTML =
-                    `
-                    <div class="message bot">
-                        أهلاً بك 👋
-                        أنا Dino AI 🦖
-                        اسألني عن أي شيء.
-                    </div>
-                    `;
-
-
-                selectedImage =
-                    null;
-
-                selectedAudio =
-                    null;
-
-                imagePreview.innerHTML =
-                    "";
-
-                audioPreview.innerHTML =
-                    "";
-
-                imageInput.value =
-                    "";
-
-                sidebar.classList.remove(
-                    "open"
-                );
-
-            };
-
-
-        /* =========================
-           الوضع الداكن
-        ========================= */
-
-        function applyDarkMode() {
-
-            const enabled =
-                localStorage.getItem(
-                    "dinoDarkMode"
-                ) === "true";
-
-
-            document.body.classList.toggle(
-                "dark-mode",
-                enabled
-            );
-
-        }
-
-
-        darkModeButton.onclick =
-            () => {
-
-                const enabled =
-                    document.body.classList.contains(
-                        "dark-mode"
-                    );
-
-
-                localStorage.setItem(
-                    "dinoDarkMode",
-                    String(!enabled)
-                );
-
-
-                applyDarkMode();
-
-            };
-
-
-        applyDarkMode();
-
-
-        /* حذف الذاكرة */
-
-        clearMemoryButton.onclick =
-            () => {
-
-                if (
-                    confirm(
-                        "هل تريد حذف كل الذاكرة؟"
-                    )
-                ) {
-
-                    localStorage.removeItem(
-                        "dinoMemory"
-                    );
-
-                    loadMemory();
-
-                }
-
-            };
-
-
-        /* حذف المحادثات */
-
-        clearChatsButton.onclick =
-            () => {
-
-                if (
-                    confirm(
-                        "هل تريد حذف كل المحادثات؟"
-                    )
-                ) {
-
-                    localStorage.removeItem(
-                        "dinoChats"
-                    );
-
-                    loadChats();
-
-                }
-
-            };
-
-    </script>
+</script>
 
 </body>
-
 </html>
