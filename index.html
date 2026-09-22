@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dino AI</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,7 +18,10 @@
     <aside id="sidebar" class="sidebar">
 
         <div class="sidebar-header">
-            <div class="sidebar-logo">Dino AI</div>
+
+            <div class="sidebar-logo">
+                Dino AI
+            </div>
 
             <button
                 id="closeSidebar"
@@ -24,6 +29,7 @@
                 type="button">
                 ×
             </button>
+
         </div>
 
         <button
@@ -59,9 +65,11 @@
         </div>
 
         <div class="sidebar-bottom">
+
             <div class="sidebar-info">
                 Dino AI
             </div>
+
         </div>
 
     </aside>
@@ -247,7 +255,7 @@
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك أو أرسل صورة أو ملف صوتي.
+                اكتب سؤالك أو أرسل صورة أو تحدث معي بالصوت.
 
             </div>
 
@@ -276,21 +284,14 @@
                     hidden>
 
 
-                <!-- زر الصوت -->
+                <!-- زر الميكروفون -->
                 <button
                     id="audioButton"
                     class="attach-button"
                     type="button"
-                    aria-label="إضافة صوت">
+                    aria-label="التحدث مع Dino AI">
                     🎤
                 </button>
-
-                <!-- اختيار الصوت -->
-                <input
-                    id="audioInput"
-                    type="file"
-                    accept="audio/*"
-                    hidden>
 
 
                 <!-- مربع السؤال -->
@@ -431,9 +432,6 @@ const imagePreview =
 
 const audioButton =
     document.getElementById("audioButton");
-
-const audioInput =
-    document.getElementById("audioInput");
 
 const audioPreview =
     document.getElementById("audioPreview");
@@ -956,7 +954,7 @@ newChatButton.addEventListener(
             <div class="message bot">
 
                 أهلاً بك 👋 أنا Dino AI،
-                اكتب سؤالك أو أرسل صورة أو ملف صوتي.
+                اكتب سؤالك أو أرسل صورة أو تحدث معي بالصوت.
 
             </div>
 
@@ -974,8 +972,6 @@ newChatButton.addEventListener(
         selectedAudio = null;
 
         imageInput.value = "";
-
-        audioInput.value = "";
 
         imagePreview.innerHTML = "";
 
@@ -1222,131 +1218,278 @@ imageInput.addEventListener(
 
 
 /* =========================
-   الصوت
+   الميكروفون
    ========================= */
 
 let selectedAudio = null;
 
+let mediaRecorder = null;
+
+let audioChunks = [];
+
+let isRecording = false;
+
+let microphoneStream = null;
+
 
 audioButton.addEventListener(
     "click",
-    function () {
+    async function () {
 
-        audioInput.click();
+        /*
+         * إذا كان التسجيل شغالًا
+         * نوقفه
+         */
 
-    }
-);
+        if (isRecording) {
 
+            mediaRecorder.stop();
 
-audioInput.addEventListener(
-    "change",
-    function () {
+            return;
 
-        const file =
-            audioInput.files[0];
-
-        if (!file) return;
+        }
 
 
-        selectedAudio = file;
+        try {
+
+            /*
+             * طلب إذن الميكروفون
+             */
+
+            microphoneStream =
+                await navigator.mediaDevices.getUserMedia({
+                    audio: true
+                });
 
 
-        const audioURL =
-            URL.createObjectURL(file);
+            audioChunks = [];
 
 
-        audioPreview.innerHTML = `
+            let options = {};
 
-            <div
-                id="audioAttachment"
-                style="
-                position:relative;
-                display:flex;
-                align-items:center;
-                gap:10px;
-                width:100%;
-                margin-top:8px;
-                padding:10px;
-                background:#f1f1f1;
-                border:1px solid #ddd;
-                border-radius:12px;
-                ">
 
-                <span
-                    style="
-                    font-size:24px;
-                    ">
-                    🎵
-                </span>
+            /*
+             * اختيار أفضل صيغة يدعمها المتصفح
+             */
+
+            if (
+                MediaRecorder.isTypeSupported(
+                    "audio/webm;codecs=opus"
+                )
+            ) {
+
+                options.mimeType =
+                    "audio/webm;codecs=opus";
+
+            }
+
+
+            mediaRecorder =
+                new MediaRecorder(
+                    microphoneStream,
+                    options
+                );
+
+
+            isRecording = true;
+
+
+            audioButton.textContent =
+                "⏹️";
+
+
+            audioButton.setAttribute(
+                "aria-label",
+                "إيقاف التسجيل"
+            );
+
+
+            audioPreview.innerHTML = `
 
                 <div
                     style="
-                    flex:1;
-                    min-width:0;
+                    margin-top:8px;
+                    padding:10px;
+                    border-radius:12px;
+                    background:#f1f1f1;
+                    border:1px solid #ddd;
+                    text-align:center;
                     ">
 
-                    <div
-                        style="
-                        font-size:13px;
-                        margin-bottom:6px;
-                        overflow:hidden;
-                        text-overflow:ellipsis;
-                        white-space:nowrap;
-                        ">
-                        ${file.name}
-                    </div>
+                    🔴 جاري التسجيل...
 
-                    <audio
-                        controls
-                        src="${audioURL}"
-                        style="
-                        width:100%;
-                        max-width:350px;
-                        height:38px;
-                        ">
-                    </audio>
+                    <br>
+
+                    <small>
+                        اضغط الميكروفون مرة ثانية لإيقاف التسجيل
+                    </small>
 
                 </div>
 
-                <button
-                    id="removeAudio"
-                    type="button"
-                    style="
-                    width:30px;
-                    height:30px;
-                    border:none;
-                    border-radius:50%;
-                    background:#202123;
-                    color:white;
-                    cursor:pointer;
-                    font-size:18px;
-                    ">
-                    ×
-                </button>
-
-            </div>
-
-        `;
+            `;
 
 
-        document
-            .getElementById(
-                "removeAudio"
-            )
-            .addEventListener(
-                "click",
-                function () {
+            /*
+             * استقبال أجزاء الصوت
+             */
 
-                    selectedAudio = null;
+            mediaRecorder.addEventListener(
+                "dataavailable",
+                function (event) {
 
-                    audioInput.value = "";
+                    if (event.data.size > 0) {
 
-                    audioPreview.innerHTML = "";
+                        audioChunks.push(
+                            event.data
+                        );
 
-                    URL.revokeObjectURL(audioURL);
+                    }
 
                 }
             );
+
+
+            /*
+             * بعد إيقاف التسجيل
+             */
+
+            mediaRecorder.addEventListener(
+                "stop",
+                function () {
+
+                    const audioType =
+                        mediaRecorder.mimeType ||
+                        "audio/webm";
+
+
+                    selectedAudio =
+                        new Blob(
+                            audioChunks,
+                            {
+                                type: audioType
+                            }
+                        );
+
+
+                    const audioURL =
+                        URL.createObjectURL(
+                            selectedAudio
+                        );
+
+
+                    audioPreview.innerHTML = `
+
+                        <div
+                            style="
+                            margin-top:8px;
+                            padding:10px;
+                            border-radius:12px;
+                            background:#f1f1f1;
+                            border:1px solid #ddd;
+                            ">
+
+                            🎤 تم تسجيل صوتك
+
+                            <audio
+                                controls
+                                src="${audioURL}"
+                                style="
+                                width:100%;
+                                margin-top:8px;
+                                ">
+                            </audio>
+
+                        </div>
+
+                    `;
+
+
+                    isRecording = false;
+
+
+                    audioButton.textContent =
+                        "🎤";
+
+
+                    audioButton.setAttribute(
+                        "aria-label",
+                        "التحدث مع Dino AI"
+                    );
+
+
+                    /*
+                     * إغلاق الميكروفون
+                     */
+
+                    if (microphoneStream) {
+
+                        microphoneStream
+                            .getTracks()
+                            .forEach(
+                                function (track) {
+
+                                    track.stop();
+
+                                }
+                            );
+
+                        microphoneStream = null;
+
+                    }
+
+
+                    /*
+                     * إرسال الصوت تلقائيًا
+                     */
+
+                    sendMessage();
+
+                }
+            );
+
+
+            /*
+             * بدء التسجيل
+             */
+
+            mediaRecorder.start();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            isRecording = false;
+
+
+            audioButton.textContent =
+                "🎤";
+
+
+            audioPreview.innerHTML = `
+
+                <div
+                    style="
+                    margin-top:8px;
+                    padding:10px;
+                    border-radius:12px;
+                    background:#fff0f0;
+                    border:1px solid #ffcccc;
+                    ">
+
+                    ❌ لم يتم السماح باستخدام الميكروفون.
+
+                    <br>
+
+                    اسمح للمتصفح باستخدام الميكروفون
+                    ثم جرّب مرة أخرى.
+
+                </div>
+
+            `;
+
+        }
 
     }
 );
@@ -1362,10 +1505,18 @@ async function sendMessage() {
         userInput.value.trim();
 
 
+    /*
+     * حفظ الصوت قبل مسحه
+     */
+
+    const audioToSend =
+        selectedAudio;
+
+
     if (
         !message &&
         !selectedImage &&
-        !selectedAudio
+        !audioToSend
     ) {
 
         return;
@@ -1376,6 +1527,10 @@ async function sendMessage() {
     let messageToSend =
         message;
 
+
+    /*
+     * الصورة
+     */
 
     if (selectedImage) {
 
@@ -1391,7 +1546,11 @@ async function sendMessage() {
     }
 
 
-    if (selectedAudio) {
+    /*
+     * الصوت
+     */
+
+    if (audioToSend) {
 
         messageToSend +=
             (
@@ -1399,25 +1558,44 @@ async function sendMessage() {
                 ? "\n\n"
                 : ""
             ) +
-            "🎵 ملف صوتي مرفق: " +
-            selectedAudio.name;
+            "🎤 رسالة صوتية";
 
     }
 
 
+    /*
+     * رسالة المستخدم
+     */
+
     const userMessage =
         document.createElement("div");
+
 
     userMessage.className =
         "message user";
 
+
     userMessage.textContent =
-        messageToSend;
+        messageToSend ||
+        "🎤 رسالة صوتية";
+
 
     chatBox.appendChild(
         userMessage
     );
 
+
+    /*
+     * حفظ نسخة من الصورة
+     */
+
+    const imageToSend =
+        selectedImage;
+
+
+    /*
+     * تنظيف الواجهة
+     */
 
     userInput.value = "";
 
@@ -1427,21 +1605,26 @@ async function sendMessage() {
 
     imageInput.value = "";
 
-    audioInput.value = "";
-
     imagePreview.innerHTML = "";
 
     audioPreview.innerHTML = "";
 
 
+    /*
+     * رسالة Dino AI
+     */
+
     const botMessage =
         document.createElement("div");
+
 
     botMessage.className =
         "message bot";
 
+
     botMessage.textContent =
         "جاري التفكير...";
+
 
     chatBox.appendChild(
         botMessage
@@ -1454,26 +1637,69 @@ async function sendMessage() {
 
     try {
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
+        let response;
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
 
-                    body: JSON.stringify({
+        /*
+         * إذا يوجد تسجيل صوتي
+         * نرسل FormData
+         */
 
-                        message:
-                            messageToSend
+        if (audioToSend) {
 
-                    })
+            const formData =
+                new FormData();
 
-                }
+
+            formData.append(
+                "message",
+                message || ""
             );
+
+
+            formData.append(
+                "audio",
+                audioToSend,
+                "dino-recording.webm"
+            );
+
+
+            response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+        } else {
+
+            /*
+             * الرسائل العادية
+             */
+
+            response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                message:
+                                    messageToSend
+                            })
+
+                    }
+                );
+
+        }
 
 
         const data =
@@ -1494,7 +1720,8 @@ async function sendMessage() {
         }
 
 
-        botMessage.textContent = "";
+        botMessage.textContent =
+            "";
 
 
         displayBotReply(
@@ -1511,6 +1738,7 @@ async function sendMessage() {
 
         console.error(error);
 
+
         botMessage.textContent =
             "❌ حصل خطأ في الاتصال بـ Dino AI.";
 
@@ -1519,6 +1747,7 @@ async function sendMessage() {
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
+
 
     userInput.focus();
 
@@ -1552,20 +1781,27 @@ function displayBotReply(
                 const link =
                     document.createElement("a");
 
-                link.href = part;
+
+                link.href =
+                    part;
+
 
                 link.textContent =
                     "🔗 فتح الرابط";
 
+
                 link.target =
                     "_blank";
+
 
                 link.rel =
                     "noopener noreferrer";
 
+
                 element.appendChild(
                     link
                 );
+
 
             } else {
 
