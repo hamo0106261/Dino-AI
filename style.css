@@ -1,88 +1,167 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
     font-family: Arial, sans-serif;
-    background: #111827;
-    color: white;
+    background: #212121;
+    color: #ffffff;
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
 }
 
+/* منطقة التطبيق */
 .chat-container {
-    width: 90%;
-    max-width: 700px;
-    background: #1f2937;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 }
 
+/* العنوان */
 h1 {
     text-align: center;
-    margin: 0;
+    font-size: 28px;
+    margin-bottom: 5px;
 }
 
 .subtitle {
     text-align: center;
-    color: #9ca3af;
+    color: #a0a0a0;
+    margin-bottom: 20px;
 }
 
+/* صندوق المحادثة */
 .chat-box {
-    height: 400px;
+    flex: 1;
     overflow-y: auto;
-    background: #111827;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 20px 0;
+    padding: 10px 5px 120px;
 }
 
+/* الرسائل */
 .message {
-    padding: 12px 15px;
-    margin: 10px 0;
-    border-radius: 12px;
     max-width: 80%;
-    line-height: 1.5;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-.bot {
-    background: #374151;
-    margin-left: auto;
-}
-
-.user {
-    background: #2563eb;
+/* رسالة Dino AI */
+.message.bot {
+    background: transparent;
+    color: #eeeeee;
     margin-right: auto;
+    margin-left: 0;
 }
 
+/* رسالة المستخدم */
+.message.user {
+    background: #303030;
+    color: #ffffff;
+    margin-left: auto;
+    margin-right: 0;
+    border: 1px solid #444444;
+}
+
+/* منطقة الكتابة */
 .input-area {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 850px;
     display: flex;
     gap: 10px;
+    background: #2f2f2f;
+    border: 1px solid #555555;
+    border-radius: 28px;
+    padding: 8px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
 }
 
+/* مربع الكتابة */
 #userInput {
     flex: 1;
-    padding: 14px;
     border: none;
-    border-radius: 10px;
     outline: none;
-    font-size: 16px;
-}
-
-#sendButton {
-    padding: 14px 22px;
-    border: none;
-    border-radius: 10px;
-    background: #2563eb;
+    background: transparent;
     color: white;
     font-size: 16px;
+    padding: 12px 15px;
+    direction: rtl;
+}
+
+#userInput::placeholder {
+    color: #999999;
+}
+
+/* زر الإرسال */
+#sendButton {
+    border: none;
+    background: #ffffff;
+    color: #202020;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
 #sendButton:hover {
-    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+#sendButton:active {
+    transform: scale(0.95);
+}
+
+/* الروابط */
+.message a {
+    color: #8ab4f8;
+    text-decoration: none;
+}
+
+.message a:hover {
+    text-decoration: underline;
+}
+
+/* الفوتر */
+footer {
+    text-align: center;
+    color: #777777;
+    font-size: 12px;
+    padding: 10px;
+}
+
+/* الموبايل */
+@media (max-width: 600px) {
+    .chat-container {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .message {
+        max-width: 90%;
+        font-size: 15px;
+    }
+
+    .input-area {
+        width: calc(100% - 20px);
+        bottom: 10px;
+    }
 }
