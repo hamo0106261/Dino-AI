@@ -23,12 +23,15 @@ function displayBotReply(element, text) {
 
             element.appendChild(link);
         } else {
-            element.appendChild(document.createTextNode(part));
+            element.appendChild(
+                document.createTextNode(part)
+            );
         }
     });
 }
 
 async function sendMessage() {
+
     const message = userInput.value.trim();
 
     if (message === "") {
@@ -38,6 +41,7 @@ async function sendMessage() {
     const userMessage = document.createElement("div");
     userMessage.className = "message user";
     userMessage.textContent = message;
+
     chatBox.appendChild(userMessage);
 
     userInput.value = "";
@@ -45,16 +49,20 @@ async function sendMessage() {
     const botMessage = document.createElement("div");
     botMessage.className = "message bot";
     botMessage.textContent = "🤖 جاري التفكير...";
+
     chatBox.appendChild(botMessage);
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
+
         const response = await fetch(API_URL, {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 message: message
             })
@@ -63,8 +71,11 @@ async function sendMessage() {
         const data = await response.json();
 
         if (!response.ok) {
+
             botMessage.textContent =
-                "❌ خطأ: " + (data.error || "خطأ غير معروف");
+                "❌ خطأ: " +
+                (data.error || "خطأ غير معروف");
+
             return;
         }
 
@@ -76,28 +87,30 @@ async function sendMessage() {
         );
 
     } catch (error) {
-        console.error(error);
+
+        console.error("Dino AI Error:", error);
 
         botMessage.textContent =
-            "❌ حصل خطأ في الاتصال: " + error.message;
+            "❌ حصل خطأ في الاتصال بالخدمة.";
     }
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // يرجع المؤشر لخانة الكتابة بعد كل رسالة
     userInput.focus();
 }
 
 sendButton.addEventListener("click", sendMessage);
 
-userInput.addEventListener("keydown", function(event) {
+userInput.addEventListener("keydown", function (event) {
+
     if (event.key === "Enter") {
+        event.preventDefault();
         sendMessage();
     }
+
 });
 
-// التركيز على خانة الكتابة تلقائيًا عند فتح الموقع
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     userInput.focus();
 });
 ```
